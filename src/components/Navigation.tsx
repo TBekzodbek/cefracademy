@@ -1,0 +1,54 @@
+import { Link, useLocation } from 'react-router-dom';
+import { BookOpen, Mic, Headphones, GraduationCap, LayoutDashboard, Globe } from 'lucide-react';
+import './Navigation.css';
+
+interface NavigationProps {
+    lang: 'en' | 'uz';
+    toggleLang: () => void;
+}
+
+const Navigation = ({ lang, toggleLang }: NavigationProps) => {
+    const location = useLocation();
+
+    const links = [
+        { to: '/reading', icon: <BookOpen size={20} />, label: lang === 'en' ? 'Reading' : 'O\'qish' },
+        { to: '/listening', icon: <Headphones size={20} />, label: lang === 'en' ? 'Listening' : 'Eshitish' },
+        { to: '/writing', icon: <GraduationCap size={20} />, label: lang === 'en' ? 'Writing' : 'Yozish' },
+        { to: '/speaking', icon: <Mic size={20} />, label: lang === 'en' ? 'Speaking' : 'Gapirish' },
+    ];
+
+    return (
+        <nav className="glass-panel main-nav">
+            <div className="container nav-content">
+                <Link to="/" className="brand">
+                    <span className="brand-logo">CEFR</span>
+                    <span className="brand-text">prep</span>
+                </Link>
+                <div className="nav-links">
+                    {links.map((link) => (
+                        <Link
+                            key={link.to}
+                            to={link.to}
+                            className={`nav-link ${location.pathname === link.to ? 'active' : ''}`}
+                        >
+                            <span className="nav-icon">{link.icon}</span>
+                            <span className="nav-label">{link.label}</span>
+                        </Link>
+                    ))}
+                </div>
+                <div className="nav-actions">
+                    <button className="btn btn-ghost lang-toggle" onClick={toggleLang}>
+                        <Globe size={20} />
+                        <span>{lang.toUpperCase()}</span>
+                    </button>
+                    <Link to="/login" className="btn btn-primary btn-sm">
+                        <LayoutDashboard size={18} />
+                        <span className="hidden-mobile">{lang === 'en' ? 'Login' : 'Kirish'}</span>
+                    </Link>
+                </div>
+            </div>
+        </nav>
+    );
+};
+
+export default Navigation;

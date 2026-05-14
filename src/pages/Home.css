@@ -1,0 +1,204 @@
+.home-page {
+    padding-bottom: 5rem;
+    position: relative;
+    overflow: hidden;
+}
+
+/* Beautiful background orbs */
+.home-page::before {
+    content: '';
+    position: absolute;
+    top: -10%;
+    left: -10%;
+    width: 500px;
+    height: 500px;
+    background: radial-gradient(circle, rgba(59, 130, 246, 0.4) 0%, rgba(59, 130, 246, 0) 70%);
+    border-radius: 50%;
+    filter: blur(80px);
+    z-index: -1;
+}
+
+.home-page::after {
+    content: '';
+    position: absolute;
+    top: 20%;
+    right: -10%;
+    width: 600px;
+    height: 600px;
+    background: radial-gradient(circle, rgba(139, 92, 246, 0.3) 0%, rgba(139, 92, 246, 0) 70%);
+    border-radius: 50%;
+    filter: blur(100px);
+    z-index: -1;
+}
+
+.hero {
+    padding: 8rem 1rem 5rem;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    text-align: center;
+}
+
+.hero-content {
+    max-width: 850px;
+}
+
+.hero-title {
+    font-size: 4rem;
+    font-weight: 800;
+    margin-bottom: 1.5rem;
+    line-height: 1.1;
+    letter-spacing: -1.5px;
+}
+
+.hero-subtitle {
+    font-size: 1.25rem;
+    margin-bottom: 2.5rem;
+    max-width: 650px;
+    margin-left: auto;
+    margin-right: auto;
+}
+
+.hero-actions {
+    display: flex;
+    justify-content: center;
+    margin-bottom: 3rem;
+    gap: 1.25rem;
+}
+
+.btn-cta {
+    font-size: 1.125rem;
+    padding: 1.125rem 2.5rem;
+}
+
+.details-sections {
+    display: flex;
+    flex-direction: column;
+    gap: 5rem;
+    padding: 4rem 1rem;
+    max-width: 950px;
+    position: relative;
+    z-index: 1;
+}
+
+.section-showcase {
+    display: flex;
+    align-items: center;
+    gap: 4rem;
+    background: var(--gradient-surface);
+    backdrop-filter: blur(20px);
+    -webkit-backdrop-filter: blur(20px);
+    padding: 3.5rem;
+    border-radius: var(--radius-xl);
+    border: 1px solid var(--color-border);
+    box-shadow: var(--shadow-lg);
+    transition: all var(--transition-normal);
+    position: relative;
+    overflow: hidden;
+}
+
+.section-showcase:hover {
+    transform: translateY(-5px);
+    border-color: rgba(148, 163, 184, 0.3);
+    box-shadow: 0 10px 40px -10px rgba(0, 0, 0, 0.1), var(--shadow-glow);
+}
+
+.section-showcase::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    height: 4px;
+    background: var(--gradient-primary);
+    opacity: 0;
+    transition: opacity var(--transition-normal);
+}
+
+.section-showcase:hover::before {
+    opacity: 1;
+}
+
+.section-showcase:nth-child(even) {
+    flex-direction: row-reverse;
+}
+
+.showcase-icon {
+    width: 140px;
+    height: 140px;
+    flex-shrink: 0;
+    border-radius: var(--radius-full);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    box-shadow: inset 0 0 20px rgba(255, 255, 255, 0.5);
+}
+
+.showcase-blue .showcase-icon {
+    background: linear-gradient(135deg, rgba(37, 99, 235, 0.1), rgba(37, 99, 235, 0.2));
+    color: #2563eb;
+    border: 1px solid rgba(37, 99, 235, 0.2);
+}
+
+.showcase-teal .showcase-icon {
+    background: linear-gradient(135deg, rgba(13, 148, 136, 0.1), rgba(13, 148, 136, 0.2));
+    color: #0d9488;
+    border: 1px solid rgba(13, 148, 136, 0.2);
+}
+
+.showcase-purple .showcase-icon {
+    background: linear-gradient(135deg, rgba(147, 51, 234, 0.1), rgba(147, 51, 234, 0.2));
+    color: #9333ea;
+    border: 1px solid rgba(147, 51, 234, 0.2);
+}
+
+.showcase-orange .showcase-icon {
+    background: linear-gradient(135deg, rgba(249, 115, 22, 0.1), rgba(249, 115, 22, 0.2));
+    color: #f97316;
+    border: 1px solid rgba(249, 115, 22, 0.2);
+}
+
+.showcase-content h2 {
+    font-size: 2.25rem;
+    margin-bottom: 0.5rem;
+}
+
+.showcase-content h4 {
+    font-size: 1.125rem;
+    font-weight: 500;
+    margin-bottom: 2rem;
+}
+
+.benefits-list {
+    list-style: none;
+    padding: 0;
+    display: flex;
+    flex-direction: column;
+    gap: 1.25rem;
+}
+
+.benefits-list li {
+    display: flex;
+    align-items: flex-start;
+    gap: 1rem;
+    font-size: 1.05rem;
+    color: var(--color-text-main);
+}
+
+@media (max-width: 768px) {
+    .hero-title {
+        font-size: 2.75rem;
+    }
+
+    .section-showcase,
+    .section-showcase:nth-child(even) {
+        flex-direction: column;
+        text-align: center;
+        padding: 2.5rem 1.5rem;
+        gap: 2rem;
+    }
+
+    .benefits-list li {
+        text-align: left;
+    }
+}
