@@ -1,6 +1,5 @@
-import { BrowserRouter as Router, Routes, Route, Outlet } from 'react-router-dom';
+import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
 import Navigation from './components/Navigation';
-import Home from './pages/Home';
 import Login from './pages/Login';
 import OnboardingSurvey from './pages/OnboardingSurvey';
 import DashboardLayout from './pages/DashboardLayout';
@@ -24,21 +23,16 @@ function App() {
   return (
     <Router>
       <Routes>
-        {/* Public Landing Routes with Main Navigation */}
-        <Route path="/" element={
+        {/* Unified Home & Onboarding */}
+        <Route path="/" element={<OnboardingSurvey lang={lang} toggleLang={toggleLang} />} />
+
+        {/* Auth with Navigation */}
+        <Route path="/login" element={
           <div className="app-container">
             <Navigation lang={lang} toggleLang={toggleLang} />
-            <main className="main-content">
-              <Outlet />
-            </main>
+            <Login lang={lang} />
           </div>
-        }>
-          <Route index element={<Home lang={lang} />} />
-          <Route path="login" element={<Login lang={lang} />} />
-        </Route>
-
-        {/* Dedicated Onboarding (Minimal/Wizard Style) */}
-        <Route path="/onboarding" element={<OnboardingSurvey lang={lang} />} />
+        } />
 
         {/* Dashboard Routes with Sidebar Layout */}
         <Route path="/dashboard" element={<DashboardLayout lang={lang} toggleLang={toggleLang} />}>
@@ -51,6 +45,9 @@ function App() {
           <Route path="plan" element={<Plan lang={lang} />} />
           <Route path="pricing" element={<Pricing lang={lang} />} />
         </Route>
+
+        {/* Legacy redirect for old bookmarkers */}
+        <Route path="/onboarding" element={<OnboardingSurvey lang={lang} toggleLang={toggleLang} />} />
       </Routes>
     </Router>
   );

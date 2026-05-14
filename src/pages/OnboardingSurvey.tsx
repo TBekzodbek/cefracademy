@@ -1,13 +1,17 @@
 import { motion } from 'framer-motion';
-import { useNavigate } from 'react-router-dom';
-import { BookOpen, Headphones, GraduationCap, Mic, ArrowRight, Zap, Star, Layout } from 'lucide-react';
+import { useNavigate, Link } from 'react-router-dom';
+import { BookOpen, Headphones, GraduationCap, Mic, ArrowRight, Zap, Star, Layout, ShieldCheck, Activity, PieChart, Globe } from 'lucide-react';
 import './OnboardingSurvey.css';
+
+// Asset imports
+import atlasWolfImg from '../assets/images/atlas-wolf.png';
 
 interface Props {
     lang: 'en' | 'uz';
+    toggleLang: () => void;
 }
 
-const OnboardingSurvey = ({ lang }: Props) => {
+const OnboardingSurvey = ({ lang, toggleLang }: Props) => {
     const navigate = useNavigate();
 
     const categories = [
@@ -76,9 +80,8 @@ const OnboardingSurvey = ({ lang }: Props) => {
     const scrollToSection = (id: string) => {
         const element = document.getElementById(id);
         if (element) {
-            // "without any animation" as requested: instant scroll
             window.scrollTo({
-                top: element.offsetTop - 80, // Adjust for sticky nav
+                top: element.offsetTop - 80,
                 behavior: 'auto'
             });
         }
@@ -89,21 +92,77 @@ const OnboardingSurvey = ({ lang }: Props) => {
             {/* Top Navigation Bar */}
             <header className="onboarding-header">
                 <div className="container nav-strip">
-                    {categories.map(cat => (
-                        <button
-                            key={cat.id}
-                            onClick={() => scrollToSection(cat.id)}
-                            className="cat-nav-btn"
-                            style={{ borderColor: cat.color }}
-                        >
-                            {cat.icon}
-                            <span>{cat.id.charAt(0).toUpperCase() + cat.id.slice(1)}</span>
+                    <Link to="/" className="brand-mini">
+                        <span className="text-primary" style={{ fontWeight: 800 }}>CEFR</span>ACADEMY
+                    </Link>
+                    <div className="cat-btns-web">
+                        {categories.map(cat => (
+                            <button
+                                key={cat.id}
+                                onClick={() => scrollToSection(cat.id)}
+                                className="cat-nav-btn"
+                                style={{ borderColor: cat.color }}
+                            >
+                                {cat.id.charAt(0).toUpperCase() + cat.id.slice(1)}
+                            </button>
+                        ))}
+                    </div>
+                    <div style={{ display: 'flex', gap: '1rem', alignItems: 'center' }}>
+                        <button className="btn btn-ghost" onClick={toggleLang} style={{ color: '#64748b' }}>
+                            <Globe size={20} /> <span>{lang.toUpperCase()}</span>
                         </button>
-                    ))}
+                        <Link to="/login" className="btn btn-primary">{lang === 'en' ? 'Sign In' : 'Kirish'}</Link>
+                    </div>
                 </div>
             </header>
 
             <main className="onboarding-sections">
+                {/* HERO SECTION - REPLACING THE PREVIOUS INTRO */}
+                <section className="hero-onboarding-wrapper" id="home">
+                    <div className="container hero-grid">
+                        <motion.div
+                            className="hero-text"
+                            initial={{ opacity: 0, x: -30 }}
+                            animate={{ opacity: 1, x: 0 }}
+                        >
+                            <span className="badge-premium">75-POINT SCALE ALIGNED</span>
+                            <h1 className="hero-title">
+                                {lang === 'en' ? 'The fastest path to your CEFR score.' : 'CEFR natijangizga eng tezkor yo\'l.'}
+                            </h1>
+                            <p className="hero-subtitle">
+                                {lang === 'en'
+                                    ? 'Meet Atlas, your AI robot coach. Bridge the gap between B1 and C1 with national exam standards.'
+                                    : 'Atlas bilan tanishing - sizning AI robot ustozingiz. B1 dan C1 gacha bo\'lgan masofani milliy standartlarda bosib o\'ting.'}
+                            </p>
+                            <div className="hero-cta-group">
+                                <button onClick={() => scrollToSection('reading')} className="btn btn-primary btn-xl btn-glow">
+                                    {lang === 'en' ? 'Start Free Diagnostic' : 'Diagnostikani boshlash'}
+                                </button>
+                                <div className="trust-badges">
+                                    <ShieldCheck size={20} /> <span>Official DTM Methodology</span>
+                                </div>
+                            </div>
+                        </motion.div>
+                        <motion.div
+                            className="hero-visual"
+                            initial={{ opacity: 0, scale: 0.9 }}
+                            animate={{ opacity: 1, scale: 1 }}
+                        >
+                            <img src={atlasWolfImg} alt="Atlas" className="mascot-img-onboarding" />
+                        </motion.div>
+                    </div>
+                </section>
+
+                {/* RESULTS BAR STATS */}
+                <div className="onboarding-stats-strip">
+                    <div className="container stats-flex">
+                        <div className="stat-pill"><Activity size={24} /> <span>+12 Avg Point Increase</span></div>
+                        <div className="stat-pill"><PieChart size={24} /> <span>98% Score Accuracy</span></div>
+                        <div className="stat-pill"><Star size={24} /> <span>2.4k Successful Students</span></div>
+                    </div>
+                </div>
+
+                {/* CATEGORY SECTIONS */}
                 {categories.map((cat, i) => (
                     <section key={cat.id} id={cat.id} className="category-section" style={{ borderLeft: `8px solid ${cat.color}` }}>
                         <div className="container section-inner">
@@ -130,7 +189,7 @@ const OnboardingSurvey = ({ lang }: Props) => {
 
                                 <div className="section-actions">
                                     <button onClick={() => navigate(cat.action)} className="btn btn-primary btn-lg" style={{ background: cat.color }}>
-                                        {lang === 'en' ? 'Start Journey' : 'Sayohatni boshlash'} <ArrowRight size={20} />
+                                        {lang === 'en' ? 'Open' : 'Ochish'} {cat.title} <ArrowRight size={20} />
                                     </button>
                                 </div>
                             </motion.div>
@@ -142,7 +201,7 @@ const OnboardingSurvey = ({ lang }: Props) => {
                                 transition={{ duration: 0.8, delay: 0.2 }}
                             >
                                 <div className="premium-shape" style={{ background: `linear-gradient(135deg, ${cat.color} 0%, #1e293b 100%)` }}>
-                                    <div className="inner-icon">{cat.icon}</div>
+                                    <div className="inner-icon" style={{ opacity: 0.25 }}>{cat.icon}</div>
                                 </div>
                                 <div className="floating-ui-card">
                                     <div className="card-header"><Layout size={14} /> Module Ready</div>
@@ -162,13 +221,16 @@ const OnboardingSurvey = ({ lang }: Props) => {
                         initial={{ opacity: 0, y: 30 }}
                         whileInView={{ opacity: 1, y: 0 }}
                     >
-                        <Zap size={48} className="text-warning" />
-                        <h2>{lang === 'en' ? 'Plan Developed' : 'Reja tayyorlandi'}</h2>
-                        <p>{lang === 'en' ? 'Atlas AI has analyzed these modules. Ready to start your 30-day roadmap?' : 'Atlas AI ushbu modullarni tahlil qildi. 30 kunlik rejangizni boshlashga tayyormisiz?'}</p>
-                        <button onClick={() => navigate('/dashboard')} className="btn btn-primary btn-xl">
-                            {lang === 'en' ? 'Open Dashboard' : 'Dashboardni ochish'}
+                        <Zap size={64} className="text-warning" />
+                        <h2>{lang === 'en' ? 'Your AI Roadmap is Ready' : 'AI Yo\'l xaritangiz tayyor'}</h2>
+                        <p>{lang === 'en' ? 'Analyze your weaknesses in each module to generate a custom 30-day plan.' : 'Shaxsiy 30 kunlik reja tuzish uchun har bir modulda kamchiliklaringizni tahlil qiling.'}</p>
+                        <button onClick={() => navigate('/dashboard')} className="btn btn-primary btn-xl btn-glow">
+                            {lang === 'en' ? 'Go to Command Center' : 'Boshqaruv markaziga o\'tish'}
                         </button>
                     </motion.div>
+                    <div className="brand-footer">
+                        <p>© 2025 CEFRACADEMY.uz. Built for Uzbekistan.</p>
+                    </div>
                 </div>
             </footer>
         </div>
