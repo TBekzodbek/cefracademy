@@ -1,11 +1,10 @@
 import { motion } from 'framer-motion';
 import { Link } from 'react-router-dom';
-import { ArrowRight, Star, ShieldCheck, Quote } from 'lucide-react';
+import { ArrowRight, Star, ShieldCheck, Zap, Headphones, BookOpen, GraduationCap, Mic, BarChart3, PieChart, Activity } from 'lucide-react';
 import './Home.css';
 
 // Import local assets
 import atlasWolfImg from '../assets/images/atlas-wolf.png';
-import successImg from '../assets/images/cefracademy-success.png';
 import mockTestImg from '../assets/images/atlas-mock-test.png';
 
 interface HomeProps {
@@ -31,11 +30,6 @@ const Home = ({ lang }: HomeProps) => {
                 { val: '2,400+', label: 'Muvaffaqiyatlar' },
                 { val: '98%', label: 'Aniq natija' }
             ],
-        testimonials: [
-            { name: 'Azizbek K.', role: 'B2 achieved', text: lang === 'en' ? 'Improved my score from 44 to 56 in just 3 weeks.' : '3 haftada natijamni 44 dan 56 ballga ko\'tardim.' },
-            { name: 'Madina G.', role: 'C1 candidate', text: lang === 'en' ? 'Atlas’s feedback on Writing Task 2 is incredibly accurate.' : 'Atlasning Writing bo\'yicha tahlillari juda aniq va foydali.' },
-            { name: 'Sardorbek M.', role: 'Targeting 60+', text: lang === 'en' ? 'The Reading mock tests feel exactly like the real Agency exams.' : 'Reading testlari xuddi rasmiy Agentlik imtihonidek ekan.' }
-        ]
     };
 
     return (
@@ -49,20 +43,20 @@ const Home = ({ lang }: HomeProps) => {
                         animate={{ opacity: 1, x: 0 }}
                         transition={{ duration: 0.8 }}
                     >
-                        <span className="badge" style={{ marginBottom: '1.5rem', background: 'rgba(34, 197, 94, 0.1)', color: '#16a34a' }}>
-                            <ShieldCheck size={14} style={{ marginRight: '6px' }} /> {t.heroBadge}
+                        <span className="badge-premium" style={{ marginBottom: '1.5rem' }}>
+                            <Zap size={14} fill="currentColor" /> {t.heroBadge}
                         </span>
-                        <h1 className="hero-title" style={{ textAlign: 'left', margin: '0 0 2rem 0' }}>{t.heroTitle}</h1>
-                        <p className="hero-subtitle" style={{ textAlign: 'left', margin: '0 0 3rem 0' }}>{t.heroSubtitle}</p>
-                        <div className="hero-actions" style={{ display: 'flex', gap: '1.5rem' }}>
-                            <Link to="/login" className="btn btn-primary" style={{ padding: '1rem 2.5rem', fontSize: '1.1rem' }}>
+                        <h1 className="hero-title">{t.heroTitle}</h1>
+                        <p className="hero-subtitle">{t.heroSubtitle}</p>
+                        <div className="hero-actions" style={{ display: 'flex', gap: '1.5rem', marginTop: '3rem' }}>
+                            <Link to="/onboarding" className="btn btn-primary btn-glow" style={{ padding: '1.25rem 3rem', fontSize: '1.15rem' }}>
                                 {t.cta} <ArrowRight size={20} />
                             </Link>
-                            <div className="trust-indicator hidden-mobile" style={{ display: 'flex', flexDirection: 'column', justifyContent: 'center' }}>
-                                <div style={{ display: 'flex', color: '#fbbf24' }}>
+                            <div className="trust-indicator hidden-mobile">
+                                <div className="stars">
                                     {[1, 2, 3, 4, 5].map(i => <Star key={i} size={16} fill="currentColor" />)}
                                 </div>
-                                <span style={{ fontSize: '0.85rem', color: 'var(--color-text-muted)' }}>Trusted by 2.4k students</span>
+                                <span>Trusted by 2.4k students</span>
                             </div>
                         </div>
                     </motion.div>
@@ -72,85 +66,93 @@ const Home = ({ lang }: HomeProps) => {
                         animate={{ opacity: 1, scale: 1 }}
                         transition={{ duration: 0.8, delay: 0.2 }}
                     >
-                        <img src={atlasWolfImg} alt="Atlas the Wolf" className="floating-img" style={{ width: '100%', maxWidth: '500px' }} />
+                        <div className="mascot-wrapper">
+                            <img src={atlasWolfImg} alt="Atlas the Wolf" className="floating-img main-mascot" />
+                            {/* Decorative Floating Graph Card */}
+                            <motion.div
+                                className="floating-card graph-card"
+                                animate={{ y: [0, -10, 0] }}
+                                transition={{ duration: 4, repeat: Infinity, ease: "easeInOut" }}
+                            >
+                                <div className="graph-header">
+                                    <BarChart3 size={16} className="text-primary" />
+                                    <span>Score Growth</span>
+                                </div>
+                                <div className="mock-graph">
+                                    <div className="bar" style={{ height: '30%' }}></div>
+                                    <div className="bar" style={{ height: '50%' }}></div>
+                                    <div className="bar" style={{ height: '85%' }}></div>
+                                    <div className="bar highlight" style={{ height: '100%' }}></div>
+                                </div>
+                                <div className="graph-label">+15 pts</div>
+                            </motion.div>
+                        </div>
                     </motion.div>
                 </div>
             </section>
 
-            {/* Results Bar */}
+            {/* Stats Band */}
             <section className="results-strip">
                 <div className="container results-flex">
-                    <div className="success-visual hidden-mobile">
-                        <img src={successImg} alt="Success" style={{ height: '60px', opacity: 0.8 }} />
-                    </div>
                     {t.results.map((res, i) => (
                         <div key={i} className="result-item">
-                            <div className="result-val">{res.val}</div>
-                            <div className="result-label">{res.label}</div>
-                        </div>
-                    ))}
-                </div>
-            </section>
-
-            {/* Confidence Section: Why CEFRACADEMY.uz */}
-            <section className="confidence-section container" style={{ padding: '8rem 0' }}>
-                <div className="grid grid-cols-3" style={{ gap: '3rem' }}>
-                    <div className="feature-card-minimal">
-                        <div className="icon-wrap color-blue"><ShieldCheck /></div>
-                        <h4>National Standard</h4>
-                        <p>We use the exact 75-point "Rasch" weighting model used by the state agency.</p>
-                    </div>
-                    <div className="feature-card-minimal">
-                        <div className="icon-wrap color-purple"><Star /></div>
-                        <h4>Score Guarantee</h4>
-                        <p>Follow our study plan and we guarantee a minimum 10-point score increase.</p>
-                    </div>
-                    <div className="feature-card-minimal">
-                        <div className="icon-wrap color-green"><Quote /></div>
-                        <h4>Atlas Feedback</h4>
-                        <p>Get personalized feedback from Atlas on every mistake you make.</p>
-                    </div>
-                </div>
-            </section>
-
-            {/* Feature Highlight Section */}
-            <section className="features-highlight container">
-                <div className="highlight-card glass-panel">
-                    <div className="highlight-content">
-                        <div className="badge" style={{ background: 'var(--color-primary)', color: 'white' }}>{lang === 'en' ? 'MOCK EXAMS' : 'MOCK IMTIHONLAR'}</div>
-                        <h2>{lang === 'en' ? 'Real-weight Mock Tests' : 'Haqiqiy vaznli Mock Testlar'}</h2>
-                        <p>{lang === 'en' ? 'Experience the official timing and score calculation before your big day.' : 'Asosiy imtihon oldidan rasmiy vaqt va ball hisoblash tizimini sinab ko\'ring.'}</p>
-                        <Link to="/login" className="btn btn-outline">{lang === 'en' ? 'Try Mock Test' : 'Mock testni ko\'rish'}</Link>
-                    </div>
-                    <div className="highlight-visual" style={{ background: 'transparent' }}>
-                        <img src={mockTestImg} alt="Mock Test" style={{ width: '100%', borderRadius: '1rem', boxShadow: 'var(--shadow-xl)' }} />
-                    </div>
-                </div>
-            </section>
-
-            {/* Testimonials */}
-            <section className="testimonials-section container" style={{ marginBottom: '8rem' }}>
-                <div className="text-center" style={{ marginBottom: '4rem' }}>
-                    <h2 style={{ fontSize: '2.5rem' }}>{lang === 'en' ? 'Student Voices' : 'Talabalar fikri'}</h2>
-                </div>
-                <div className="grid grid-cols-3" style={{ gap: '2rem' }}>
-                    {t.testimonials.map((test, i) => (
-                        <div key={i} className="glass-panel" style={{ padding: '2rem', position: 'relative' }}>
-                            <Quote size={24} style={{ color: 'var(--color-primary)', opacity: 0.2, marginBottom: '1rem' }} />
-                            <p style={{ fontStyle: 'italic', marginBottom: '1.5rem', fontSize: '0.95rem' }}>"{test.text}"</p>
+                            <div className="result-icon-bg">
+                                {i === 0 ? <Activity size={24} /> : i === 1 ? <PieChart size={24} /> : <ShieldCheck size={24} />}
+                            </div>
                             <div>
-                                <strong style={{ display: 'block' }}>{test.name}</strong>
-                                <span className="text-muted" style={{ fontSize: '0.85rem' }}>{test.role}</span>
+                                <div className="result-val">{res.val}</div>
+                                <div className="result-label">{res.label}</div>
                             </div>
                         </div>
                     ))}
                 </div>
             </section>
 
+            {/* Core Skills Section */}
+            <section className="skills-section container">
+                <div className="section-header text-center">
+                    <span className="badge">BUILDING PLAN</span>
+                    <h2>Personalized 30-Day Roadmap</h2>
+                </div>
+                <div className="skills-grid">
+                    {[
+                        { icon: <BookOpen />, title: 'Reading', color: 'blue', desc: 'Predictive "Rasch" based mock tests.' },
+                        { icon: <Headphones />, title: 'Listening', color: 'green', desc: 'Real exam recording acoustics.' },
+                        { icon: <GraduationCap />, title: 'Writing', color: 'purple', desc: 'AI feedback on DTM criteria.' },
+                        { icon: <Mic />, title: 'Speaking', color: 'warning', desc: 'Stress-free Atlas conversation.' }
+                    ].map((skill, i) => (
+                        <div key={i} className={`skill-card color-${skill.color}`}>
+                            <div className="skill-icon">{skill.icon}</div>
+                            <h3>{skill.title}</h3>
+                            <p>{skill.desc}</p>
+                        </div>
+                    ))}
+                </div>
+            </section>
+
+            {/* Why Atlas (Comparison Visual) */}
+            <section className="comparison-section container">
+                <div className="highlight-card premium-gradient">
+                    <div className="highlight-content">
+                        <div className="badge-light">WHY ATLAS?</div>
+                        <h2>Automated Study Journey.</h2>
+                        <ul className="premium-list">
+                            <li><Zap size={18} /> Official 75-point scaling</li>
+                            <li><Zap size={18} /> One-on-one AI coaching 24/7</li>
+                            <li><Zap size={18} /> Real-time weakness diagnostic</li>
+                        </ul>
+                        <Link to="/onboarding" className="btn btn-white">Build My Plan</Link>
+                    </div>
+                    <div className="highlight-visual">
+                        <img src={mockTestImg} alt="Exam Platform" className="perspective-img" />
+                    </div>
+                </div>
+            </section>
+
             <footer className="footer container">
-                <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', opacity: 0.6 }}>
-                    <div className="brand" style={{ fontSize: '1.25rem' }}>CEFR<span className="text-primary">ACADEMY.uz</span></div>
-                    <p>© 2025 CEFRACADEMY.uz. Real National Standards.</p>
+                <div className="footer-content">
+                    <div className="brand" style={{ fontSize: '1.5rem' }}>CEFR<span className="text-primary">ACADEMY.uz</span></div>
+                    <p>© 2025 CEFRACADEMY.uz. Built for Uzbekistan.</p>
                 </div>
             </footer>
         </div>
