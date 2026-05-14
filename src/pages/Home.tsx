@@ -13,7 +13,7 @@ const Home = ({ lang }: HomeProps) => {
         heroSubtitle: lang === 'en'
             ? 'The ultimate platform for Uzbek students to prepare for CEFR Reading, Listening, Writing, and Speaking.'
             : 'O\'zbek o\'quvchilari uchun CEFR bo\'yicha o\'qish, tinglash, yozish va gapirish ko\'nikmalarini tayyorlashning yagona platformasi.',
-        getStarted: lang === 'en' ? 'Get Started' : 'Bolash',
+        getStarted: lang === 'en' ? 'Get Started' : 'Boshlash',
         login: lang === 'en' ? 'Login' : 'Tizimga kirish',
         sections: [
             {

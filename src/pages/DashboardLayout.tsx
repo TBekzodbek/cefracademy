@@ -1,5 +1,7 @@
-import { Link, useLocation, Outlet } from 'react-router-dom';
+import { useEffect } from 'react';
+import { Link, useLocation, Outlet, useNavigate } from 'react-router-dom';
 import { LayoutDashboard, User, Crown, CreditCard, BookOpen, Headphones, GraduationCap, Mic, LogOut, CheckCircle } from 'lucide-react';
+import { supabase } from '../lib/supabase';
 import './DashboardLayout.css';
 
 interface Props {
@@ -8,6 +10,20 @@ interface Props {
 
 const DashboardLayout = ({ lang }: Props) => {
     const location = useLocation();
+    const navigate = useNavigate();
+
+    useEffect(() => {
+        const checkUser = async () => {
+            const { data: { user } } = await supabase.auth.getUser();
+            if (!user) navigate('/login');
+        };
+        checkUser();
+    }, [navigate]);
+
+    const handleLogout = async () => {
+        await supabase.auth.signOut();
+        navigate('/');
+    };
 
     const menuItems = [
         { section: lang === 'en' ? 'Main' : 'Asosiy' },
@@ -65,10 +81,10 @@ const DashboardLayout = ({ lang }: Props) => {
                 </nav>
 
                 <div className="sidebar-footer">
-                    <Link to="/" className="sidebar-link text-error">
+                    <button onClick={handleLogout} className="sidebar-link text-error" style={{ width: '100%', background: 'none', border: 'none', cursor: 'pointer' }}>
                         <LogOut size={20} />
                         <span>{lang === 'en' ? 'Log Out' : 'Chiqish'}</span>
-                    </Link>
+                    </button>
                 </div>
             </aside>
 

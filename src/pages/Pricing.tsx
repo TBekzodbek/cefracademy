@@ -6,6 +6,33 @@ interface Props {
 }
 
 const Pricing = ({ lang }: Props) => {
+    const t = {
+        freeBenefits: lang === 'en' ? [
+            '3 mock reading texts',
+            '3 writing prompt questions',
+            '3 sample audios',
+            'Basic speaking intro'
+        ] : [
+            '3 ta o\'qish testi',
+            '3 ta yozish mavzusi',
+            '3 ta audio namuna',
+            'Boshlang\'ich gapirish tanishtiruvi'
+        ],
+        proBenefits: lang === 'en' ? [
+            'Unlimited mock tests (All sections)',
+            'AI scoring & detailed grammar feedback',
+            'Live AI robot for speaking',
+            'Transcripts for all audios',
+            'AI dynamic study plan generation'
+        ] : [
+            'Cheksiz mock testlar (barcha bo\'limlar)',
+            'AI baholash va batafsil grammatik tahlil',
+            'Gapirish uchun jonli AI robot',
+            'Barcha audiolar uchun transkriptlar',
+            'AI orqali dinamik o\'quv rejasini yaratish'
+        ]
+    };
+
     return (
         <motion.div
             initial={{ opacity: 0, y: 15 }}
@@ -28,11 +55,11 @@ const Pricing = ({ lang }: Props) => {
                 <div className="glass-panel" style={{ padding: '3rem', display: 'flex', flexDirection: 'column' }}>
                     <h2 style={{ fontSize: '1.75rem', marginBottom: '0.5rem' }}>{lang === 'en' ? 'Free Basic' : 'Bepul Asosiy'}</h2>
                     <div style={{ fontSize: '2.5rem', fontWeight: 'bold', marginBottom: '2rem' }}>
-                        {lang === 'en' ? '$0' : '0 sum'}<span className="text-muted" style={{ fontSize: '1rem', fontWeight: 500 }}> / {lang === 'en' ? 'forever' : 'doim'}</span>
+                        {lang === 'en' ? '$0' : '0 so\'m'}<span className="text-muted" style={{ fontSize: '1rem', fontWeight: 500 }}> / {lang === 'en' ? 'forever' : 'doimiy'}</span>
                     </div>
 
                     <ul style={{ listStyle: 'none', padding: 0, display: 'flex', flexDirection: 'column', gap: '1rem', flexGrow: 1, marginBottom: '3rem' }}>
-                        {['3 mock reading texts', '3 writing prompt questions', '3 sample audios', 'Basic speaking intro'].map((feat, i) => (
+                        {t.freeBenefits.map((feat, i) => (
                             <li key={i} style={{ display: 'flex', gap: '0.75rem', alignItems: 'center' }}>
                                 <CheckCircle size={18} className="text-muted" /> {feat}
                             </li>
@@ -52,17 +79,11 @@ const Pricing = ({ lang }: Props) => {
 
                     <h2 style={{ fontSize: '1.75rem', marginBottom: '0.5rem', color: 'var(--color-primary)' }}>{lang === 'en' ? 'Pro CEFR' : 'Pro CEFR'}</h2>
                     <div style={{ fontSize: '2.5rem', fontWeight: 'bold', marginBottom: '2rem' }}>
-                        {lang === 'en' ? '$19' : '230,000 sum'}<span className="text-muted" style={{ fontSize: '1rem', fontWeight: 500 }}> / {lang === 'en' ? 'month' : 'oy'}</span>
+                        {lang === 'en' ? '$19' : '230,000 so\'m'}<span className="text-muted" style={{ fontSize: '1rem', fontWeight: 500 }}> / {lang === 'en' ? 'month' : 'oy'}</span>
                     </div>
 
                     <ul style={{ listStyle: 'none', padding: 0, display: 'flex', flexDirection: 'column', gap: '1rem', flexGrow: 1, marginBottom: '3rem' }}>
-                        {[
-                            'Unlimited mock tests (All sections)',
-                            'AI scoring & detailed grammar feedback',
-                            'Live AI robot for speaking',
-                            'Transcripts for all audios',
-                            'AI dynamic study plan generation'
-                        ].map((feat, i) => (
+                        {t.proBenefits.map((feat, i) => (
                             <li key={i} style={{ display: 'flex', gap: '0.75rem', alignItems: 'center', fontWeight: 500 }}>
                                 <CheckCircle size={18} className="text-primary" /> {feat}
                             </li>
@@ -70,7 +91,7 @@ const Pricing = ({ lang }: Props) => {
                     </ul>
 
                     <button className="btn btn-primary" style={{ width: '100%', padding: '1rem', fontSize: '1.1rem' }}>
-                        {lang === 'en' ? 'Upgrade with Payme / Stripe' : 'Payme / Stripe orqali to\'lash'}
+                        {lang === 'en' ? 'Upgrade with Payme / Stripe' : 'Payme / Stripe orqali yangilash'}
                     </button>
                 </div>
 

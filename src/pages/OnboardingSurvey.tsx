@@ -1,7 +1,8 @@
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { useNavigate } from 'react-router-dom';
 import { Sparkles, Target, Clock, BrainCircuit } from 'lucide-react';
+import { supabase } from '../lib/supabase';
 import './PageLayout.css';
 
 interface Props {
@@ -12,20 +13,37 @@ const OnboardingSurvey = ({ lang }: Props) => {
     const navigate = useNavigate();
     const [step, setStep] = useState(1);
     const [isGenerating, setIsGenerating] = useState(false);
+    const [selections, setSelections] = useState<string[]>([]);
+    const [userId, setUserId] = useState<string | null>(null);
+
+    useEffect(() => {
+        const fetchUser = async () => {
+            const { data: { user } } = await supabase.auth.getUser();
+            if (!user) {
+                navigate('/login');
+            } else {
+                setUserId(user.id);
+            }
+        };
+        fetchUser();
+    }, [navigate]);
 
     const t = {
         steps: [
             {
+                id: 'current_level',
                 icon: <BrainCircuit size={40} />,
                 q: lang === 'en' ? 'What is your current English level?' : 'Hozirgi Ingliz tili darajangiz qanday?',
                 opts: ['A1 Beginner', 'A2 Elementary', 'B1 Intermediate', 'B2 Upper', 'C1 Advanced']
             },
             {
+                id: 'target_level',
                 icon: <Target size={40} />,
                 q: lang === 'en' ? 'What is your target CEFR score?' : 'Maqsad qilgan CEFR darajangiz qanday?',
                 opts: ['B1', 'B2', 'C1']
             },
             {
+                id: 'time_left',
                 icon: <Clock size={40} />,
                 q: lang === 'en' ? 'How much time left until your exam?' : 'Imtihongacha qancha vaqt qoldi?',
                 opts: [lang === 'en' ? 'Less than 1 month' : '1 oydan kam', lang === 'en' ? '1-3 months' : '1-3 oy', lang === 'en' ? 'More than 3 months' : '3 oydan ko\'p']
@@ -36,11 +54,35 @@ const OnboardingSurvey = ({ lang }: Props) => {
         generating: lang === 'en' ? 'Analyzing your profile and generating your personalized study plan...' : 'Profilingiz tahlil qilinmoqda va shaxsiy o\'quv rejangiz yasalmoqda...'
     };
 
-    const handleNext = () => {
+    const handleSelect = async (opt: string) => {
+        const newSelections = [...selections, opt];
+        setSelections(newSelections);
+
         if (step < 3) {
             setStep(step + 1);
         } else {
             setIsGenerating(true);
+
+            // Save data to Supabase
+            if (userId) {
+                try {
+                    const { error } = await supabase
+                        .from('profiles')
+                        .upsert({
+                            id: userId,
+                            current_level: newSelections[0],
+                            target_level: newSelections[1],
+                            time_left: newSelections[2],
+                            points: 0,
+                            onboarding_completed: true
+                        });
+
+                    if (error) console.error('Error saving profile:', error);
+                } catch (err) {
+                    console.error('Unexpected error:', err);
+                }
+            }
+
             // Simulate AI loading logic
             setTimeout(() => {
                 navigate('/dashboard');
@@ -72,7 +114,7 @@ const OnboardingSurvey = ({ lang }: Props) => {
                                     key={i}
                                     className="btn btn-outline"
                                     style={{ width: '100%', padding: '1rem', justifyContent: 'center', fontSize: '1.1rem' }}
-                                    onClick={handleNext}
+                                    onClick={() => handleSelect(opt)}
                                 >
                                     {opt}
                                 </button>

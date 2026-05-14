@@ -11,10 +11,10 @@ const Navigation = ({ lang, toggleLang }: NavigationProps) => {
     const location = useLocation();
 
     const links = [
-        { to: '/reading', icon: <BookOpen size={20} />, label: lang === 'en' ? 'Reading' : 'O\'qish' },
-        { to: '/listening', icon: <Headphones size={20} />, label: lang === 'en' ? 'Listening' : 'Eshitish' },
-        { to: '/writing', icon: <GraduationCap size={20} />, label: lang === 'en' ? 'Writing' : 'Yozish' },
-        { to: '/speaking', icon: <Mic size={20} />, label: lang === 'en' ? 'Speaking' : 'Gapirish' },
+        { to: '/dashboard/reading', icon: <BookOpen size={20} />, label: lang === 'en' ? 'Reading' : 'O\'qish' },
+        { to: '/dashboard/listening', icon: <Headphones size={20} />, label: lang === 'en' ? 'Listening' : 'Eshitish' },
+        { to: '/dashboard/writing', icon: <GraduationCap size={20} />, label: lang === 'en' ? 'Writing' : 'Yozish' },
+        { to: '/dashboard/speaking', icon: <Mic size={20} />, label: lang === 'en' ? 'Speaking' : 'Gapirish' },
     ];
 
     return (
