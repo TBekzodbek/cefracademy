@@ -3,26 +3,46 @@
 }
 
 .hero {
-    padding: 10rem 1rem 8rem;
-    text-align: center;
+    padding: 8rem 1rem 6rem;
+}
+
+.hero-grid {
+    display: grid;
+    grid-template-columns: 1.2fr 0.8fr;
+    align-items: center;
+    gap: 4rem;
 }
 
 .hero-title {
-    font-size: 5rem;
+    font-size: 4.5rem;
     font-weight: 850;
-    max-width: 950px;
-    margin: 0 auto 2rem;
-    line-height: 1;
+    line-height: 1.1;
 }
 
 .hero-subtitle {
     font-size: 1.25rem;
     color: var(--color-text-muted);
-    max-width: 650px;
-    margin: 0 auto 3rem;
 }
 
-/* Results Strip ala ieltsnation */
+.floating-img {
+    animation: float 6s ease-in-out infinite;
+}
+
+@keyframes float {
+    0% {
+        transform: translateY(0px);
+    }
+
+    50% {
+        transform: translateY(-20px);
+    }
+
+    100% {
+        transform: translateY(0px);
+    }
+}
+
+/* Results Strip */
 .results-strip {
     border-top: 1px solid var(--color-border);
     border-bottom: 1px solid var(--color-border);
@@ -101,11 +121,6 @@
     box-shadow: 0 4px 10px rgba(37, 99, 235, 0.3);
 }
 
-.step-card h3 {
-    font-size: 1.5rem;
-    margin-bottom: 1rem;
-}
-
 /* Feature Highlight */
 .features-highlight {
     padding: 4rem 0 8rem;
@@ -133,43 +148,28 @@
     margin-bottom: 2.5rem;
 }
 
-.highlight-visual {
-    height: 300px;
-    background: var(--color-background-alt);
-    border-radius: var(--radius-xl);
-    position: relative;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-}
-
-.visual-mock {
-    width: 280px;
-    padding: 2rem;
-    background: white;
-    border-radius: var(--radius-lg);
-    box-shadow: var(--shadow-xl);
-    border: 1px solid var(--color-border);
-    z-index: 1;
-}
-
-.visual-circle {
-    position: absolute;
-    width: 250px;
-    height: 250px;
-    background: var(--color-primary-soft);
-    border-radius: 50%;
-    filter: blur(40px);
-}
-
 .footer {
     padding: 4rem 0;
     border-top: 1px solid var(--color-border);
 }
 
 @media (max-width: 968px) {
-    .hero-title {
-        font-size: 3rem;
+    .hero-grid {
+        grid-template-columns: 1fr;
+        text-align: center;
+    }
+
+    .hero-title,
+    .hero-subtitle {
+        text-align: center !important;
+    }
+
+    .hero-actions {
+        justify-content: center;
+    }
+
+    .hero-image {
+        order: -1;
     }
 
     .steps-grid {
@@ -183,7 +183,7 @@
         padding: 3rem 1.5rem;
     }
 
-    .highlight-visual {
+    .hidden-mobile {
         display: none;
     }
 }

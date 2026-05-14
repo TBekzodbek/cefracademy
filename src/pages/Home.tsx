@@ -3,6 +3,11 @@ import { Link } from 'react-router-dom';
 import { ArrowRight } from 'lucide-react';
 import './Home.css';
 
+// Import local assets
+import aiCoachImg from '../assets/images/ai-coach.png';
+import successImg from '../assets/images/success.png';
+import mockTestImg from '../assets/images/mock-test.png';
+
 interface HomeProps {
     lang: 'en' | 'uz';
 }
@@ -37,25 +42,39 @@ const Home = ({ lang }: HomeProps) => {
         <div className="home-page">
             {/* Hero Section */}
             <section className="hero container">
-                <motion.div
-                    initial={{ opacity: 0, y: 20 }}
-                    animate={{ opacity: 1, y: 0 }}
-                    transition={{ duration: 0.8 }}
-                >
-                    <span className="badge" style={{ marginBottom: '1.5rem' }}>{t.heroBadge}</span>
-                    <h1 className="hero-title">{t.heroTitle}</h1>
-                    <p className="hero-subtitle">{t.heroSubtitle}</p>
-                    <div className="hero-actions">
-                        <Link to="/login" className="btn btn-primary" style={{ padding: '1rem 2.5rem', fontSize: '1.1rem' }}>
-                            {t.cta} <ArrowRight size={20} />
-                        </Link>
-                    </div>
-                </motion.div>
+                <div className="hero-grid">
+                    <motion.div
+                        className="hero-text"
+                        initial={{ opacity: 0, x: -20 }}
+                        animate={{ opacity: 1, x: 0 }}
+                        transition={{ duration: 0.8 }}
+                    >
+                        <span className="badge" style={{ marginBottom: '1.5rem' }}>{t.heroBadge}</span>
+                        <h1 className="hero-title" style={{ textAlign: 'left', margin: '0 0 2rem 0' }}>{t.heroTitle}</h1>
+                        <p className="hero-subtitle" style={{ textAlign: 'left', margin: '0 0 3rem 0' }}>{t.heroSubtitle}</p>
+                        <div className="hero-actions" style={{ display: 'flex' }}>
+                            <Link to="/login" className="btn btn-primary" style={{ padding: '1rem 2.5rem', fontSize: '1.1rem' }}>
+                                {t.cta} <ArrowRight size={20} />
+                            </Link>
+                        </div>
+                    </motion.div>
+                    <motion.div
+                        className="hero-image"
+                        initial={{ opacity: 0, scale: 0.9 }}
+                        animate={{ opacity: 1, scale: 1 }}
+                        transition={{ duration: 0.8, delay: 0.2 }}
+                    >
+                        <img src={aiCoachImg} alt="AI Coach" className="floating-img" style={{ width: '100%', maxWidth: '500px' }} />
+                    </motion.div>
+                </div>
             </section>
 
             {/* Results Bar */}
             <section className="results-strip">
                 <div className="container results-flex">
+                    <div className="success-visual hidden-mobile">
+                        <img src={successImg} alt="Students" style={{ height: '60px', opacity: 0.8 }} />
+                    </div>
                     {t.results.map((res, i) => (
                         <div key={i} className="result-item">
                             <div className="result-val">{res.val}</div>
@@ -65,7 +84,7 @@ const Home = ({ lang }: HomeProps) => {
                 </div>
             </section>
 
-            {/* 3-Step Process Section (IELTS Nation Style) */}
+            {/* 3-Step Process Section */}
             <section className="steps-section container">
                 <div className="text-center" style={{ marginBottom: '4rem' }}>
                     <h2 style={{ fontSize: '2.5rem' }}>{lang === 'en' ? 'Simple. Fast. Effective.' : 'Oddiy. Tezkor. Samarali.'}</h2>
@@ -90,16 +109,8 @@ const Home = ({ lang }: HomeProps) => {
                         <p>{lang === 'en' ? 'Real timing, real scoring, and detailed AI feedback for every section.' : 'Haqiqiy vaqt, aniq ballar va har bir bo\'lim uchun AI tahlillari.'}</p>
                         <Link to="/login" className="btn btn-outline">{lang === 'en' ? 'Try Mock Test' : 'Mock testni ko\'rish'}</Link>
                     </div>
-                    <div className="highlight-visual">
-                        <div className="visual-circle"></div>
-                        <div className="visual-mock">
-                            <div style={{ height: '14px', width: '40%', background: 'var(--color-primary)', borderRadius: '4px', marginBottom: '1.5rem' }}></div>
-                            <div style={{ display: 'flex', flexDirection: 'column', gap: '0.75rem' }}>
-                                <div style={{ height: '8px', width: '100%', background: '#eee', borderRadius: '4px' }}></div>
-                                <div style={{ height: '8px', width: '90%', background: '#eee', borderRadius: '4px' }}></div>
-                                <div style={{ height: '8px', width: '95', background: '#eee', borderRadius: '4px' }}></div>
-                            </div>
-                        </div>
+                    <div className="highlight-visual" style={{ background: 'transparent' }}>
+                        <img src={mockTestImg} alt="Mock Test" style={{ width: '100%', borderRadius: '1rem', boxShadow: 'var(--shadow-xl)' }} />
                     </div>
                 </div>
             </section>

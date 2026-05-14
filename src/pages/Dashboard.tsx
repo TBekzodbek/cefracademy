@@ -4,6 +4,7 @@ import { Loader2, ArrowUpRight, BookOpen, GraduationCap } from 'lucide-react';
 import { Link } from 'react-router-dom';
 import { supabase } from '../lib/supabase';
 import './PageLayout.css';
+import aiCoachSmall from '../assets/images/ai-coach.png';
 
 interface Props {
     lang: 'en' | 'uz';
@@ -61,16 +62,21 @@ const Dashboard = ({ lang }: Props) => {
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.4 }}
         >
-            <header className="page-header">
-                <h1>{lang === 'en' ? 'Dashboard Overview' : 'Boshqaruv paneli'}</h1>
-                <p>
-                    {lang === 'en'
-                        ? 'Welcome back. Here is a summary of your CEFR preparation progress.'
-                        : 'Xush kelibsiz. CEFR tayyorgarligingiz bo\'yicha qisqacha ma\'lumotlar.'}
-                </p>
+            <header className="page-header" style={{ position: 'relative' }}>
+                <div>
+                    <h1>{lang === 'en' ? 'Dashboard Overview' : 'Boshqaruv paneli'}</h1>
+                    <p>
+                        {lang === 'en'
+                            ? 'Welcome back. Here is a summary of your CEFR preparation progress.'
+                            : 'Xush kelibsiz. CEFR tayyorgarligingiz bo\'yicha qisqacha ma\'lumotlar.'}
+                    </p>
+                </div>
+                <div className="dashboard-mascot hidden-mobile" style={{ position: 'absolute', right: 0, top: '-20px' }}>
+                    <img src={aiCoachSmall} alt="AI Coach" style={{ width: '120px', filter: 'drop-shadow(0 10px 15px rgba(0,0,0,0.1))' }} />
+                </div>
             </header>
 
-            <div className="dashboard-grid">
+            <div className="dashboard-grid" style={{ marginTop: '2rem' }}>
                 <div className="stat-card">
                     <h3>{lang === 'en' ? 'Target Score' : 'Maqsadli ball'}</h3>
                     <div className="value" style={{ color: 'var(--color-primary)' }}>{profile?.target_level || 'N/A'}</div>
