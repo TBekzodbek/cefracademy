@@ -17,16 +17,7 @@ interface Props {
 }
 
 const AIChat = ({ lang }: Props) => {
-    const [messages, setMessages] = useState<Message[]>([
-        {
-            id: '1',
-            text: lang === 'en'
-                ? "Hello! I am Atlas, your CEFR AI tutor. How can I help you with your exam preparation today?"
-                : "Salom! Men Atlasman, sizning CEFR AI repetitoringizman. Bugun imtihonga tayyorgarlik ko'rishda sizga qanday yordam bera olaman?",
-            sender: 'bot',
-            timestamp: new Date()
-        }
-    ]);
+    const [messages, setMessages] = useState<Message[]>([]);
     const [input, setInput] = useState('');
     const [isTyping, setIsTyping] = useState(false);
     const messagesEndRef = useRef<HTMLDivElement>(null);
@@ -58,7 +49,6 @@ const AIChat = ({ lang }: Props) => {
         try {
             // Gemini history must start with 'user' role.
             const history = allMessages
-                .filter((m, i) => !(i === 0 && m.sender === 'bot'))
                 .map(m => ({
                     role: m.sender === 'user' ? 'user' : 'model',
                     parts: [{ text: m.text }],
