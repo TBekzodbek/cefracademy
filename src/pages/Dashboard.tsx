@@ -3,6 +3,7 @@ import { motion } from 'framer-motion';
 import { Loader2, BookOpen, GraduationCap, BarChart, TrendingUp, ArrowRight, CheckCircle2, Calendar, MessageSquare, Compass, Award } from 'lucide-react';
 import { Link } from 'react-router-dom';
 import { supabase } from '../lib/supabase';
+import { CEFR_MARKING_SYSTEM } from '../lib/marking';
 import './PageLayout.css';
 import atlasWolfSmall from '../assets/images/atlas-wolf.png';
 
@@ -90,11 +91,11 @@ const Dashboard = ({ lang }: Props) => {
         setDailyPlan(tasks);
     };
 
+
+
     const getScoreBoundary = (level: string) => {
-        if (level?.includes('C1')) return 64;
-        if (level?.includes('B2')) return 49;
-        if (level?.includes('B1')) return 34;
-        return 0;
+        const range = CEFR_MARKING_SYSTEM.find(r => level.includes(r.level));
+        return range ? range.minPoints : 0;
     };
 
     const targetBoundary = getScoreBoundary(profile?.target_level || 'B2');
@@ -214,6 +215,19 @@ const Dashboard = ({ lang }: Props) => {
                                 <h4 style={{ fontSize: '1.5rem', margin: '0', color: '#0f172a' }}>1st Day</h4>
                             </div>
                             <Award className="text-secondary" size={32} />
+                        </div>
+                    </div>
+
+                    {/* Marking System Guide */}
+                    <div className="glass-panel" style={{ padding: '1.5rem' }}>
+                        <h4 style={{ fontSize: '0.9rem', marginBottom: '1rem' }}>{lang === 'en' ? 'Official Marking Guide' : 'Rasmiy baholash tizimi'}</h4>
+                        <div style={{ display: 'flex', flexDirection: 'column', gap: '0.8rem' }}>
+                            {CEFR_MARKING_SYSTEM.map(range => (
+                                <div key={range.level} style={{ display: 'flex', justifyContent: 'space-between', fontSize: '0.85rem' }}>
+                                    <span style={{ fontWeight: 700 }}>{range.level}</span>
+                                    <span className="text-muted">{range.minPoints}-{range.maxPoints} pts</span>
+                                </div>
+                            ))}
                         </div>
                     </div>
                 </div>

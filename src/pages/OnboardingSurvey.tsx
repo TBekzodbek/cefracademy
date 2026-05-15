@@ -100,7 +100,7 @@ const OnboardingSurvey = ({ lang, toggleLang }: Props) => {
             id: 'target_level',
             icon: <Target size={48} />,
             q: lang === 'en' ? 'What is your target score?' : 'Maqsadli natijangiz?',
-            opts: ['B1 (34-48 pts)', 'B2 (49-63 pts)', 'C1 (64-75 pts)']
+            opts: ['B1 (38-50 pts)', 'B2 (51-64 pts)', 'C1 (65-75 pts)']
         },
         {
             id: 'weakness',
