@@ -55,11 +55,17 @@ const AIChat = ({ lang }: Props) => {
         setIsTyping(true);
 
         try {
-            const chat = model.startChat({
-                history: messages.map(m => ({
+            // Gemini history must start with 'user' role.
+            // We skip the very first welcome message if it's from the bot.
+            const history = messages
+                .filter((m, i) => !(i === 0 && m.sender === 'bot'))
+                .map(m => ({
                     role: m.sender === 'user' ? 'user' : 'model',
                     parts: [{ text: m.text }],
-                })),
+                }));
+
+            const chat = model.startChat({
+                history: history,
                 generationConfig: {
                     maxOutputTokens: 1000,
                 },
