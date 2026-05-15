@@ -65,13 +65,27 @@ const Listening = ({ lang }: Props) => {
                     <h3 style={{ marginBottom: '1.5rem' }}>{lang === 'en' ? 'Answer the following:' : 'Quyidagilarga javob bering:'}</h3>
 
                     <div style={{ display: 'flex', flexDirection: 'column', gap: '2rem' }}>
-                        {[1, 2, 3, 4].map(q => (
+                        <div className="section-part-label" style={{ padding: '0.5rem 1rem', background: 'var(--color-secondary)', color: 'white', borderRadius: 'var(--radius-md)', fontSize: '0.8rem', fontWeight: 700, width: 'fit-content' }}>PART 1: Qisqa monologlar (1-10 savollar)</div>
+                        {[1].map(q => (
                             <div key={q} style={{ borderBottom: '1px solid var(--color-border)', paddingBottom: '1.5rem' }}>
-                                <p style={{ fontWeight: 600, marginBottom: '1rem' }}>{q}. [Insert listening comprehension question]</p>
+                                <p style={{ fontWeight: 600, marginBottom: '1rem' }}>{q}. [Qisqa monolog asosidagi savol]</p>
                                 <div style={{ display: 'flex', flexDirection: 'column', gap: '0.5rem' }}>
                                     {['A', 'B', 'C'].map(opt => (
                                         <label key={opt} style={{ display: 'flex', alignItems: 'center', gap: '0.75rem', cursor: 'pointer' }}>
-                                            <input type="radio" name={`lq${q}`} /> <span>{opt}) [Option data]</span>
+                                            <input type="radio" name={`lq${q}`} /> <span>{opt}) [Varyant]</span>
+                                        </label>
+                                    ))}
+                                </div>
+                            </div>
+                        ))}
+                        <div className="section-part-label" style={{ padding: '0.5rem 1rem', background: 'var(--color-primary)', color: 'white', borderRadius: 'var(--radius-md)', fontSize: '0.8rem', fontWeight: 700, width: 'fit-content' }}>PART 2: Dialoglar (11-16 savollar)</div>
+                        {[11].map(q => (
+                            <div key={q} style={{ borderBottom: '1px solid var(--color-border)', paddingBottom: '1.5rem' }}>
+                                <p style={{ fontWeight: 600, marginBottom: '1rem' }}>{q}. [Dialog asosidagi savol]</p>
+                                <div style={{ display: 'flex', flexDirection: 'column', gap: '0.5rem' }}>
+                                    {['A', 'B', 'C'].map(opt => (
+                                        <label key={opt} style={{ display: 'flex', alignItems: 'center', gap: '0.75rem', cursor: 'pointer' }}>
+                                            <input type="radio" name={`lq${q}`} /> <span>{opt}) [Varyant]</span>
                                         </label>
                                     ))}
                                 </div>

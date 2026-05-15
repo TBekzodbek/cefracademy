@@ -66,13 +66,27 @@ const Reading = ({ lang }: Props) => {
                         </h3>
 
                         <div style={{ display: 'flex', flexDirection: 'column', gap: '2rem' }}>
-                            {[1, 2, 3].map(q => (
+                            <div className="section-part-label" style={{ padding: '0.5rem 1rem', background: 'var(--color-primary)', color: 'white', borderRadius: 'var(--radius-md)', fontSize: '0.8rem', fontWeight: 700, width: 'fit-content' }}>PART 1: Qisqa matnlar (e'lon, reklama)</div>
+                            {[1].map(q => (
                                 <div key={q} style={{ background: 'var(--color-background-alt)', padding: '1.5rem', borderRadius: 'var(--radius-md)', border: '1px solid var(--color-border)' }}>
-                                    <p style={{ fontWeight: 600, marginBottom: '1rem' }}>{q}. [Insert Question text here]</p>
+                                    <p style={{ fontWeight: 600, marginBottom: '1rem' }}>{q}. [E'lon asosidagi savol]</p>
                                     <div style={{ display: 'flex', flexDirection: 'column', gap: '0.5rem' }}>
                                         {['A', 'B', 'C', 'D'].map(opt => (
                                             <label key={opt} style={{ display: 'flex', alignItems: 'center', gap: '0.75rem', cursor: 'pointer' }}>
-                                                <input type="radio" name={`q${q}`} /> <span>{opt}) [Insert option text]</span>
+                                                <input type="radio" name={`q${q}`} /> <span>{opt}) [Varyant]</span>
+                                            </label>
+                                        ))}
+                                    </div>
+                                </div>
+                            ))}
+                            <div className="section-part-label" style={{ padding: '0.5rem 1rem', background: 'var(--color-secondary)', color: 'white', borderRadius: 'var(--radius-md)', fontSize: '0.8rem', fontWeight: 700, width: 'fit-content' }}>PART 2: Ommabop materiallar (gazeta, internet)</div>
+                            {[2].map(q => (
+                                <div key={q} style={{ background: 'var(--color-background-alt)', padding: '1.5rem', borderRadius: 'var(--radius-md)', border: '1px solid var(--color-border)' }}>
+                                    <p style={{ fontWeight: 600, marginBottom: '1rem' }}>{q}. [Maqola asosidagi savol]</p>
+                                    <div style={{ display: 'flex', flexDirection: 'column', gap: '0.5rem' }}>
+                                        {['A', 'B', 'C', 'D'].map(opt => (
+                                            <label key={opt} style={{ display: 'flex', alignItems: 'center', gap: '0.75rem', cursor: 'pointer' }}>
+                                                <input type="radio" name={`q${q}`} /> <span>{opt}) [Varyant]</span>
                                             </label>
                                         ))}
                                     </div>
