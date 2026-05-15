@@ -49,16 +49,27 @@ const Login = ({ lang, theme }: Props) => {
     }, [navigate]);
 
     const handleGoogleLogin = async () => {
-        setLoading(true);
-        setError(null);
-        const { error } = await supabase.auth.signInWithOAuth({
-            provider: 'google',
-            options: {
-                redirectTo: `${window.location.origin}/dashboard`,
-            },
-        });
-        if (error) {
-            setError(error.message);
+        try {
+            setLoading(true);
+            setError(null);
+            const { data, error } = await supabase.auth.signInWithOAuth({
+                provider: 'google',
+                options: {
+                    redirectTo: `${window.location.origin}/dashboard`,
+                    queryParams: {
+                        access_type: 'offline',
+                        prompt: 'consent',
+                    },
+                },
+            });
+            console.log('Google OAuth response:', { data, error });
+            if (error) {
+                throw error;
+            }
+            // If no error, Supabase will redirect the browser to Google automatically
+        } catch (err: any) {
+            console.error('Google login error:', err);
+            setError(err.message || 'Google login failed. Please check your Supabase Google provider settings.');
             setLoading(false);
         }
     };
