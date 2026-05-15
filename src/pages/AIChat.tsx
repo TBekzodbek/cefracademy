@@ -50,22 +50,25 @@ const AIChat = ({ lang }: Props) => {
             timestamp: new Date()
         };
 
-        setMessages(prev => [...prev, userMsg]);
+        const allMessages = [...messages, userMsg];
+        setMessages(allMessages);
         setInput('');
         setIsTyping(true);
 
         try {
             // Gemini history must start with 'user' role.
-            // We skip the very first welcome message if it's from the bot.
-            const history = messages
+            const history = allMessages
                 .filter((m, i) => !(i === 0 && m.sender === 'bot'))
                 .map(m => ({
                     role: m.sender === 'user' ? 'user' : 'model',
                     parts: [{ text: m.text }],
                 }));
 
+            // We remove the last message because it's the one we're about to "send"
+            const chatHistory = history.slice(0, -1);
+
             const chat = model.startChat({
-                history: history,
+                history: chatHistory,
                 generationConfig: {
                     maxOutputTokens: 1000,
                 },
