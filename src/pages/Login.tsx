@@ -10,7 +10,7 @@ interface Props {
     theme: 'light' | 'dark';
 }
 
-const Login = ({ lang, theme }: Props) => {
+const Login = ({ lang }: Props) => {
     const navigate = useNavigate();
     const [isSignUp, setIsSignUp] = useState(false);
     const [showPassword, setShowPassword] = useState(false);

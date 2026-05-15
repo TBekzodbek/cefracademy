@@ -1,5 +1,6 @@
 import { useEffect, useState } from 'react';
-import { Quote, getRandomQuote } from '../lib/quotes';
+import type { Quote } from '../lib/quotes';
+import { getRandomQuote } from '../lib/quotes';
 import { Quote as QuoteIcon } from 'lucide-react';
 
 export const MotivationalQuote = () => {

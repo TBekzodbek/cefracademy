@@ -1,7 +1,7 @@
 import { useState, useEffect } from 'react';
 import { motion } from 'framer-motion';
 import { useNavigate } from 'react-router-dom';
-import { User, Mail, Target, Activity, Loader2, LogOut, Shield, Camera, Upload } from 'lucide-react';
+import { User, Mail, Target, Activity, Loader2, LogOut, Shield, Camera } from 'lucide-react';
 import { supabase } from '../lib/supabase';
 import { calculateLevel } from '../lib/leveling';
 

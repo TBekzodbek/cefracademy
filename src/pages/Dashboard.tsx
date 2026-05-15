@@ -1,6 +1,6 @@
 import { useState, useEffect } from 'react';
 import { motion } from 'framer-motion';
-import { Loader2, BookOpen, GraduationCap, BarChart, TrendingUp, ArrowRight, CheckCircle2, Calendar, MessageSquare, Compass, Award, Shield } from 'lucide-react';
+import { Loader2, BookOpen, GraduationCap, BarChart, TrendingUp, ArrowRight, CheckCircle2, Calendar, MessageSquare, Compass, Shield } from 'lucide-react';
 import { Link } from 'react-router-dom';
 import { supabase } from '../lib/supabase';
 import { CEFR_MARKING_SYSTEM } from '../lib/marking';
@@ -33,7 +33,7 @@ interface PlanTask {
     priority: boolean;
 }
 
-const Dashboard = ({ lang, theme }: Props) => {
+const Dashboard = ({ lang }: Props) => {
     const [profile, setProfile] = useState<UserProfile | null>(null);
     const [loading, setLoading] = useState(true);
     const [dailyPlan, setDailyPlan] = useState<PlanTask[]>([]);
