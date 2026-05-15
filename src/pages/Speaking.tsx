@@ -25,6 +25,12 @@ const Speaking = ({ lang }: Props) => {
                 </p>
             </header>
 
+            <div className="glass-panel" style={{ padding: '0.5rem', display: 'flex', gap: '0.5rem', background: 'var(--color-background-alt)', width: '100%', maxWidth: '700px', marginBottom: '2rem' }}>
+                <button className="btn btn-primary" style={{ flex: 1, padding: '0.75rem', fontSize: '0.9rem' }}>PART 1: Interview</button>
+                <button className="btn btn-ghost" style={{ flex: 1, padding: '0.75rem', fontSize: '0.9rem' }}>PART 2: Card</button>
+                <button className="btn btn-ghost" style={{ flex: 1, padding: '0.75rem', fontSize: '0.9rem' }}>PART 3: Discuss</button>
+            </div>
+
             {/* AI Robot / Visualizer Space */}
             <div className="glass-panel" style={{ width: '100%', maxWidth: '700px', padding: '4rem 2rem', display: 'flex', flexDirection: 'column', alignItems: 'center', gap: '2.5rem' }}>
 
@@ -34,9 +40,14 @@ const Speaking = ({ lang }: Props) => {
                 </div>
 
                 <div style={{ textAlign: 'center' }}>
-                    <h3 style={{ fontSize: '1.5rem', marginBottom: '0.5rem' }}>
-                        {lang === 'en' ? 'AI: "Please tell me about your hometown."' : 'AI: "Menga ona shahringiz haqida so\'zlab bering."'}
+                    <h3 style={{ fontSize: '1.25rem', marginBottom: '1.5rem', background: 'rgba(249, 115, 22, 0.1)', padding: '1rem', borderRadius: 'var(--radius-md)', border: '1px solid rgba(249, 115, 22, 0.2)' }}>
+                        {lang === 'en'
+                            ? 'Part 1: General questions about your life, study, and interests.'
+                            : '1-qism: Hayotingiz, o\'qishingiz va qiziqishlaringiz haqida umumiy savollar.'}
                     </h3>
+                    <h4 style={{ fontSize: '1.5rem', marginBottom: '0.5rem' }}>
+                        {lang === 'en' ? 'AI: "Please tell me about your hometown."' : 'AI: "Menga ona shahringiz haqida so\'zlab bering."'}
+                    </h4>
                     <p className="text-muted">
                         {lang === 'en' ? 'Press the microphone to respond.' : 'Javob berish uchun mikrofonni bosing.'}
                     </p>

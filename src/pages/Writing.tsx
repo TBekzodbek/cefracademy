@@ -32,16 +32,23 @@ const Writing = ({ lang }: Props) => {
 
             <div className="grid grid-cols-2 gap-6">
                 <div style={{ display: 'flex', flexDirection: 'column', gap: '1.5rem' }}>
+                    <div className="glass-panel" style={{ padding: '0.5rem', display: 'flex', gap: '0.5rem', background: 'var(--color-background-alt)' }}>
+                        <button className="btn btn-primary" style={{ flex: 1, padding: '0.75rem', fontSize: '0.9rem' }}>TASK 1: Letter/Email</button>
+                        <button className="btn btn-ghost" style={{ flex: 1, padding: '0.75rem', fontSize: '0.9rem' }}>TASK 2: Essay</button>
+                    </div>
+
                     <div className="glass-panel" style={{ padding: '2rem' }}>
                         <h3 style={{ display: 'flex', alignItems: 'center', gap: '0.5rem', marginBottom: '1rem' }}>
                             <Edit3 size={20} />
-                            {lang === 'en' ? 'Prompt' : 'Mavzu'}
+                            {lang === 'en' ? 'Prompt (Task 1)' : 'Mavzu (1-topshiriq)'}
                         </h3>
                         <p style={{ fontSize: '1.1rem', lineHeight: '1.7', padding: '1rem', background: 'var(--color-background-alt)', borderRadius: 'var(--radius-md)', borderLeft: '4px solid #9333ea' }}>
-                            [Insert detailed writing prompt here. E.g., "Some people think that the only purpose of working hard is to earn money. To what extent do you agree or disagree?"]
+                            {lang === 'en'
+                                ? 'Write a formal email to a university professor asking for information about a research project. Mention your interest and qualifications.'
+                                : 'Universitet professoriga tadqiqot loyihasi haqida ma\'lumot so\'rab rasmiy xat yozing. O\'z qiziqishingiz va ko\'nikmalaringizni aytib o\'ting.'}
                         </p>
                         <p className="text-muted" style={{ marginTop: '1rem', fontSize: '0.9rem' }}>
-                            {lang === 'en' ? 'Write at least 250 words.' : 'Kamida 250 ta so\'z yozing.'}
+                            {lang === 'en' ? 'Write at least 150 words.' : 'Kamida 150 ta so\'z yozing.'}
                         </p>
                     </div>
 
@@ -49,7 +56,9 @@ const Writing = ({ lang }: Props) => {
                         <Sparkles size={32} style={{ color: '#9333ea', margin: '0 auto 1rem' }} />
                         <h4>{lang === 'en' ? 'AI Feedback Area' : 'AI Fikr-mulohaza maydoni'}</h4>
                         <p className="text-muted" style={{ fontSize: '0.95rem', marginTop: '0.5rem' }}>
-                            [After pressing submit, an AI API (OpenAI/Claude) will return grammar fixes, vocabulary upgrades, and an estimated CEFR score. Render that structured JSON data here.]
+                            {lang === 'en'
+                                ? 'Submit your writing to get a detailed band score (C1, B2, B1) based on DTM assessment criteria.'
+                                : 'DTM baholash mezonlari asosida batafsil natija (C1, B2, B1) olish uchun inshoni yuboring.'}
                         </p>
                     </div>
                 </div>

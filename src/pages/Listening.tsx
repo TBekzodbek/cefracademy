@@ -22,7 +22,7 @@ const Listening = ({ lang }: Props) => {
                         {lang === 'en' ? 'Tinglab tushunish (Listening)' : 'Tinglab tushunish (Eshitish)'}
                     </h1>
                     <p className="text-muted" style={{ margin: '0.5rem 0 0 0' }}>
-                        {lang === 'en' ? '4 Parts • 30-35 Minutes • 30 Questions' : '4 qism • 30-35 daqiqa • 30 savol'}
+                        {lang === 'en' ? '4 Parts • 30-35 Minutes • 35 Questions' : '4 qism • 30-35 daqiqa • 35 savol'}
                     </p>
                 </div>
                 <button className="btn btn-primary">
@@ -47,7 +47,7 @@ const Listening = ({ lang }: Props) => {
                         <button className="btn btn-secondary" style={{ padding: '1rem', borderRadius: '50%' }}>
                             <PlayCircle size={28} />
                         </button>
-                        <p className="text-muted" style={{ fontSize: '0.9rem' }}>[Replace with actual Custom Audio Player component loading audio source data]</p>
+                        <p className="text-muted" style={{ fontSize: '0.9rem' }}>{lang === 'en' ? 'Audio Source: CEFR Academy Official Mock' : 'Audio manbasi: CEFR Academy rasmiy Mock testi'}</p>
                     </div>
 
                     <div className="glass-panel" style={{ padding: '1.5rem' }}>
@@ -56,7 +56,7 @@ const Listening = ({ lang }: Props) => {
                             {lang === 'en' ? 'Transcript (Premium)' : 'Transkript (Premium)'}
                         </h4>
                         <div className="content-placeholder" style={{ minHeight: '100px', padding: '1rem' }}>
-                            <p className="text-muted" style={{ fontSize: '0.9rem' }}>[Transcript will be blurred/hidden until audio finishes or user upgrades. Insert text map here.]</p>
+                            <p className="text-muted" style={{ fontSize: '0.9rem' }}>{lang === 'en' ? 'Transcript will be available here after the test is submitted.' : 'Test yuborilgandan so\'ng transkript bu erda ko\'rinadi.'}</p>
                         </div>
                     </div>
                 </div>
@@ -65,32 +65,21 @@ const Listening = ({ lang }: Props) => {
                     <h3 style={{ marginBottom: '1.5rem' }}>{lang === 'en' ? 'Answer the following:' : 'Quyidagilarga javob bering:'}</h3>
 
                     <div style={{ display: 'flex', flexDirection: 'column', gap: '2rem' }}>
-                        <div className="section-part-label" style={{ padding: '0.5rem 1rem', background: 'var(--color-secondary)', color: 'white', borderRadius: 'var(--radius-md)', fontSize: '0.8rem', fontWeight: 700, width: 'fit-content' }}>PART 1: Qisqa monologlar (1-10 savollar)</div>
-                        {[1].map(q => (
-                            <div key={q} style={{ borderBottom: '1px solid var(--color-border)', paddingBottom: '1.5rem' }}>
-                                <p style={{ fontWeight: 600, marginBottom: '1rem' }}>{q}. [Qisqa monolog asosidagi savol]</p>
-                                <div style={{ display: 'flex', flexDirection: 'column', gap: '0.5rem' }}>
-                                    {['A', 'B', 'C'].map(opt => (
-                                        <label key={opt} style={{ display: 'flex', alignItems: 'center', gap: '0.75rem', cursor: 'pointer' }}>
-                                            <input type="radio" name={`lq${q}`} /> <span>{opt}) [Varyant]</span>
-                                        </label>
-                                    ))}
-                                </div>
-                            </div>
-                        ))}
-                        <div className="section-part-label" style={{ padding: '0.5rem 1rem', background: 'var(--color-primary)', color: 'white', borderRadius: 'var(--radius-md)', fontSize: '0.8rem', fontWeight: 700, width: 'fit-content' }}>PART 2: Dialoglar (11-16 savollar)</div>
-                        {[11].map(q => (
-                            <div key={q} style={{ borderBottom: '1px solid var(--color-border)', paddingBottom: '1.5rem' }}>
-                                <p style={{ fontWeight: 600, marginBottom: '1rem' }}>{q}. [Dialog asosidagi savol]</p>
-                                <div style={{ display: 'flex', flexDirection: 'column', gap: '0.5rem' }}>
-                                    {['A', 'B', 'C'].map(opt => (
-                                        <label key={opt} style={{ display: 'flex', alignItems: 'center', gap: '0.75rem', cursor: 'pointer' }}>
-                                            <input type="radio" name={`lq${q}`} /> <span>{opt}) [Varyant]</span>
-                                        </label>
-                                    ))}
-                                </div>
-                            </div>
-                        ))}
+                        <div className="section-part-label" style={{ padding: '0.5rem 1rem', background: 'var(--color-secondary)', color: 'white', borderRadius: 'var(--radius-md)', fontSize: '0.8rem', fontWeight: 700, width: 'fit-content' }}>
+                            PART 1: {lang === 'en' ? 'Short conversations (8 questions)' : 'Qisqa suhbatlar (8 savol)'}
+                        </div>
+
+                        <div className="section-part-label" style={{ padding: '0.5rem 1rem', background: 'var(--color-primary)', color: 'white', borderRadius: 'var(--radius-md)', fontSize: '0.8rem', fontWeight: 700, width: 'fit-content' }}>
+                            PART 2: {lang === 'en' ? 'Monologues (8 questions)' : 'Monologlar (8 savol)'}
+                        </div>
+
+                        <div className="section-part-label" style={{ padding: '0.5rem 1rem', background: 'var(--color-accent)', color: 'white', borderRadius: 'var(--radius-md)', fontSize: '0.8rem', fontWeight: 700, width: 'fit-content' }}>
+                            PART 3: {lang === 'en' ? 'Long monologues (9 questions)' : 'Uzun monologlar (9 savol)'}
+                        </div>
+
+                        <div className="section-part-label" style={{ padding: '0.5rem 1rem', background: '#334155', color: 'white', borderRadius: 'var(--radius-md)', fontSize: '0.8rem', fontWeight: 700, width: 'fit-content' }}>
+                            PART 4: {lang === 'en' ? 'Longer conversations (10 questions)' : 'Uzun suhbatlar (10 savol)'}
+                        </div>
                     </div>
                 </div>
             </div>
