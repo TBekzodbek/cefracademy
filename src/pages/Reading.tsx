@@ -1,5 +1,6 @@
 import { motion } from 'framer-motion';
 import { BookOpen, Highlighter, PenTool, CheckCircle, PieChart } from 'lucide-react';
+import { MotivationalQuote } from '../components/MotivationalQuote';
 import './PageLayout.css';
 
 interface Props {
@@ -90,6 +91,8 @@ const Reading = ({ lang }: Props) => {
                             [AI will highlight why your selected answer was wrong and show vocabulary meaning context from the text here once submitted.]
                         </p>
                     </div>
+
+                    <MotivationalQuote />
                 </div>
             </div>
         </motion.div>

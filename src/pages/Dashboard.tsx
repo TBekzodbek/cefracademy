@@ -4,6 +4,8 @@ import { Loader2, BookOpen, GraduationCap, BarChart, TrendingUp, ArrowRight, Che
 import { Link } from 'react-router-dom';
 import { supabase } from '../lib/supabase';
 import { CEFR_MARKING_SYSTEM } from '../lib/marking';
+import { calculateLevel } from '../lib/leveling';
+import { MotivationalQuote } from '../components/MotivationalQuote';
 import './PageLayout.css';
 import atlasWolfSmall from '../assets/images/atlas-wolf.png';
 
@@ -195,6 +197,31 @@ const Dashboard = ({ lang, theme }: Props) => {
                         </div>
                     </div>
 
+                    {/* Level Card */}
+                    {(() => {
+                        const levelData = calculateLevel(profile?.points || 0);
+                        return (
+                            <div className="glass-panel" style={{ padding: '1.5rem', background: 'var(--gradient-primary)', color: 'white' }}>
+                                <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '1rem' }}>
+                                    <div>
+                                        <p style={{ fontSize: '0.75rem', opacity: 0.8 }}>Current Level</p>
+                                        <h4 style={{ fontSize: '1.5rem', margin: 0 }}>Level {levelData.level}</h4>
+                                    </div>
+                                    <div style={{ background: 'rgba(255,255,255,0.2)', padding: '0.4rem 0.8rem', borderRadius: 'var(--radius-lg)', fontSize: '0.8rem', fontWeight: 700 }}>
+                                        {levelData.title}
+                                    </div>
+                                </div>
+                                <div className="mini-progress-track" style={{ background: 'rgba(255,255,255,0.2)' }}>
+                                    <div className="mini-progress-bar" style={{ width: `${levelData.progress}%`, background: 'white' }}></div>
+                                </div>
+                                <div style={{ marginTop: '0.5rem', display: 'flex', justifyContent: 'space-between', fontSize: '0.7rem', opacity: 0.8 }}>
+                                    <span>{levelData.currentXP} XP</span>
+                                    <span>{levelData.xpToNextLevel} XP needed</span>
+                                </div>
+                            </div>
+                        );
+                    })()}
+
                     <div className="glass-panel" style={{ padding: '1.5rem' }}>
                         <h4 style={{ fontSize: '0.9rem', marginBottom: '1rem', display: 'flex', alignItems: 'center', gap: '0.5rem' }}>
                             <TrendingUp size={16} /> {lang === 'en' ? 'Current Path' : 'Joriy yo\'nalish'}
@@ -209,15 +236,7 @@ const Dashboard = ({ lang, theme }: Props) => {
                         <MessageSquare size={20} /> {lang === 'en' ? 'Ask Atlas AI' : 'Atlas AI dan so\'rash'}
                     </Link>
 
-                    <div className="stat-card-modern color-white">
-                        <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
-                            <div>
-                                <p style={{ fontSize: '0.85rem', color: '#64748b' }}>Training Day</p>
-                                <h4 style={{ fontSize: '1.5rem', margin: '0', color: '#0f172a' }}>1st Day</h4>
-                            </div>
-                            <Award className="text-secondary" size={32} />
-                        </div>
-                    </div>
+                    <MotivationalQuote />
 
                     {/* Marking System Guide */}
                     <div className="glass-panel" style={{ padding: '1.5rem' }}>
@@ -249,7 +268,7 @@ const Dashboard = ({ lang, theme }: Props) => {
                     </Link>
                 </div>
             </section>
-        </motion.div>
+        </motion.div >
     );
 };
 
