@@ -9,6 +9,7 @@ import atlasWolfSmall from '../assets/images/atlas-wolf.png';
 
 interface Props {
     lang: 'en' | 'uz';
+    theme: 'light' | 'dark';
 }
 
 interface UserProfile {
@@ -30,7 +31,7 @@ interface PlanTask {
     priority: boolean;
 }
 
-const Dashboard = ({ lang }: Props) => {
+const Dashboard = ({ lang, theme }: Props) => {
     const [profile, setProfile] = useState<UserProfile | null>(null);
     const [loading, setLoading] = useState(true);
     const [dailyPlan, setDailyPlan] = useState<PlanTask[]>([]);

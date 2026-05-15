@@ -1,13 +1,15 @@
 import { Link, useLocation } from 'react-router-dom';
-import { BookOpen, Mic, Headphones, GraduationCap, Globe } from 'lucide-react';
+import { BookOpen, Mic, Headphones, GraduationCap, Globe, Sun, Moon } from 'lucide-react';
 import './Navigation.css';
 
 interface NavigationProps {
     lang: 'en' | 'uz';
     toggleLang: () => void;
+    theme: 'light' | 'dark';
+    toggleTheme: () => void;
 }
 
-const Navigation = ({ lang, toggleLang }: NavigationProps) => {
+const Navigation = ({ lang, toggleLang, theme, toggleTheme }: NavigationProps) => {
     const location = useLocation();
 
     const links = [
@@ -37,6 +39,9 @@ const Navigation = ({ lang, toggleLang }: NavigationProps) => {
                     ))}
                 </div>
                 <div className="nav-actions">
+                    <button className="btn btn-ghost theme-toggle" onClick={toggleTheme} title="Toggle Theme">
+                        {theme === 'light' ? <Moon size={20} /> : <Sun size={20} />}
+                    </button>
                     <button className="btn btn-ghost lang-toggle" onClick={toggleLang}>
                         <Globe size={20} />
                         <span>{lang.toUpperCase()}</span>

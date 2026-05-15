@@ -7,9 +7,10 @@ import './Login.css';
 
 interface Props {
     lang: 'en' | 'uz';
+    theme: 'light' | 'dark';
 }
 
-const Login = ({ lang }: Props) => {
+const Login = ({ lang, theme }: Props) => {
     const navigate = useNavigate();
     const [isSignUp, setIsSignUp] = useState(false);
     const [showPassword, setShowPassword] = useState(false);

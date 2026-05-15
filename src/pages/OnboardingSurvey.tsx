@@ -1,7 +1,7 @@
 import { useState, useEffect } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { useNavigate, Link } from 'react-router-dom';
-import { BookOpen, Headphones, GraduationCap, Mic, ArrowRight, Zap, Star, Layout, ShieldCheck, Activity, PieChart, Globe, Target, BrainCircuit, Clock, AlertCircle } from 'lucide-react';
+import { BookOpen, Headphones, GraduationCap, Mic, ArrowRight, Zap, Star, Layout, ShieldCheck, Activity, PieChart, Globe, Target, BrainCircuit, Clock, AlertCircle, Sun, Moon } from 'lucide-react';
 import { supabase } from '../lib/supabase';
 import './OnboardingSurvey.css';
 
@@ -11,9 +11,11 @@ import atlasWolfImg from '../assets/images/atlas-wolf.png';
 interface Props {
     lang: 'en' | 'uz';
     toggleLang: () => void;
+    theme: 'light' | 'dark';
+    toggleTheme: () => void;
 }
 
-const OnboardingSurvey = ({ lang, toggleLang }: Props) => {
+const OnboardingSurvey = ({ lang, toggleLang, theme, toggleTheme }: Props) => {
     const navigate = useNavigate();
 
     // Survey State
@@ -186,6 +188,9 @@ const OnboardingSurvey = ({ lang, toggleLang }: Props) => {
                         ))}
                     </div>
                     <div style={{ display: 'flex', gap: '1rem', alignItems: 'center' }}>
+                        <button className="btn btn-ghost" onClick={toggleTheme} title="Toggle Theme" style={{ color: '#64748b' }}>
+                            {theme === 'light' ? <Moon size={20} /> : <Sun size={20} />}
+                        </button>
                         <button className="btn btn-ghost" onClick={toggleLang} style={{ color: '#64748b' }}>
                             <Globe size={20} /> <span>{lang.toUpperCase()}</span>
                         </button>

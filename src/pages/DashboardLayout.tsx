@@ -1,15 +1,17 @@
 import { useEffect } from 'react';
 import { Link, useLocation, Outlet, useNavigate } from 'react-router-dom';
-import { LayoutDashboard, User, Crown, CreditCard, BookOpen, Headphones, GraduationCap, Mic, LogOut, CheckCircle, Globe } from 'lucide-react';
+import { LayoutDashboard, User, Crown, CreditCard, BookOpen, Headphones, GraduationCap, Mic, LogOut, CheckCircle, Globe, Sun, Moon } from 'lucide-react';
 import { supabase } from '../lib/supabase';
 import './DashboardLayout.css';
 
 interface Props {
     lang: 'en' | 'uz';
     toggleLang: () => void;
+    theme: 'light' | 'dark';
+    toggleTheme: () => void;
 }
 
-const DashboardLayout = ({ lang, toggleLang }: Props) => {
+const DashboardLayout = ({ lang, toggleLang, theme, toggleTheme }: Props) => {
     const location = useLocation();
     const navigate = useNavigate();
 
@@ -45,15 +47,20 @@ const DashboardLayout = ({ lang, toggleLang }: Props) => {
     return (
         <div className="dashboard-layout">
             <aside className="dashboard-sidebar glass-panel">
-                <div className="sidebar-header" style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
+                <div className="sidebar-header" style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', gap: '0.5rem' }}>
                     <Link to="/" className="brand">
                         <span className="brand-logo">CEFR</span>
                         <span className="brand-text">ACADEMY</span>
                     </Link>
-                    <button className="btn btn-ghost lang-toggle-sidebar" onClick={toggleLang}>
-                        <Globe size={18} />
-                        <span style={{ fontSize: '0.8rem' }}>{lang.toUpperCase()}</span>
-                    </button>
+                    <div style={{ display: 'flex', gap: '0.25rem' }}>
+                        <button className="btn btn-ghost theme-toggle-sidebar" onClick={toggleTheme} title="Toggle Theme" style={{ padding: '0.4rem' }}>
+                            {theme === 'light' ? <Moon size={18} /> : <Sun size={18} />}
+                        </button>
+                        <button className="btn btn-ghost lang-toggle-sidebar" onClick={toggleLang} style={{ padding: '0.4rem' }}>
+                            <Globe size={18} />
+                            <span style={{ fontSize: '0.8rem' }}>{lang.toUpperCase()}</span>
+                        </button>
+                    </div>
                 </div>
 
                 <div className="sidebar-premium-card">

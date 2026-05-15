@@ -11,16 +11,32 @@ import Speaking from './pages/Speaking';
 import Profile from './pages/Profile';
 import Plan from './pages/Plan';
 import Pricing from './pages/Pricing';
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import { SpeedInsights } from "@vercel/speed-insights/react";
 import { Analytics } from "@vercel/analytics/react";
 
 function App() {
   const [lang, setLang] = useState<'en' | 'uz'>('en');
+  const [theme, setTheme] = useState<'light' | 'dark'>(() => {
+    return (localStorage.getItem('theme') as 'light' | 'dark') || 'light';
+  });
 
   const toggleLang = () => {
     setLang((prev) => (prev === 'en' ? 'uz' : 'en'));
   };
+
+  const toggleTheme = () => {
+    const newTheme = theme === 'light' ? 'dark' : 'light';
+    setTheme(newTheme);
+    localStorage.setItem('theme', newTheme);
+  };
+
+  useEffect(() => {
+    document.documentElement.setAttribute('data-theme', theme);
+  }, [theme]);
+
+  // Pass theme props recursively to main entry points
+  const commonProps = { lang, toggleLang, theme, toggleTheme };
 
   return (
     <Router>
@@ -28,19 +44,19 @@ function App() {
       <Analytics />
       <Routes>
         {/* Unified Home & Onboarding */}
-        <Route path="/" element={<OnboardingSurvey lang={lang} toggleLang={toggleLang} />} />
+        <Route path="/" element={<OnboardingSurvey {...commonProps} />} />
 
         {/* Auth with Navigation */}
         <Route path="/login" element={
           <div className="app-container">
-            <Navigation lang={lang} toggleLang={toggleLang} />
-            <Login lang={lang} />
+            <Navigation {...commonProps} />
+            <Login lang={lang} theme={theme} />
           </div>
         } />
 
         {/* Dashboard Routes with Sidebar Layout */}
-        <Route path="/dashboard" element={<DashboardLayout lang={lang} toggleLang={toggleLang} />}>
-          <Route index element={<Dashboard lang={lang} />} />
+        <Route path="/dashboard" element={<DashboardLayout {...commonProps} />}>
+          <Route index element={<Dashboard lang={lang} theme={theme} />} />
           <Route path="reading" element={<Reading lang={lang} />} />
           <Route path="listening" element={<Listening lang={lang} />} />
           <Route path="writing" element={<Writing lang={lang} />} />
@@ -51,7 +67,7 @@ function App() {
         </Route>
 
         {/* Legacy redirect for old bookmarkers */}
-        <Route path="/onboarding" element={<OnboardingSurvey lang={lang} toggleLang={toggleLang} />} />
+        <Route path="/onboarding" element={<OnboardingSurvey {...commonProps} />} />
       </Routes>
     </Router>
   );

@@ -42,6 +42,7 @@
 [data-theme="dark"] {
   --color-background: #020617;
   --color-background-alt: #0f172a;
+  --color-background-glass: rgba(15, 23, 42, 0.8);
   --color-text-main: #f8fafc;
   --color-text-muted: #94a3b8;
   --color-border: #1e293b;
@@ -60,6 +61,7 @@ body {
   color: var(--color-text-main);
   line-height: 1.6;
   -webkit-font-smoothing: antialiased;
+  transition: background-color var(--transition-normal), color var(--transition-normal);
 }
 
 h1,
@@ -89,6 +91,8 @@ h4 {
   transition: all var(--transition-normal);
   gap: 0.5rem;
   text-decoration: none;
+  cursor: pointer;
+  border: none;
 }
 
 .btn-primary {
@@ -97,13 +101,14 @@ h4 {
 }
 
 .btn-primary:hover {
-  background: var(--color-primary-hover);
+  background: #1d4ed8;
   transform: translateY(-2px);
   box-shadow: 0 10px 15px -3px rgba(37, 99, 235, 0.3);
 }
 
 .btn-outline {
   border: 1px solid var(--color-border);
+  background: transparent;
   color: var(--color-text-main);
 }
 
@@ -112,8 +117,20 @@ h4 {
   border-color: var(--color-text-muted);
 }
 
+.btn-ghost {
+  background: transparent;
+  color: var(--color-text-muted);
+  padding: 0.5rem;
+}
+
+.btn-ghost:hover {
+  background: var(--color-background-alt);
+  color: var(--color-text-main);
+}
+
 .glass-panel {
-  background: #ffffff;
+  background: var(--color-background);
+  backdrop-filter: blur(12px);
   border: 1px solid var(--color-border);
   border-radius: var(--radius-xl);
   box-shadow: var(--shadow-md);
