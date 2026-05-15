@@ -121,6 +121,26 @@ const AIChat = ({ lang }: Props) => {
                 </div>
             </header>
 
+            <div style={{
+                background: 'rgba(59, 130, 246, 0.1)',
+                border: '1px solid rgba(59, 130, 246, 0.2)',
+                borderRadius: 'var(--radius-lg)',
+                padding: '1rem 1.5rem',
+                marginBottom: '1.5rem',
+                display: 'flex',
+                alignItems: 'center',
+                gap: '1rem',
+                color: 'var(--color-primary)',
+                fontSize: '0.9rem'
+            }}>
+                <Sparkles size={20} className="text-primary" />
+                <span>
+                    {lang === 'en'
+                        ? "Ask Atlas to check your grammar, explain CEFR rules, or help with any practice questions."
+                        : "Atlasdan grammatikani tekshirishni, CEFR qoidalarini tushuntirishni yoki har qanday savolga yordam berishni so'rang."}
+                </span>
+            </div>
+
             <div className="glass-panel" style={{ flexGrow: 1, display: 'flex', flexDirection: 'column', overflow: 'hidden', padding: 0 }}>
                 <div style={{ flexGrow: 1, overflowY: 'auto', padding: '2rem', display: 'flex', flexDirection: 'column', gap: '1.5rem' }}>
                     <AnimatePresence initial={false}>
