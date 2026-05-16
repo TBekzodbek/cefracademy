@@ -58,6 +58,9 @@ const Plan = ({ lang }: Props) => {
 
             // Extract JSON safely
             const parsedPlan = extractJSON(resText);
+            if (!Array.isArray(parsedPlan)) {
+                throw new Error("AI returned invalid plan format");
+            }
             setPlan(parsedPlan);
 
             // Save to DB (wrapped in separate try-catch to prevent UI block if column missing)

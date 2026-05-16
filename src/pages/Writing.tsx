@@ -35,23 +35,28 @@ const Writing = ({ lang }: Props) => {
 
         try {
             const prompt = `
-                Act as a professional CEFR Examiner for the Uzbekistan DTM National Exam. 
-                Task Type: Task ${task} (${task === 1 ? 'Email/Letter' : 'Essay'})
-                User Text: "${text}"
-
-                Evaluate based on: Task Fulfillment, Coherence/Cohesion, Lexical Resource, Grammatical Range/Accuracy.
-                Return ONLY a JSON object:
+                Act as a professional DTM Writing Examiner for Uzbekistan CEFR exams.
+                Analyze this Task ${task} essay: "${text}"
+                
+                Provide feedback in strict JSON format:
                 {
-                    "score": "B1/B2/C1",
-                    "positives": ["3 points"],
-                    "improvements": ["3 points"],
-                    "grammar_fixes": ["3 points"]
+                    "score": "B1/B2/C1 based on 9.0 scale",
+                    "positives": ["3 strengths"],
+                    "improvements": ["3 areas for improvement"],
+                    "grammar_fixes": ["3 specific grammar/vocab corrections"]
                 }
                 Language for feedback: ${lang === 'en' ? 'English' : 'Uzbek (lotin)'}
             `;
 
             const resText = await getAIResponse(prompt);
-            setFeedback(extractJSON(resText));
+            const parsed = extractJSON(resText);
+
+            setFeedback({
+                score: parsed.score?.toString() || "0",
+                positives: Array.isArray(parsed.positives) ? parsed.positives : [],
+                improvements: Array.isArray(parsed.improvements) ? parsed.improvements : [],
+                grammar_fixes: Array.isArray(parsed.grammar_fixes) ? parsed.grammar_fixes : []
+            });
         } catch (error) {
             console.error("Writing AI Error:", error);
             alert("AI scoring failed.");

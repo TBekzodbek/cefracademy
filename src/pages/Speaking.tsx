@@ -84,7 +84,16 @@ const Speaking = ({ lang }: Props) => {
             `;
 
             const resText = await getAIResponse(prompt);
-            setFeedback(extractJSON(resText));
+            const parsed = extractJSON(resText);
+
+            setFeedback({
+                transcription: text,
+                fluency: Number(parsed.fluency) || 0,
+                pronunciation: parsed.pronunciation?.toString() || "N/A",
+                grammar: parsed.grammar?.toString() || "N/A",
+                cefr_level: parsed.cefr_level?.toString() || "B1",
+                tips: Array.isArray(parsed.tips) ? parsed.tips : []
+            });
         } catch (error) {
             console.error("Speaking AI Error:", error);
         } finally {
