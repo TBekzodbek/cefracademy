@@ -1,7 +1,7 @@
 import { useState, useRef } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { Mic, Radio, Pause, Sparkles, Loader2, Play, CheckCircle } from 'lucide-react';
-import { transcribeAudio, getAIResponse } from '../lib/ai';
+import { transcribeAudio, getAIResponse, extractJSON } from '../lib/ai';
 import './PageLayout.css';
 
 interface Props {
@@ -84,8 +84,7 @@ const Speaking = ({ lang }: Props) => {
             `;
 
             const resText = await getAIResponse(prompt);
-            const jsonStr = resText.trim().startsWith('```') ? resText.trim().split('```')[1].replace(/^json/, '').trim() : resText;
-            setFeedback(JSON.parse(jsonStr));
+            setFeedback(extractJSON(resText));
         } catch (error) {
             console.error("Speaking AI Error:", error);
         } finally {

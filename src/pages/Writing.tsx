@@ -1,7 +1,7 @@
 import { useState, useEffect } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { GraduationCap, Edit3, Send, Sparkles, Loader2, CheckCircle, AlertCircle } from 'lucide-react';
-import { getAIResponse } from '../lib/ai';
+import { getAIResponse, extractJSON } from '../lib/ai';
 import './PageLayout.css';
 
 interface Props {
@@ -51,8 +51,7 @@ const Writing = ({ lang }: Props) => {
             `;
 
             const resText = await getAIResponse(prompt);
-            const jsonStr = resText.trim().startsWith('```') ? resText.trim().split('```')[1].replace(/^json/, '').trim() : resText;
-            setFeedback(JSON.parse(jsonStr));
+            setFeedback(extractJSON(resText));
         } catch (error) {
             console.error("Writing AI Error:", error);
             alert("AI scoring failed.");
