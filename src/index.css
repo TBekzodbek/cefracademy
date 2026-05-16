@@ -16,9 +16,11 @@
   --color-background-alt: #f8fafc;
 
   --color-text-main: #0f172a;
-  --color-text-muted: #64748b;
+  --color-text-muted: #475569;
   --color-text-light: #94a3b8;
   --color-border: #e2e8f0;
+  --color-surface: #ffffff;
+  --color-surface-alt: #f8fafc;
 
   --gradient-primary: linear-gradient(135deg, #2563eb 0%, #7c3aed 100%);
   --gradient-subtle: linear-gradient(180deg, #ffffff 0%, #f1f5f9 100%);
@@ -43,9 +45,12 @@
   --color-background: #020617;
   --color-background-alt: #0f172a;
   --color-background-glass: rgba(15, 23, 42, 0.8);
+  --color-surface: #1e293b;
+  --color-surface-alt: #0f172a;
   --color-text-main: #f8fafc;
-  --color-text-muted: #94a3b8;
-  --color-border: #1e293b;
+  --color-text-muted: #cbd5e1;
+  --color-text-light: #94a3b8;
+  --color-border: #334155;
   --gradient-subtle: linear-gradient(180deg, #1e293b 0%, #0f172a 100%);
 }
 

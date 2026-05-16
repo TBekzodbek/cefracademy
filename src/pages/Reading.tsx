@@ -14,82 +14,80 @@ const Reading = ({ lang }: Props) => {
             initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.5 }}
-            style={{ display: 'flex', flexDirection: 'column', height: '100%' }}
         >
-            <header style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '2rem' }}>
-                <div>
-                    <h1 style={{ display: 'flex', alignItems: 'center', gap: '0.75rem', margin: 0 }}>
+            <header className="page-header-flex">
+                <div className="header-info">
+                    <h1 className="category-title">
                         <BookOpen className="text-primary" size={28} />
-                        {lang === 'en' ? 'O\'qib tushunish (Reading)' : 'O\'qib tushunish (O\'qish)'}
+                        <span>{lang === 'en' ? 'O\'qib tushunish (Reading)' : 'O\'qib tushunish (O\'qish)'}</span>
                     </h1>
-                    <p className="text-muted" style={{ margin: '0.5rem 0 0 0' }}>
+                    <p className="text-muted subtitle">
                         {lang === 'en' ? '4 Parts • 70 Minutes • 35 Questions' : '4 qism • 70 daqiqa • 35 savol'}
                     </p>
                 </div>
-                <div style={{ display: 'flex', gap: '1rem' }}>
-                    <button className="btn btn-outline" style={{ display: 'flex', gap: '0.5rem' }}>
-                        <Highlighter size={18} /> {lang === 'en' ? 'Mark Text (3/3)' : 'Belgilash (3/3)'}
+                <div className="header-actions">
+                    <button className="btn btn-outline">
+                        <Highlighter size={18} />
+                        <span>{lang === 'en' ? 'Mark Text (3/3)' : 'Belgilash (3/3)'}</span>
                     </button>
                     <button className="btn btn-primary">
-                        <CheckCircle size={18} /> {lang === 'en' ? 'Submit Answers' : 'Javoblarni yuborish'}
+                        <CheckCircle size={18} />
+                        <span>{lang === 'en' ? 'Submit Answers' : 'Javoblarni yuborish'}</span>
                     </button>
                 </div>
             </header>
 
-            <div className="grid grid-cols-2 gap-6" style={{ flexGrow: 1, height: '600px' }}>
+            <div className="reading-content-grid">
                 {/* Left Side: Mock Text */}
-                <div className="glass-panel" style={{ padding: '2rem', overflowY: 'auto' }}>
-                    <div style={{ paddingBottom: '1rem', borderBottom: '1px solid var(--color-border)', marginBottom: '2rem' }}>
-                        <h2>{lang === 'en' ? 'The Impact of AI on Modern Education' : 'Sun\'iy intellektning zamonaviy ta\'limga ta\'siri'}</h2>
-                        <p className="text-muted">By CEFR Academy Research Team</p>
+                <div className="text-panel-glass">
+                    <div className="panel-header">
+                        <h2 className="passage-title">{lang === 'en' ? 'The Impact of AI on Modern Education' : 'Sun\'iy intellektning zamonaviy ta\'limga ta\'siri'}</h2>
+                        <p className="text-muted author">By CEFR Academy Research Team</p>
                     </div>
 
-                    <div className="content-placeholder" style={{ minHeight: 'auto', padding: '1rem' }}>
-                        <p style={{ fontSize: '1rem', textAlign: 'left', lineHeight: '1.8' }}>
+                    <div className="passage-content">
+                        <p>
                             [Insert full multi-paragraph reading passage text here. The text should be formatted so users can select and highlight it.]
                         </p>
-                        <div className="skeleton-line w-full" style={{ width: '100%', height: '1rem', background: 'var(--color-background-alt)', borderRadius: '4px', margin: '1rem 0' }}></div>
-                        <div className="skeleton-line w-full" style={{ width: '100%', height: '1rem', background: 'var(--color-background-alt)', borderRadius: '4px', margin: '1rem 0' }}></div>
-                        <div className="skeleton-line w-3/4" style={{ width: '75%', height: '1rem', background: 'var(--color-background-alt)', borderRadius: '4px', margin: '1rem 0' }}></div>
+                        <div className="skeleton-line" />
+                        <div className="skeleton-line" />
+                        <div className="skeleton-line half" />
                         <br />
-                        <div className="skeleton-line w-full" style={{ width: '100%', height: '1rem', background: 'var(--color-background-alt)', borderRadius: '4px', margin: '1rem 0' }}></div>
-                        <div className="skeleton-line w-1/2" style={{ width: '50%', height: '1rem', background: 'var(--color-background-alt)', borderRadius: '4px', margin: '1rem 0' }}></div>
+                        <div className="skeleton-line" />
+                        <div className="skeleton-line quarter" />
                     </div>
                 </div>
 
                 {/* Right Side: Questions & AI Analytics */}
-                <div style={{ display: 'flex', flexDirection: 'column', gap: '1.5rem' }}>
-                    <div className="glass-panel" style={{ padding: '2rem', flexGrow: 1, overflowY: 'auto' }}>
-                        <h3 style={{ marginBottom: '1.5rem', display: 'flex', alignItems: 'center', gap: '0.5rem' }}>
+                <div className="questions-side-stack">
+                    <div className="questions-panel-glass">
+                        <h3 className="questions-heading">
                             <PenTool className="text-primary" size={20} />
-                            {lang === 'en' ? 'Questions 1 - 35' : 'Savollar 1 - 35'}
+                            <span>{lang === 'en' ? 'Questions 1 - 35' : 'Savollar 1 - 35'}</span>
                         </h3>
 
-                        <div style={{ display: 'flex', flexDirection: 'column', gap: '2rem' }}>
-                            <div className="section-part-label" style={{ padding: '0.5rem 1rem', background: 'var(--color-primary)', color: 'white', borderRadius: 'var(--radius-md)', fontSize: '0.8rem', fontWeight: 700, width: 'fit-content' }}>
+                        <div className="parts-labels-stack">
+                            <div className="part-label primary">
                                 PART 1: {lang === 'en' ? 'Matching short texts (5 questions)' : 'Qisqa matnlarni moslashtirish (5 savol)'}
                             </div>
-
-                            <div className="section-part-label" style={{ padding: '0.5rem 1rem', background: 'var(--color-secondary)', color: 'white', borderRadius: 'var(--radius-md)', fontSize: '0.8rem', fontWeight: 700, width: 'fit-content' }}>
+                            <div className="part-label secondary">
                                 PART 2: {lang === 'en' ? 'Multiple choice (5 questions)' : 'Ko\'p variantli savollar (5 savol)'}
                             </div>
-
-                            <div className="section-part-label" style={{ padding: '0.5rem 1rem', background: 'var(--color-accent)', color: 'white', borderRadius: 'var(--radius-md)', fontSize: '0.8rem', fontWeight: 700, width: 'fit-content' }}>
+                            <div className="part-label purple">
                                 PART 3: {lang === 'en' ? 'Matching headings (5 questions)' : 'Sarlavhalarni moslashtirish (5 savol)'}
                             </div>
-
-                            <div className="section-part-label" style={{ padding: '0.5rem 1rem', background: '#334155', color: 'white', borderRadius: 'var(--radius-md)', fontSize: '0.8rem', fontWeight: 700, width: 'fit-content' }}>
+                            <div className="part-label dark">
                                 PART 4: {lang === 'en' ? 'Multiple choice (20 questions)' : 'Ko\'p variantli savollar (20 savol)'}
                             </div>
                         </div>
 
                         {/* Premium Analytics Placeholder */}
-                        <div className="glass-panel" style={{ padding: '1.5rem', border: '1px solid rgba(139, 92, 246, 0.3)' }}>
-                            <h4 style={{ display: 'flex', alignItems: 'center', gap: '0.5rem', color: 'var(--color-accent)' }}>
+                        <div className="premium-analytics-card">
+                            <h4 className="analytics-title">
                                 <PieChart size={20} />
-                                {lang === 'en' ? 'AI Suggestion (Premium)' : 'AI Tavsiya (Premium)'}
+                                <span>{lang === 'en' ? 'AI Suggestion (Premium)' : 'AI Tavsiya (Premium)'}</span>
                             </h4>
-                            <p className="text-muted" style={{ fontSize: '0.9rem', marginTop: '0.5rem' }}>
+                            <p className="text-muted analytics-desc">
                                 [AI will highlight why your selected answer was wrong and show vocabulary meaning context from the text here once submitted.]
                             </p>
                         </div>

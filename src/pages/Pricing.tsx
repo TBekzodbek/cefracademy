@@ -1,5 +1,6 @@
 import { motion } from 'framer-motion';
 import { Crown, CheckCircle } from 'lucide-react';
+import './Pricing.css'; // I'll create this to handle styles properly
 
 interface Props {
     lang: 'en' | 'uz';
@@ -37,64 +38,72 @@ const Pricing = ({ lang }: Props) => {
         <motion.div
             initial={{ opacity: 0, y: 15 }}
             animate={{ opacity: 1, y: 0 }}
-            className="container flex-col items-center"
-            style={{ maxWidth: '1000px', display: 'flex' }}
+            className="pricing-page-master"
         >
-            <header className="text-center" style={{ marginBottom: '4rem' }}>
-                <h1 style={{ fontSize: '3rem', marginBottom: '1rem' }}>
-                    {lang === 'en' ? 'Unlock Your Full Potential' : 'To\'liq imkoniyatlarni oching'}
-                </h1>
-                <p className="text-muted" style={{ fontSize: '1.2rem', maxWidth: '600px' }}>
-                    {lang === 'en' ? 'Choose the plan that fits your preparation speed.' : 'Sizning tayyorgarlik tezligingizga mos tarifni tanlang.'}
-                </p>
-            </header>
+            <div className="container pricing-inner">
+                <header className="pricing-header text-center">
+                    <h1 className="pricing-title">
+                        {lang === 'en' ? 'Unlock Your Full Potential' : 'To\'liq imkoniyatlarni oching'}
+                    </h1>
+                    <p className="pricing-subtitle">
+                        {lang === 'en' ? 'Choose the plan that fits your preparation speed.' : 'Sizning tayyorgarlik tezligingizga mos tarifni tanlang.'}
+                    </p>
+                </header>
 
-            <div className="grid grid-cols-2 gap-8" style={{ width: '100%' }}>
+                <div className="pricing-grid">
+                    {/* Free Plan */}
+                    <div className="pricing-card">
+                        <div className="card-header">
+                            <h2 className="card-plan-name">{lang === 'en' ? 'Free Basic' : 'Bepul Asosiy'}</h2>
+                            <div className="card-price">
+                                {lang === 'en' ? '$0' : '0 so\'m'}
+                                <span className="price-period"> / {lang === 'en' ? 'forever' : 'doimiy'}</span>
+                            </div>
+                        </div>
 
-                {/* Free Plan */}
-                <div className="glass-panel" style={{ padding: '3rem', display: 'flex', flexDirection: 'column' }}>
-                    <h2 style={{ fontSize: '1.75rem', marginBottom: '0.5rem' }}>{lang === 'en' ? 'Free Basic' : 'Bepul Asosiy'}</h2>
-                    <div style={{ fontSize: '2.5rem', fontWeight: 'bold', marginBottom: '2rem' }}>
-                        {lang === 'en' ? '$0' : '0 so\'m'}<span className="text-muted" style={{ fontSize: '1rem', fontWeight: 500 }}> / {lang === 'en' ? 'forever' : 'doimiy'}</span>
+                        <ul className="benefit-list">
+                            {t.freeBenefits.map((feat, i) => (
+                                <li key={i} className="benefit-item">
+                                    <CheckCircle size={18} className="icon-muted" />
+                                    <span>{feat}</span>
+                                </li>
+                            ))}
+                        </ul>
+
+                        <button className="btn-pricing btn-outline-alt">
+                            {lang === 'en' ? 'Current Plan' : 'Joriy Tarif'}
+                        </button>
                     </div>
 
-                    <ul style={{ listStyle: 'none', padding: 0, display: 'flex', flexDirection: 'column', gap: '1rem', flexGrow: 1, marginBottom: '3rem' }}>
-                        {t.freeBenefits.map((feat, i) => (
-                            <li key={i} style={{ display: 'flex', gap: '0.75rem', alignItems: 'center' }}>
-                                <CheckCircle size={18} className="text-muted" /> {feat}
-                            </li>
-                        ))}
-                    </ul>
+                    {/* Premium Plan */}
+                    <div className="pricing-card featured">
+                        <div className="popular-badge">
+                            <Crown size={16} />
+                            <span>{lang === 'en' ? 'Most Popular' : 'Eng Mashhur'}</span>
+                        </div>
 
-                    <button className="btn btn-outline" style={{ width: '100%', padding: '1rem' }}>
-                        {lang === 'en' ? 'Current Plan' : 'Joriy Tarif'}
-                    </button>
+                        <div className="card-header">
+                            <h2 className="card-plan-name featured-text">{lang === 'en' ? 'Pro CEFR' : 'Pro CEFR'}</h2>
+                            <div className="card-price">
+                                {lang === 'en' ? '$19' : '230,000 so\'m'}
+                                <span className="price-period"> / {lang === 'en' ? 'month' : 'oy'}</span>
+                            </div>
+                        </div>
+
+                        <ul className="benefit-list">
+                            {t.proBenefits.map((feat, i) => (
+                                <li key={i} className="benefit-item">
+                                    <CheckCircle size={18} className="icon-primary" />
+                                    <span className="bold-benefit">{feat}</span>
+                                </li>
+                            ))}
+                        </ul>
+
+                        <button className="btn-pricing btn-primary-alt">
+                            {lang === 'en' ? 'Upgrade with Payme / Stripe' : 'Payme / Stripe orqali yangilash'}
+                        </button>
+                    </div>
                 </div>
-
-                {/* Premium Plan */}
-                <div className="glass-panel" style={{ padding: '3rem', display: 'flex', flexDirection: 'column', border: '2px solid var(--color-primary)', position: 'relative', transform: 'scale(1.05)' }}>
-                    <div style={{ position: 'absolute', top: 0, left: '50%', transform: 'translate(-50%, -50%)', background: 'var(--gradient-primary)', color: 'white', padding: '0.5rem 1rem', borderRadius: 'var(--radius-full)', fontWeight: 'bold', display: 'flex', gap: '0.5rem', alignItems: 'center' }}>
-                        <Crown size={18} /> {lang === 'en' ? 'Most Popular' : 'Eng Mashhur'}
-                    </div>
-
-                    <h2 style={{ fontSize: '1.75rem', marginBottom: '0.5rem', color: 'var(--color-primary)' }}>{lang === 'en' ? 'Pro CEFR' : 'Pro CEFR'}</h2>
-                    <div style={{ fontSize: '2.5rem', fontWeight: 'bold', marginBottom: '2rem' }}>
-                        {lang === 'en' ? '$19' : '230,000 so\'m'}<span className="text-muted" style={{ fontSize: '1rem', fontWeight: 500 }}> / {lang === 'en' ? 'month' : 'oy'}</span>
-                    </div>
-
-                    <ul style={{ listStyle: 'none', padding: 0, display: 'flex', flexDirection: 'column', gap: '1rem', flexGrow: 1, marginBottom: '3rem' }}>
-                        {t.proBenefits.map((feat, i) => (
-                            <li key={i} style={{ display: 'flex', gap: '0.75rem', alignItems: 'center', fontWeight: 500 }}>
-                                <CheckCircle size={18} className="text-primary" /> {feat}
-                            </li>
-                        ))}
-                    </ul>
-
-                    <button className="btn btn-primary" style={{ width: '100%', padding: '1rem', fontSize: '1.1rem' }}>
-                        {lang === 'en' ? 'Upgrade with Payme / Stripe' : 'Payme / Stripe orqali yangilash'}
-                    </button>
-                </div>
-
             </div>
         </motion.div>
     );

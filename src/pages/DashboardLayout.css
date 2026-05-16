@@ -13,22 +13,26 @@
 }
 
 .sidebar-header {
-    padding: 2rem 1.5rem;
+    padding: 2.5rem 1.75rem;
 }
 
 .lang-toggle-sidebar {
-    padding: 0.4rem 0.6rem;
-    border-radius: 8px;
-    background: #f8fafc;
-    border: 1px solid #e2e8f0;
-    color: #64748b;
+    padding: 0.5rem 0.75rem;
+    border-radius: 10px;
+    background: var(--color-background-alt);
+    border: 1px solid var(--color-border);
+    color: var(--color-text-muted);
     display: flex;
     align-items: center;
-    gap: 0.4rem;
+    gap: 0.5rem;
+    font-size: 0.85rem;
+    font-weight: 600;
+    cursor: pointer;
+    transition: all 0.2s;
 }
 
 .lang-toggle-sidebar:hover {
-    background: #f1f5f9;
+    border-color: var(--color-primary);
     color: var(--color-primary);
 }
 
@@ -49,20 +53,22 @@
     font-weight: 700;
     color: var(--color-text-light);
     text-transform: uppercase;
-    letter-spacing: 0.1em;
-    padding: 1.5rem 1rem 0.5rem;
+    letter-spacing: 0.12em;
+    padding: 2rem 1rem 0.75rem;
 }
 
 .sidebar-link {
     display: flex;
     align-items: center;
-    gap: 0.75rem;
-    padding: 0.6rem 1rem;
-    border-radius: var(--radius-md);
+    gap: 0.85rem;
+    padding: 0.75rem 1.25rem;
+    border-radius: 12px;
     color: var(--color-text-muted);
     font-weight: 500;
     font-size: 0.95rem;
     transition: all var(--transition-fast);
+    margin-bottom: 0.25rem;
+    text-decoration: none;
 }
 
 .sidebar-link:hover {
@@ -71,17 +77,18 @@
 }
 
 .sidebar-link.active {
-    background: #eff6ff;
+    background: var(--color-primary-soft);
     color: var(--color-primary);
-    font-weight: 600;
+    font-weight: 700;
 }
 
 .sidebar-premium-card {
     margin: 1.5rem;
     padding: 1.5rem;
-    background: var(--color-text-main);
-    border-radius: var(--radius-xl);
+    background: var(--gradient-primary);
+    border-radius: 20px;
     color: white;
+    box-shadow: 0 10px 20px rgba(37, 99, 235, 0.2);
 }
 
 .sidebar-premium-card h4 {
@@ -90,7 +97,7 @@
 }
 
 .sidebar-footer {
-    padding: 1rem 1.25rem;
+    padding: 1.25rem;
     border-top: 1px solid var(--color-border);
 }
 
@@ -98,6 +105,7 @@
     flex: 1;
     overflow-y: auto;
     padding: 4rem;
+    background: var(--color-background-alt);
 }
 
 @media (max-width: 968px) {
