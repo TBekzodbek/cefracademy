@@ -1,6 +1,8 @@
-import { motion } from 'framer-motion';
-import { BookOpen, Highlighter, PenTool, CheckCircle, PieChart } from 'lucide-react';
+import { useState } from 'react';
+import { motion, AnimatePresence } from 'framer-motion';
+import { BookOpen, Highlighter, PenTool, CheckCircle, PieChart, Loader2 } from 'lucide-react';
 import { MotivationalQuote } from '../components/MotivationalQuote';
+import { getAIResponse } from '../lib/ai';
 import './PageLayout.css';
 
 interface Props {
@@ -8,6 +10,23 @@ interface Props {
 }
 
 const Reading = ({ lang }: Props) => {
+    const [submitting, setSubmitting] = useState(false);
+    const [explanation, setExplanation] = useState<string | null>(null);
+
+    const handleSubmit = async () => {
+        setSubmitting(true);
+        setExplanation(null);
+        try {
+            const prompt = `Analyze this CEFR Reading passage context and provide a learning tip for Part 1 matching tasks. Passage title: "The Impact of AI on Modern Education". Language: ${lang === 'en' ? 'English' : 'Uzbek (lotin)'}.`;
+            const res = await getAIResponse(prompt);
+            setExplanation(res);
+        } catch (e) {
+            console.error(e);
+        } finally {
+            setSubmitting(false);
+        }
+    };
+
     return (
         <motion.div
             className="page-container"
@@ -30,8 +49,8 @@ const Reading = ({ lang }: Props) => {
                         <Highlighter size={18} />
                         <span>{lang === 'en' ? 'Mark Text (3/3)' : 'Belgilash (3/3)'}</span>
                     </button>
-                    <button className="btn btn-primary">
-                        <CheckCircle size={18} />
+                    <button onClick={handleSubmit} disabled={submitting} className="btn btn-primary">
+                        {submitting ? <Loader2 size={18} className="animate-spin" /> : <CheckCircle size={18} />}
                         <span>{lang === 'en' ? 'Submit Answers' : 'Javoblarni yuborish'}</span>
                     </button>
                 </div>
@@ -47,14 +66,11 @@ const Reading = ({ lang }: Props) => {
 
                     <div className="passage-content">
                         <p>
-                            [Insert full multi-paragraph reading passage text here. The text should be formatted so users can select and highlight it.]
+                            Artificial Intelligence (AI) has become a cornerstone of technological advancement in the 21st century. In the realm of education, its impact is profound, shifting how students learn and how teachers facilitate knowledge. Automated grading systems and personalized learning platforms allow for a more tailored educational experience, accommodating individual student needs that were previously difficult to address in traditional classrooms. However, concerns regarding data privacy and the reduction of human interaction remain significant topics of debate among educational theorists.
                         </p>
                         <div className="skeleton-line" />
                         <div className="skeleton-line" />
                         <div className="skeleton-line half" />
-                        <br />
-                        <div className="skeleton-line" />
-                        <div className="skeleton-line quarter" />
                     </div>
                 </div>
 
@@ -67,18 +83,10 @@ const Reading = ({ lang }: Props) => {
                         </h3>
 
                         <div className="parts-labels-stack">
-                            <div className="part-label primary">
-                                PART 1: {lang === 'en' ? 'Matching short texts (5 questions)' : 'Qisqa matnlarni moslashtirish (5 savol)'}
-                            </div>
-                            <div className="part-label secondary">
-                                PART 2: {lang === 'en' ? 'Multiple choice (5 questions)' : 'Ko\'p variantli savollar (5 savol)'}
-                            </div>
-                            <div className="part-label purple">
-                                PART 3: {lang === 'en' ? 'Matching headings (5 questions)' : 'Sarlavhalarni moslashtirish (5 savol)'}
-                            </div>
-                            <div className="part-label dark">
-                                PART 4: {lang === 'en' ? 'Multiple choice (20 questions)' : 'Ko\'p variantli savollar (20 savol)'}
-                            </div>
+                            <div className="part-label primary">PART 1: Matching short texts</div>
+                            <div className="part-label secondary">PART 2: Multiple choice</div>
+                            <div className="part-label purple">PART 3: Matching headings</div>
+                            <div className="part-label dark">PART 4: Multiple choice</div>
                         </div>
 
                         {/* Premium Analytics Placeholder */}
@@ -88,7 +96,13 @@ const Reading = ({ lang }: Props) => {
                                 <span>{lang === 'en' ? 'AI Suggestion (Premium)' : 'AI Tavsiya (Premium)'}</span>
                             </h4>
                             <p className="text-muted analytics-desc">
-                                [AI will highlight why your selected answer was wrong and show vocabulary meaning context from the text here once submitted.]
+                                <AnimatePresence mode="wait">
+                                    {explanation ? (
+                                        <motion.span initial={{ opacity: 0 }} animate={{ opacity: 1 }}>{explanation}</motion.span>
+                                    ) : (
+                                        <span>{lang === 'en' ? 'Submit your answers to get AI-powered insights on your mistakes.' : 'Xatolaringiz haqida AI tahlilini olish uchun javoblarni yuboring.'}</span>
+                                    )}
+                                </AnimatePresence>
                             </p>
                         </div>
 

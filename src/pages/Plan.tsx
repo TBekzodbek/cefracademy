@@ -2,7 +2,7 @@ import { useState, useEffect } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { Zap, Calendar, ArrowRight, Loader2, RefreshCw } from 'lucide-react';
 import { supabase } from '../lib/supabase';
-import { model } from '../lib/gemini';
+import { getAIResponse } from '../lib/ai';
 
 interface Props {
     lang: 'en' | 'uz';
@@ -43,12 +43,10 @@ const Plan = ({ lang }: Props) => {
                 Language: ${lang === 'en' ? 'English' : 'Uzbek (lotin)'}
             `;
 
-            const result = await model.generateContent(prompt);
-            const response = await result.response;
-            const text = response.text().trim();
+            const resText = await getAIResponse(prompt);
 
             // Extract JSON from potential markdown blocks
-            const jsonStr = text.startsWith('```') ? text.split('```')[1].replace(/^json/, '').trim() : text;
+            const jsonStr = resText.trim().startsWith('```') ? resText.trim().split('```')[1].replace(/^json/, '').trim() : resText;
             const parsedPlan = JSON.parse(jsonStr);
             setPlan(parsedPlan);
 

@@ -6,6 +6,7 @@ import { supabase } from '../lib/supabase';
 import { CEFR_MARKING_SYSTEM } from '../lib/marking';
 import { calculateLevel } from '../lib/leveling';
 import { MotivationalQuote } from '../components/MotivationalQuote';
+import { getAIResponse } from '../lib/ai';
 import './PageLayout.css';
 import atlasWolfSmall from '../assets/images/atlas-wolf.png';
 
@@ -38,6 +39,7 @@ const Dashboard = ({ lang }: Props) => {
     const [profile, setProfile] = useState<UserProfile | null>(null);
     const [loading, setLoading] = useState(true);
     const [dailyPlan, setDailyPlan] = useState<PlanTask[]>([]);
+    const [aiTip, setAiTip] = useState<string>('');
 
     useEffect(() => {
         const fetchProfile = async () => {
@@ -52,16 +54,28 @@ const Dashboard = ({ lang }: Props) => {
                 if (data) {
                     setProfile(data);
                     generateSmartPlan(data);
+                    fetchAiTip(data);
                 } else if (error && error.code === 'PGRST116') {
                     const fallback = { current_level: 'B1', target_level: 'C1', points: 0, tests_completed: 0, avg_score: 0 };
                     setProfile(fallback);
                     generateSmartPlan(fallback);
+                    fetchAiTip(fallback);
                 }
             }
             setLoading(false);
         };
         fetchProfile();
     }, [lang]);
+
+    const fetchAiTip = async (prof: UserProfile) => {
+        const prompt = `Give a 1-sentence expert CEFR study tip for a student who is at level ${prof.current_level} aiming for ${prof.target_level}. Their weakness is ${prof.weakness}. Language: ${lang === 'en' ? 'English' : 'Uzbek (lotin)'}. Be encouraging.`;
+        try {
+            const tip = await getAIResponse(prompt);
+            setAiTip(tip);
+        } catch (e) {
+            setAiTip(lang === 'en' ? "Keep practicing your vocabulary!" : "Lug'at ustida ishlashda davom eting!");
+        }
+    };
 
     const generateSmartPlan = (prof: UserProfile) => {
         const tasks: PlanTask[] = [];
@@ -171,9 +185,9 @@ const Dashboard = ({ lang }: Props) => {
                         <div style={{ marginTop: '2rem', padding: '1.5rem', background: 'var(--color-primary-soft)', borderRadius: '1rem', display: 'flex', gap: '1rem', alignItems: 'center', border: '1px solid var(--color-primary-soft)' }}>
                             <Compass className="text-primary" size={32} />
                             <p style={{ fontSize: '1rem', color: 'var(--color-primary)', margin: 0 }}>
-                                <strong>Atlas AI Robot:</strong> {profile?.weakness?.includes('Writing')
+                                <strong>Atlas AI Robot:</strong> {aiTip || (profile?.weakness?.includes('Writing')
                                     ? (lang === 'en' ? 'Focus on cohesive devices today to boost your Task 2 score.' : 'Task 2 ballini oshirish uchun bugun bog\'lovchi vositalarga e\'tibor bering.')
-                                    : (lang === 'en' ? 'Read 2 articles from BBC today to improve reading speed.' : 'O\'qish tezligini oshirish uchun BBC dan 2 ta maqola o\'qing.')}
+                                    : (lang === 'en' ? 'Read 2 articles from BBC today to improve reading speed.' : 'O\'qish tezligini oshirish uchun BBC dan 2 ta maqola o\'qing.'))}
                             </p>
                         </div>
                     </div>

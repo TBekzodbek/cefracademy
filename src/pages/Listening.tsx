@@ -1,5 +1,7 @@
-import { motion } from 'framer-motion';
-import { Headphones, PlayCircle, FileText, CheckCircle, Volume2 } from 'lucide-react';
+import { useState } from 'react';
+import { motion, AnimatePresence } from 'framer-motion';
+import { Headphones, PlayCircle, CheckCircle, Volume2, Loader2, Sparkles } from 'lucide-react';
+import { getAIResponse } from '../lib/ai';
 import './PageLayout.css';
 
 interface Props {
@@ -7,6 +9,23 @@ interface Props {
 }
 
 const Listening = ({ lang }: Props) => {
+    const [submitting, setSubmitting] = useState(false);
+    const [insight, setInsight] = useState<string | null>(null);
+
+    const handleSubmit = async () => {
+        setSubmitting(true);
+        setInsight(null);
+        try {
+            const prompt = `Analyze current CEFR Listening trends and give a specific tip for Part 4 (Long Conversations). Language: ${lang === 'en' ? 'English' : 'Uzbek (lotin)'}.`;
+            const res = await getAIResponse(prompt);
+            setInsight(res);
+        } catch (e) {
+            console.error(e);
+        } finally {
+            setSubmitting(false);
+        }
+    };
+
     return (
         <motion.div
             className="page-container"
@@ -23,8 +42,8 @@ const Listening = ({ lang }: Props) => {
                         {lang === 'en' ? '4 Parts • 30-35 Minutes • 35 Questions' : '4 qism • 30-35 daqiqa • 35 savol'}
                     </p>
                 </div>
-                <button className="btn btn-primary">
-                    <CheckCircle size={18} />
+                <button onClick={handleSubmit} disabled={submitting} className="btn btn-primary">
+                    {submitting ? <Loader2 size={18} className="animate-spin" /> : <CheckCircle size={18} />}
                     <span>{lang === 'en' ? 'Submit Section' : 'Bo\'limni yakunlash'}</span>
                 </button>
             </header>
@@ -36,12 +55,8 @@ const Listening = ({ lang }: Props) => {
                         <div className="audio-visualizer-circle">
                             <Volume2 size={32} className="text-secondary" />
                         </div>
-                        <div className="progress-track">
-                            <div className="progress-fill" style={{ width: '45%' }}></div>
-                        </div>
-                        <div className="time-info">
-                            <span>02:14</span>
-                            <span>05:30</span>
+                        <div className="progress-track" style={{ margin: '1.5rem 0' }}>
+                            <div className="progress-fill" style={{ width: '0%' }}></div>
                         </div>
                         <button className="btn-play-circle">
                             <PlayCircle size={32} />
@@ -53,11 +68,17 @@ const Listening = ({ lang }: Props) => {
 
                     <div className="text-panel-glass transcript-panel">
                         <h4 className="panel-subheading">
-                            <FileText size={20} className="text-primary" />
-                            <span>{lang === 'en' ? 'Transcript (Premium)' : 'Transkript (Premium)'}</span>
+                            <Sparkles size={20} className="text-primary" />
+                            <span>{lang === 'en' ? 'AI Insight' : 'AI Tahlili'}</span>
                         </h4>
-                        <div className="placeholder-box">
-                            <p className="text-muted">{lang === 'en' ? 'Available after submission.' : 'Yuborilgandan so‘ng ochiladi.'}</p>
+                        <div className="placeholder-box" style={{ padding: '1rem', background: 'var(--color-surface-alt)', borderRadius: 'var(--radius-md)', minHeight: '100px' }}>
+                            <AnimatePresence mode="wait">
+                                {insight ? (
+                                    <motion.p initial={{ opacity: 0 }} animate={{ opacity: 1 }} style={{ fontSize: '0.9rem' }}>{insight}</motion.p>
+                                ) : (
+                                    <p className="text-muted">{lang === 'en' ? 'Submit your answers to see AI feedback here.' : 'AI tahlilini ko‘rish uchun javoblarni yuboring.'}</p>
+                                )}
+                            </AnimatePresence>
                         </div>
                     </div>
                 </div>
@@ -66,18 +87,10 @@ const Listening = ({ lang }: Props) => {
                     <h3 className="questions-heading">{lang === 'en' ? 'Answer the following:' : 'Savollarga javob bering:'}</h3>
 
                     <div className="parts-labels-stack">
-                        <div className="part-label secondary">
-                            PART 1: {lang === 'en' ? 'Short conversations (8 questions)' : 'Qisqa suhbatlar (8 savol)'}
-                        </div>
-                        <div className="part-label primary">
-                            PART 2: {lang === 'en' ? 'Monologues (8 questions)' : 'Monologlar (8 savol)'}
-                        </div>
-                        <div className="part-label purple">
-                            PART 3: {lang === 'en' ? 'Long monologues (9 questions)' : 'Uzun monologlar (9 savol)'}
-                        </div>
-                        <div className="part-label dark">
-                            PART 4: {lang === 'en' ? 'Longer conversations (10 questions)' : 'Uzun suhbatlar (10 savol)'}
-                        </div>
+                        <div className="part-label secondary">PART 1: Short conversations</div>
+                        <div className="part-label primary">PART 2: Monologues</div>
+                        <div className="part-label purple">PART 3: Long monologues</div>
+                        <div className="part-label dark">PART 4: Longer conversations</div>
                     </div>
                 </div>
             </div>

@@ -2,7 +2,7 @@ import { useState, useRef, useEffect } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { Send, Bot, User, Loader2, ArrowLeft, Sparkles } from 'lucide-react';
 import { Link } from 'react-router-dom';
-import { model } from '../lib/gemini';
+import { getAIChatResponse } from '../lib/ai';
 import './PageLayout.css';
 
 interface Message {
@@ -47,26 +47,13 @@ const AIChat = ({ lang }: Props) => {
         setIsTyping(true);
 
         try {
-            // Gemini history must start with 'user' role.
-            const history = allMessages
-                .map(m => ({
-                    role: m.sender === 'user' ? 'user' : 'model',
-                    parts: [{ text: m.text }],
-                }));
+            // Convert history for the unified AI handler
+            const history = allMessages.map(m => ({
+                role: m.sender === 'user' ? 'user' : 'model',
+                text: m.text,
+            }));
 
-            // We remove the last message because it's the one we're about to "send"
-            const chatHistory = history.slice(0, -1);
-
-            const chat = model.startChat({
-                history: chatHistory,
-                generationConfig: {
-                    maxOutputTokens: 1000,
-                },
-            });
-
-            const result = await chat.sendMessage(input);
-            const response = await result.response;
-            const botText = response.text();
+            const botText = await getAIChatResponse(history);
 
             const botMsg: Message = {
                 id: (Date.now() + 1).toString(),

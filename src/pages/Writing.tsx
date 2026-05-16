@@ -1,7 +1,7 @@
 import { useState, useEffect } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { GraduationCap, Edit3, Send, Sparkles, Loader2, CheckCircle, AlertCircle } from 'lucide-react';
-import { model } from '../lib/gemini';
+import { getAIResponse } from '../lib/ai';
 import './PageLayout.css';
 
 interface Props {
@@ -50,10 +50,8 @@ const Writing = ({ lang }: Props) => {
                 Language for feedback: ${lang === 'en' ? 'English' : 'Uzbek (lotin)'}
             `;
 
-            const result = await model.generateContent(prompt);
-            const response = await result.response;
-            const resText = response.text().trim();
-            const jsonStr = resText.startsWith('```') ? resText.split('```')[1].replace(/^json/, '').trim() : resText;
+            const resText = await getAIResponse(prompt);
+            const jsonStr = resText.trim().startsWith('```') ? resText.trim().split('```')[1].replace(/^json/, '').trim() : resText;
             setFeedback(JSON.parse(jsonStr));
         } catch (error) {
             console.error("Writing AI Error:", error);
