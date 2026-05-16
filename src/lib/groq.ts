@@ -3,8 +3,8 @@ import Groq from "groq-sdk";
 const API_KEY = import.meta.env.VITE_GROQ_API_KEY || "";
 const groq = new Groq({ apiKey: API_KEY, dangerouslyAllowBrowser: true });
 
-// Using Llama 3 70B for high-quality CEFR grading/marking
-export const GROQ_MODEL = "llama3-70b-8192";
+// Using Llama 3.1 70B for higher stability and rate limits
+export const GROQ_MODEL = "llama-3.1-70b-versatile";
 
 export const getGroqResponse = async (prompt: string) => {
     if (!API_KEY) {

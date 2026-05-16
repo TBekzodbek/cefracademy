@@ -28,15 +28,26 @@ const Plan = ({ lang }: Props) => {
             const { data: { user } } = await supabase.auth.getUser();
             if (!user) throw new Error("Not logged in");
 
-            const { data: profile } = await supabase.from('profiles').select('*').eq('id', user.id).single();
+            let { data: profile } = await supabase.from('profiles').select('*').eq('id', user.id).single();
+
+            // If profile doesn't exist, create a basic one or use defaults
+            if (!profile) {
+                profile = {
+                    current_level: 'B1',
+                    target_level: 'C1',
+                    weakness: 'Writing',
+                    frequency: 'Daily',
+                    time_left: '1 month'
+                } as any;
+            }
 
             const prompt = `
                 Act as an expert CEFR English Tutor. Create a 7-day study plan snippet (for a 30-day roadmap) for a student with these details:
-                - Current Level: ${profile?.current_level}
-                - Target Level: ${profile?.target_level}
-                - Weakness: ${profile?.weakness}
-                - Study Frequency: ${profile?.frequency}
-                - Time left until exam: ${profile?.time_left}
+                - Current Level: ${profile?.current_level || 'B1'}
+                - Target Level: ${profile?.target_level || 'C1'}
+                - Weakness: ${profile?.weakness || 'General'}
+                - Study Frequency: ${profile?.frequency || 'Daily'}
+                - Time left until exam: ${profile?.time_left || '1 month'}
 
                 Return ONLY a JSON array of objects with this structure:
                 [{ "day": 1, "title": "string", "description": "string", "duration": "string", "focus": "string" }]
@@ -49,8 +60,12 @@ const Plan = ({ lang }: Props) => {
             const parsedPlan = extractJSON(resText);
             setPlan(parsedPlan);
 
-            // Save to DB (optional: we can add a study_plan column)
-            await supabase.from('profiles').update({ study_plan: parsedPlan }).eq('id', user.id);
+            // Save to DB (wrapped in separate try-catch to prevent UI block if column missing)
+            try {
+                await supabase.from('profiles').update({ study_plan: parsedPlan }).eq('id', user.id);
+            } catch (dbErr) {
+                console.warn("DB Update failed (likely missing study_plan column):", dbErr);
+            }
         } catch (err: any) {
             console.error("AI Plan Error:", err);
             setError(lang === 'en' ? "Failed to generate plan. Please try again." : "Reja yaratib bo'lmadi. Qayta urinib ko'ring.");
