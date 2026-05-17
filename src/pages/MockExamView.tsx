@@ -3,6 +3,8 @@ import { motion } from 'framer-motion';
 import { BookOpen, Loader2, ArrowLeft, Trophy, Clock, ChevronRight, ChevronLeft, Send, Headphones } from 'lucide-react';
 import { MockService } from '../data/MockService';
 import type { MockTest } from '../data/MockService';
+import { GamificationService } from '../lib/gamification';
+import { supabase } from '../lib/supabase';
 import './PageLayout.css';
 import './ExamInterface.css';
 
@@ -48,15 +50,19 @@ const MockExamView = ({ lang, type }: Props) => {
         setUserAnswers(prev => ({ ...prev, [qNum]: val }));
     };
 
-    const handleSubmit = () => {
+    const handleSubmit = async () => {
         if (!mockData) return;
         setIsSubmitting(true);
-        setTimeout(() => {
-            const keys = type === 'reading' ? mockData.keys.reading : mockData.keys.listening;
-            const res = MockService.calculateScore(userAnswers, keys);
-            setResults({ score: res.score, total: res.total, detail: res.results });
-            setIsSubmitting(false);
-        }, 1500);
+        const keys = type === 'reading' ? mockData.keys.reading : mockData.keys.listening;
+        const res = MockService.calculateScore(userAnswers, keys);
+        setResults({ score: res.score, total: res.total, detail: res.results });
+
+        // Gamification
+        const { data: { user } } = await supabase.auth.getUser();
+        if (user) {
+            await GamificationService.updateActivity(user.id, res.score * 10);
+        }
+        setIsSubmitting(false);
     };
 
     // Grid View

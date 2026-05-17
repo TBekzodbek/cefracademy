@@ -1,7 +1,8 @@
-import { useEffect } from 'react';
+import { useEffect, useState } from 'react';
 import { Link, useLocation, Outlet, useNavigate } from 'react-router-dom';
-import { LayoutDashboard, User, Crown, CreditCard, BookOpen, Headphones, GraduationCap, Mic, LogOut, CheckCircle, Globe, Sun, Moon, Sparkles } from 'lucide-react';
+import { LayoutDashboard, User, Crown, CreditCard, BookOpen, Headphones, GraduationCap, Mic, LogOut, CheckCircle, Globe, Sun, Moon, Sparkles, Flame, Trophy, Library } from 'lucide-react';
 import { supabase } from '../lib/supabase';
+import { GamificationService } from '../lib/gamification';
 import './DashboardLayout.css';
 
 interface Props {
@@ -14,14 +15,32 @@ interface Props {
 const DashboardLayout = ({ lang, toggleLang, theme, toggleTheme }: Props) => {
     const location = useLocation();
     const navigate = useNavigate();
+    const [stats, setStats] = useState({ xp: 0, streak: 0, level: 1 });
 
     useEffect(() => {
-        const checkUser = async () => {
+        const fetchUserData = async () => {
             const { data: { user } } = await supabase.auth.getUser();
-            if (!user) navigate('/login');
+            if (!user) {
+                navigate('/login');
+                return;
+            }
+
+            const { data: profile } = await supabase
+                .from('profiles')
+                .select('xp, streak')
+                .eq('id', user.id)
+                .single();
+
+            if (profile) {
+                setStats({
+                    xp: profile.xp || 0,
+                    streak: profile.streak || 0,
+                    level: GamificationService.calculateLevel(profile.xp || 0)
+                });
+            }
         };
-        checkUser();
-    }, [navigate]);
+        fetchUserData();
+    }, [navigate, location.pathname]);
 
     const handleLogout = async () => {
         await supabase.auth.signOut();
@@ -38,6 +57,7 @@ const DashboardLayout = ({ lang, toggleLang, theme, toggleTheme }: Props) => {
         { section: lang === 'en' ? 'Practice Categories' : 'Amaliyot bo\'limlari' },
         { to: '/dashboard/reading', icon: <BookOpen size={20} />, label: lang === 'en' ? 'Reading' : 'O\'qib tushunish' },
         { to: '/dashboard/listening', icon: <Headphones size={20} />, label: lang === 'en' ? 'Listening' : 'Tinglab tushunish' },
+        { to: '/dashboard/vocabulary', icon: <Library size={20} />, label: lang === 'en' ? 'Vocabulary' : 'Lug\'at boyligi' },
         { to: '/dashboard/writing', icon: <GraduationCap size={20} />, label: lang === 'en' ? 'Writing' : 'Yozma nutq' },
         { to: '/dashboard/speaking', icon: <Mic size={20} />, label: lang === 'en' ? 'Speaking' : 'Og\'zaki nutq' },
 
@@ -45,22 +65,43 @@ const DashboardLayout = ({ lang, toggleLang, theme, toggleTheme }: Props) => {
         { to: '/dashboard/pricing', icon: <CreditCard size={20} />, label: lang === 'en' ? 'Pricing & Plans' : 'Ta\'riflar' },
     ];
 
+    const xpProgress = GamificationService.calculateProgress(stats.xp);
+
     return (
         <div className="dashboard-layout">
             <aside className="dashboard-sidebar glass-panel">
-                <div className="sidebar-header" style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', gap: '0.5rem' }}>
-                    <Link to="/" className="brand allow-select">
-                        <span className="brand-logo">CEFR</span>
-                        <span className="brand-text">ACADEMY</span>
-                    </Link>
-                    <div style={{ display: 'flex', gap: '0.25rem' }}>
-                        <button className="btn btn-ghost theme-toggle-sidebar" onClick={toggleTheme} title="Toggle Theme" style={{ padding: '0.4rem' }}>
-                            {theme === 'light' ? <Moon size={18} /> : <Sun size={18} />}
-                        </button>
-                        <button className="btn btn-ghost lang-toggle-sidebar" onClick={toggleLang} style={{ padding: '0.4rem' }}>
-                            <Globe size={18} />
-                            <span style={{ fontSize: '0.8rem' }}>{lang.toUpperCase()}</span>
-                        </button>
+                <div className="sidebar-header" style={{ display: 'flex', flexDirection: 'column', gap: '0.5rem' }}>
+                    <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
+                        <Link to="/" className="brand allow-select">
+                            <span className="brand-logo">CEFR</span>
+                            <span className="brand-text">ACADEMY</span>
+                        </Link>
+                        <div style={{ display: 'flex', gap: '0.25rem' }}>
+                            <button className="btn btn-ghost theme-toggle-sidebar" onClick={toggleTheme} title="Toggle Theme" style={{ padding: '0.4rem' }}>
+                                {theme === 'light' ? <Moon size={18} /> : <Sun size={18} />}
+                            </button>
+                            <button className="btn btn-ghost lang-toggle-sidebar" onClick={toggleLang} style={{ padding: '0.4rem' }}>
+                                <Globe size={18} />
+                                <span style={{ fontSize: '0.8rem' }}>{lang.toUpperCase()}</span>
+                            </button>
+                        </div>
+                    </div>
+
+                    {/* User Mini Stats */}
+                    <div className="sidebar-stats-card">
+                        <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '0.5rem' }}>
+                            <div className="flex" style={{ gap: '0.5rem', color: 'var(--color-warning)' }}>
+                                <Flame size={18} fill="currentColor" />
+                                <span style={{ fontWeight: 800 }}>{stats.streak} {lang === 'en' ? 'Days' : 'Kun'}</span>
+                            </div>
+                            <div className="flex" style={{ gap: '0.5rem', color: 'var(--color-primary)' }}>
+                                <Trophy size={18} />
+                                <span style={{ fontWeight: 800 }}>Lvl {stats.level}</span>
+                            </div>
+                        </div>
+                        <div className="mini-progress-track" style={{ height: '6px' }}>
+                            <div className="mini-progress-bar" style={{ width: `${xpProgress}%` }}></div>
+                        </div>
                     </div>
                 </div>
 

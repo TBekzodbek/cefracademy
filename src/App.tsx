@@ -12,6 +12,7 @@ import Profile from './pages/Profile';
 import Plan from './pages/Plan';
 import Pricing from './pages/Pricing';
 import AIChat from './pages/AIChat';
+import Vocabulary from './pages/Vocabulary';
 import { useState, useEffect } from 'react';
 import { SpeedInsights } from "@vercel/speed-insights/react";
 import { Analytics } from "@vercel/analytics/react";
@@ -66,6 +67,7 @@ function App() {
           <Route path="plan" element={<Plan lang={lang} />} />
           <Route path="pricing" element={<Pricing lang={lang} />} />
           <Route path="ai-chat" element={<AIChat lang={lang} />} />
+          <Route path="vocabulary" element={<Vocabulary lang={lang} />} />
         </Route>
 
         {/* Legacy redirect for old bookmarkers */}
