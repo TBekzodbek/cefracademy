@@ -263,10 +263,15 @@ const OnboardingSurvey = ({ lang, toggleLang, theme, toggleTheme }: Props) => {
                             <div className="exam-format-card">
                                 <h3 className="card-title">Official Exam Format</h3>
                                 <div className="format-rows">
-                                    {['Reading', 'Listening', 'Writing', 'Speaking'].map((skill, i) => (
+                                    {[
+                                        { s: 'Reading', t: '60 min' },
+                                        { s: 'Listening', t: '35 min' },
+                                        { s: 'Writing', t: '60 min' },
+                                        { s: 'Speaking', t: '15-20 min' }
+                                    ].map((item, i) => (
                                         <div key={i} className="format-row">
-                                            <span className="skill-name">{skill}</span>
-                                            <span className="skill-time">{i === 3 ? '15-20 min' : '60-70 min'}</span>
+                                            <span className="skill-name">{item.s}</span>
+                                            <span className="skill-time">{item.t}</span>
                                         </div>
                                     ))}
                                 </div>

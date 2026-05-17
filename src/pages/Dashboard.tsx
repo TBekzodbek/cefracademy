@@ -50,12 +50,12 @@ const Dashboard = ({ lang }: Props) => {
     }
 
     const categories = [
-        { to: '/dashboard/reading', label: lang === 'en' ? 'Reading' : 'O\'qib tushunish', sub: 'Mocks 1-50', icon: <BookOpen />, color: '#4F46E5' },
-        { to: '/dashboard/listening', label: lang === 'en' ? 'Listening' : 'Tinglab tushunish', sub: 'Mocks 1-50', icon: <Headphones />, color: '#0EA5E9' },
-        { to: '/dashboard/vocabulary', label: lang === 'en' ? 'Vocabulary' : 'Lug\'at boyligi', sub: '600+ Words', icon: <Library />, color: '#10B981' },
-        { to: '/dashboard/writing', label: lang === 'en' ? 'Writing' : 'Yozma nutq', sub: 'AI Feedback', icon: <GraduationCap />, color: '#7C3AED' },
-        { to: '/dashboard/speaking', label: lang === 'en' ? 'Speaking' : 'Og\'zaki nutq', sub: 'Atlas AI', icon: <Mic />, color: '#F59E0B' },
-        { to: '/dashboard/ai-chat', label: 'Atlas AI Chat', sub: 'Smart Tutor', icon: <MessageSquare />, color: '#6366f1' },
+        { to: '/dashboard/reading', label: lang === 'en' ? 'Reading' : 'O\'qib tushunish', sub: '60 min | 35 Items', icon: <BookOpen />, color: '#4F46E5' },
+        { to: '/dashboard/listening', label: lang === 'en' ? 'Listening' : 'Tinglab tushunish', sub: '35 min | 35 Items', icon: <Headphones />, color: '#0EA5E9' },
+        { to: '/dashboard/vocabulary', label: lang === 'en' ? 'Vocabulary' : 'Lug\'at boyligi', sub: 'Interactive Quiz', icon: <Library />, color: '#10B981' },
+        { to: '/dashboard/writing', label: lang === 'en' ? 'Writing' : 'Yozma nutq', sub: '60 min | 2 Tasks', icon: <GraduationCap />, color: '#7C3AED' },
+        { to: '/dashboard/speaking', label: lang === 'en' ? 'Speaking' : 'Og\'zaki nutq', sub: '20 min | 3 Parts', icon: <Mic />, color: '#F59E0B' },
+        { to: '/dashboard/ai-chat', label: 'Atlas AI Chat', sub: 'Tutor Support', icon: <MessageSquare />, color: '#6366f1' },
     ];
 
     return (
