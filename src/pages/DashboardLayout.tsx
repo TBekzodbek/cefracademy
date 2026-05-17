@@ -89,31 +89,32 @@ const DashboardLayout = ({ lang, toggleLang, theme, toggleTheme }: Props) => {
 
                     {/* User Mini Stats */}
                     <div className="sidebar-stats-card">
-                        <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '0.5rem' }}>
-                            <div className="flex" style={{ gap: '0.5rem', color: 'var(--color-warning)' }}>
-                                <Flame size={18} fill="currentColor" />
-                                <span style={{ fontWeight: 800 }}>{stats.streak} {lang === 'en' ? 'Days' : 'Kun'}</span>
+                        <div style={{ display: 'flex', alignItems: 'center', gap: '0.6rem', marginBottom: '0.6rem' }}>
+                            <div style={{
+                                width: '32px', height: '32px', borderRadius: '50%',
+                                background: 'rgba(255,255,255,0.15)', display: 'flex',
+                                alignItems: 'center', justifyContent: 'center',
+                                fontSize: '0.75rem', fontWeight: 800, color: 'white', flexShrink: 0,
+                            }}>
+                                {(stats.level <= 2 ? 'A' : stats.level <= 4 ? 'B' : 'C')}
                             </div>
-                            <div className="flex" style={{ gap: '0.5rem', color: 'var(--color-primary)' }}>
-                                <Trophy size={18} />
-                                <span style={{ fontWeight: 800 }}>Lvl {stats.level}</span>
+                            <div style={{ flex: 1, minWidth: 0 }}>
+                                <div style={{ display: 'flex', alignItems: 'center', gap: '0.5rem' }}>
+                                    <div style={{ display: 'flex', alignItems: 'center', gap: '0.3rem', color: '#FBBF24' }}>
+                                        <Flame size={13} fill="currentColor" />
+                                        <span style={{ fontWeight: 800, fontSize: '0.8rem', color: 'white' }}>{stats.streak}d</span>
+                                    </div>
+                                    <div style={{ display: 'flex', alignItems: 'center', gap: '0.3rem', color: '#7C6FFF' }}>
+                                        <Trophy size={13} />
+                                        <span style={{ fontWeight: 800, fontSize: '0.8rem', color: 'white' }}>Lvl {stats.level}</span>
+                                    </div>
+                                </div>
                             </div>
                         </div>
-                        <div className="mini-progress-track" style={{ height: '6px' }}>
+                        <div className="mini-progress-track">
                             <div className="mini-progress-bar" style={{ width: `${xpProgress}%` }}></div>
                         </div>
                     </div>
-                </div>
-
-                <div className="sidebar-premium-card">
-                    <Crown size={24} className="text-warning" style={{ marginBottom: '0.5rem' }} />
-                    <h4>{lang === 'en' ? 'Free Plan' : 'Bepul ta\'rif'}</h4>
-                    <p style={{ fontSize: '0.85rem', marginBottom: '1rem', opacity: 0.9 }}>
-                        {lang === 'en' ? 'Limited access to standard tests.' : 'Cheklangan testlarga kirish.'}
-                    </p>
-                    <Link to="/dashboard/pricing" className="btn btn-primary" style={{ width: '100%', padding: '0.5rem', fontSize: '0.9rem', color: 'white' }}>
-                        {lang === 'en' ? 'Upgrade to Premium' : 'Premiumga o\'tish'}
-                    </Link>
                 </div>
 
                 <nav className="sidebar-nav">
@@ -133,6 +134,15 @@ const DashboardLayout = ({ lang, toggleLang, theme, toggleTheme }: Props) => {
                         );
                     })}
                 </nav>
+
+                <div className="sidebar-premium-card">
+                    <Crown size={20} style={{ color: '#FBBF24', marginBottom: '0.4rem' }} />
+                    <h4>{lang === 'en' ? 'Go Premium' : 'Premium qiling'}</h4>
+                    <p>{lang === 'en' ? 'Unlock speaking, full mocks & AI writing.' : 'Speaking, to\'liq testlar va AI yozuv.'}</p>
+                    <Link to="/dashboard/pricing" className="btn-premium">
+                        {lang === 'en' ? 'Upgrade Now' : 'Hozir o\'tish'}
+                    </Link>
+                </div>
 
                 <div className="sidebar-footer">
                     <button onClick={handleLogout} className="sidebar-link text-error" style={{ width: '100%', background: 'none', border: 'none', cursor: 'pointer' }}>

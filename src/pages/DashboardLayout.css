@@ -1,6 +1,5 @@
 /* ═══════════════════════════════════════════════════
    CEFR ACADEMY — Dashboard Layout
-   Inspired by cefrai.uz sidebar design
    ═══════════════════════════════════════════════════ */
 
 .dashboard-layout {
@@ -10,7 +9,7 @@
     overflow: hidden;
 }
 
-/* ─── Sidebar ─── */
+/* ─── Sidebar ─────────────────────────────────────── */
 .dashboard-sidebar {
     width: 256px;
     min-width: 256px;
@@ -20,20 +19,21 @@
     flex-direction: column;
     overflow-y: auto;
     overflow-x: hidden;
+    scrollbar-width: none;
 }
+.dashboard-sidebar::-webkit-scrollbar { display: none; }
 
 /* Brand / Logo */
 .sidebar-header {
-    padding: 1.5rem 1.25rem 1rem;
+    padding: 1.25rem 1rem 1rem;
     border-bottom: 1px solid var(--color-border);
 }
 
-/* .brand is the Link element in DashboardLayout.tsx */
 .brand,
 .brand-text {
     font-family: var(--font-heading);
     font-weight: 900;
-    font-size: 1.2rem;
+    font-size: 1.15rem;
     letter-spacing: -0.03em;
     color: var(--color-text-main);
     display: flex;
@@ -41,7 +41,6 @@
     gap: 0.5rem;
     text-decoration: none;
 }
-
 .brand .brand-logo { color: var(--color-text-main); }
 .brand .brand-text { color: var(--color-primary); font-size: inherit; font-weight: inherit; display: inline; }
 
@@ -57,19 +56,18 @@
     margin-left: auto;
 }
 
-/* User Stats Card */
+/* ─── User Stats Card ──────────────────────────────── */
 .sidebar-stats-card {
-    margin: 1rem 0.75rem 0.25rem;
-    background: var(--color-background);
-    border: 1px solid var(--color-border);
+    margin: 0.75rem 0.75rem 0;
+    background: linear-gradient(135deg, #1e1b4b 0%, #312e81 100%);
     border-radius: var(--radius-xl);
     padding: 1rem 1.1rem;
 }
 
 .sidebar-user-name {
     font-weight: 700;
-    font-size: 0.85rem;
-    color: var(--color-text-main);
+    font-size: 0.82rem;
+    color: white;
     margin-bottom: 0.6rem;
     white-space: nowrap;
     overflow: hidden;
@@ -78,7 +76,7 @@
 
 .sidebar-stat-row {
     display: flex;
-    gap: 1.25rem;
+    gap: 1.5rem;
 }
 
 .sidebar-stat {
@@ -88,22 +86,22 @@
 }
 
 .sidebar-stat-val {
-    font-weight: 800;
-    font-size: 1rem;
-    color: var(--color-primary);
+    font-weight: 900;
+    font-size: 1.1rem;
+    color: white;
     line-height: 1;
 }
 
 .sidebar-stat-label {
-    font-size: 10px;
-    font-weight: 600;
+    font-size: 9px;
+    font-weight: 700;
     text-transform: uppercase;
     letter-spacing: 0.05em;
-    color: var(--color-text-light);
+    color: rgba(255,255,255,0.45);
 }
 
 .mini-progress-track {
-    background: var(--color-background-alt);
+    background: rgba(255,255,255,0.1);
     height: 4px;
     border-radius: var(--radius-full);
     margin-top: 0.75rem;
@@ -111,122 +109,149 @@
 }
 
 .mini-progress-bar {
-    background: var(--gradient-primary);
+    background: #7C6FFF;
     height: 100%;
     border-radius: var(--radius-full);
     transition: width 0.6s ease;
 }
 
-/* Navigation */
+/* ─── Navigation ───────────────────────────────────── */
 .sidebar-nav {
     flex: 1;
-    padding: 0.5rem 0.75rem 0;
+    padding: 0.75rem 0.75rem 0;
 }
 
 .sidebar-section-title {
     font-weight: 700;
-    font-size: 10px;
+    font-size: 9px;
     text-transform: uppercase;
     color: var(--color-text-light);
-    letter-spacing: 0.08em;
-    padding: 1rem 0.6rem 0.35rem;
+    letter-spacing: 0.1em;
+    padding: 1rem 0.6rem 0.3rem;
 }
 
 .sidebar-link {
     display: flex;
     align-items: center;
     gap: 0.7rem;
-    padding: 0.6rem 0.85rem;
+    padding: 0.55rem 0.85rem;
     border-radius: var(--radius-lg);
     color: var(--color-text-muted);
     text-decoration: none;
     font-weight: 600;
-    font-size: 0.875rem;
+    font-size: 0.84rem;
     transition: all 0.15s ease;
-    margin-bottom: 2px;
+    margin-bottom: 1px;
 }
 
 .sidebar-link svg {
     flex-shrink: 0;
     width: 17px;
     height: 17px;
+    opacity: 0.7;
 }
 
 .sidebar-link:hover {
     background: var(--color-background);
     color: var(--color-text-main);
 }
+.sidebar-link:hover svg { opacity: 1; }
 
 .sidebar-link.active {
     background: var(--color-primary-soft);
     color: var(--color-primary);
     font-weight: 700;
 }
+.sidebar-link.active svg { opacity: 1; }
 
-/* Premium Upgrade Card */
+/* Active indicator dot */
+.sidebar-link.active::before {
+    content: '';
+    position: absolute;
+    left: 0;
+    width: 3px;
+    height: 18px;
+    background: var(--color-primary);
+    border-radius: 0 4px 4px 0;
+}
+.sidebar-nav { position: relative; }
+.sidebar-link { position: relative; }
+
+/* ─── Premium Upgrade Card ────────────────────────── */
 .sidebar-premium-card {
     margin: 0.75rem;
     background: var(--gradient-dark);
     border-radius: var(--radius-xl);
-    padding: 1.25rem;
+    padding: 1.1rem;
     color: white;
+    position: relative;
+    overflow: hidden;
+}
+.sidebar-premium-card::before {
+    content: '';
+    position: absolute;
+    right: -20px; top: -20px;
+    width: 80px; height: 80px;
+    background: rgba(91,80,232,0.3);
+    border-radius: 50%;
+    filter: blur(20px);
 }
 
 .sidebar-premium-card h4 {
-    font-size: 0.88rem;
+    font-size: 0.84rem;
     font-weight: 800;
-    margin-bottom: 0.35rem;
+    margin-bottom: 0.25rem;
     color: white;
     letter-spacing: -0.01em;
+    position: relative;
 }
 
 .sidebar-premium-card p {
-    font-size: 0.75rem;
-    color: rgba(255, 255, 255, 0.5);
-    margin-bottom: 0.9rem;
-    line-height: 1.45;
+    font-size: 0.72rem;
+    color: rgba(255, 255, 255, 0.45);
+    margin-bottom: 0.8rem;
+    line-height: 1.4;
+    position: relative;
 }
 
 .btn-premium {
     display: block;
     width: 100%;
-    padding: 0.55rem;
+    padding: 0.5rem;
     background: var(--color-primary);
     color: white;
     border: none;
     border-radius: var(--radius-lg);
     font-weight: 700;
-    font-size: 0.8rem;
+    font-size: 0.78rem;
     cursor: pointer;
     text-align: center;
     text-decoration: none;
     transition: filter 0.2s;
+    position: relative;
 }
+.btn-premium:hover { filter: brightness(1.12); }
 
-.btn-premium:hover {
-    filter: brightness(1.12);
-}
-
-/* Sidebar Footer (logout button area) */
+/* ─── Sidebar Footer ────────────────────────────────── */
 .sidebar-footer {
     padding: 0.75rem;
     border-top: 1px solid var(--color-border);
     margin-top: auto;
 }
 
-/* ─── Main Content Area ─── */
+/* ─── Main Content Area ────────────────────────────── */
 .dashboard-main-content {
     flex: 1;
-    padding: 2.5rem 3rem;
+    padding: 2.25rem 2.75rem;
     overflow-y: auto;
     background-color: var(--color-background);
 }
 
-/* ─── Responsive ─── */
+/* ─── Responsive ─────────────────────────────────────── */
 @media (max-width: 1100px) {
     .dashboard-sidebar {
-        width: 68px;
-        min-width: 68px;
+        width: 62px;
+        min-width: 62px;
     }
 
     .sidebar-stats-card,
@@ -242,19 +267,19 @@
 
     .sidebar-header {
         justify-content: center;
-        padding: 1rem 0;
+        padding: 0.875rem 0;
     }
 
-    .sidebar-nav {
-        padding: 0.5rem;
-    }
+    .sidebar-nav { padding: 0.5rem; }
 
     .sidebar-link {
         justify-content: center;
-        padding: 0.75rem;
+        padding: 0.7rem;
     }
+    .sidebar-link svg { opacity: 1; }
+    .sidebar-link.active::before { display: none; }
 
     .dashboard-main-content {
-        padding: 2rem 1.5rem;
+        padding: 1.75rem 1.5rem;
     }
 }
