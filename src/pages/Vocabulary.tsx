@@ -6,10 +6,9 @@ import { GamificationService } from '../lib/gamification';
 import { supabase } from '../lib/supabase';
 import './PageLayout.css';
 
-interface Props { lang: 'en' | 'uz'; }
 interface Word { en: string; uz: string; }
 
-const Vocabulary = ({ lang }: Props) => {
+const Vocabulary = () => {
     const [quizStarted, setQuizStarted] = useState(false);
     const [currentQuestion, setCurrentQuestion] = useState(0);
     const [score, setScore] = useState(0);
