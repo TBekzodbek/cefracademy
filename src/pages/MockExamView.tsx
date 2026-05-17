@@ -79,25 +79,44 @@ const MockExamView = ({ lang, type }: Props) => {
                     </p>
                 </header>
 
-                <div className="dashboard-grid">
+                <div className="dashboard-grid" style={{ gridTemplateColumns: 'repeat(auto-fill, minmax(280px, 1fr))', gap: '1.5rem', marginTop: '2rem' }}>
                     {mockIds.map(id => (
                         <motion.div
                             key={id}
-                            whileHover={{ y: -5, borderColor: 'var(--color-primary)' }}
-                            className="stat-card glass-panel"
+                            whileHover={{ y: -8, boxShadow: 'var(--shadow-xl)', borderColor: 'var(--color-primary)' }}
+                            className="glass-panel"
                             onClick={() => handleSelectMock(id)}
-                            style={{ cursor: 'pointer', padding: '1.5rem', border: '1px solid var(--color-border)' }}
+                            style={{
+                                cursor: 'pointer',
+                                padding: '2rem',
+                                border: '1px solid var(--color-border)',
+                                borderRadius: 'var(--radius-xl)',
+                                background: 'var(--color-surface)',
+                                position: 'relative'
+                            }}
                         >
-                            <div className="flex" style={{ justifyContent: 'space-between', marginBottom: '1.5rem' }}>
-                                <span className={`badge-small ${type === 'reading' ? 'primary' : 'secondary'}`}>Mock #{id}</span>
-                                <Clock size={16} className="text-muted" />
+                            <div style={{ marginBottom: '1.5rem', display: 'flex', justifyContent: 'center' }}>
+                                <div style={{
+                                    width: '4rem',
+                                    height: '4rem',
+                                    borderRadius: '1.5rem',
+                                    background: type === 'reading' ? 'var(--color-primary-soft)' : 'rgba(14,165,233,0.1)',
+                                    color: type === 'reading' ? 'var(--color-primary)' : 'var(--color-secondary)',
+                                    display: 'flex',
+                                    alignItems: 'center',
+                                    justifyContent: 'center'
+                                }}>
+                                    {type === 'reading' ? <BookOpen size={28} /> : <Headphones size={28} />}
+                                </div>
                             </div>
-                            <h3 style={{ margin: '0 0 1rem 0' }}>{type === 'reading' ? 'Official Reading' : 'Official Listening'}</h3>
-                            <div className="flex" style={{ fontSize: '0.85rem', color: 'var(--color-text-muted)', gap: '1.5rem' }}>
-                                <span>{type === 'reading' ? '5 Parts' : '6 Parts'}</span>
-                                <span>35 Questions</span>
+                            <div className="text-center">
+                                <h3 style={{ fontSize: '1.4rem', fontWeight: 800, marginBottom: '0.25rem' }}>Mock Test {id}</h3>
+                                <p className="text-muted" style={{ fontSize: '0.85rem', marginBottom: '1.5rem' }}>Official Selection</p>
+                                <div className="flex" style={{ justifyContent: 'center', gap: '1rem', fontSize: '0.8rem', fontWeight: 600, color: 'var(--color-text-muted)' }}>
+                                    <span className="badge-small primary">{type === 'reading' ? '60 mins' : '35 mins'}</span>
+                                    <span className="badge-small secondary">35 Items</span>
+                                </div>
                             </div>
-                            <button className={`btn ${type === 'reading' ? 'btn-primary' : 'btn-secondary'}`} style={{ width: '100%', marginTop: '1.5rem' }}>Start Exam</button>
                         </motion.div>
                     ))}
                 </div>

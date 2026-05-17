@@ -1,311 +1,145 @@
 import { useState, useEffect } from 'react';
 import { motion } from 'framer-motion';
-import { Loader2, BookOpen, GraduationCap, BarChart, TrendingUp, ArrowRight, CheckCircle2, Calendar, MessageSquare, Compass, Shield } from 'lucide-react';
-import { Link } from 'react-router-dom';
+import { Loader2, BookOpen, GraduationCap, ArrowRight, MessageSquare, Flame, Trophy, Mic, Headphones, Library, CheckCircle, Target } from 'lucide-react';
+import { Link, useNavigate } from 'react-router-dom';
 import { supabase } from '../lib/supabase';
-import { CEFR_MARKING_SYSTEM } from '../lib/marking';
-import { calculateLevel } from '../lib/leveling';
-import { MotivationalQuote } from '../components/MotivationalQuote';
-import { getAIResponse } from '../lib/ai';
+import { GamificationService } from '../lib/gamification';
 import './PageLayout.css';
-import atlasWolfSmall from '../assets/images/atlas-wolf.png';
 
-interface Props {
-    lang: 'en' | 'uz';
-    theme: 'light' | 'dark';
-}
-
-interface UserProfile {
-    current_level: string;
-    target_level: string;
-    points: number;
-    tests_completed: number;
-    avg_score?: number;
-    weakness?: string;
-    frequency?: string;
-    time_left?: string;
-    username?: string;
-}
-
-interface PlanTask {
-    id: number;
-    task: string;
-    done: boolean;
-    time: string;
-    priority: boolean;
-}
+interface Props { lang: 'en' | 'uz'; theme: 'light' | 'dark'; }
 
 const Dashboard = ({ lang }: Props) => {
-    const [profile, setProfile] = useState<UserProfile | null>(null);
+    const navigate = useNavigate();
     const [loading, setLoading] = useState(true);
-    const [dailyPlan, setDailyPlan] = useState<PlanTask[]>([]);
-    const [aiTip, setAiTip] = useState<string>('');
+    const [profile, setProfile] = useState<any>(null);
+    const [stats, setStats] = useState({ xp: 0, streak: 0, level: 1 });
 
     useEffect(() => {
-        const fetchProfile = async () => {
+        const fetchData = async () => {
             const { data: { user } } = await supabase.auth.getUser();
-            if (user) {
-                const { data, error } = await supabase
-                    .from('profiles')
-                    .select('current_level, target_level, points, tests_completed, avg_score, weakness, frequency, time_left, username')
-                    .eq('id', user.id)
-                    .single();
+            if (!user) {
+                navigate('/login');
+                return;
+            }
 
-                if (data) {
-                    setProfile(data);
-                    generateSmartPlan(data);
-                    fetchAiTip(data);
-                } else if (error && error.code === 'PGRST116') {
-                    const fallback = { current_level: 'B1', target_level: 'C1', points: 0, tests_completed: 0, avg_score: 0 };
-                    setProfile(fallback);
-                    generateSmartPlan(fallback);
-                    fetchAiTip(fallback);
-                }
+            const { data: profileData } = await supabase
+                .from('profiles')
+                .select('*')
+                .eq('id', user.id)
+                .single();
+
+            if (profileData) {
+                setProfile(profileData);
+                setStats({
+                    xp: profileData.xp || 0,
+                    streak: profileData.streak || 0,
+                    level: GamificationService.calculateLevel(profileData.xp || 0)
+                });
             }
             setLoading(false);
         };
-        fetchProfile();
-    }, [lang]);
-
-    const fetchAiTip = async (prof: UserProfile) => {
-        const prompt = `Give a 1-sentence expert CEFR study tip for a student who is at level ${prof.current_level} aiming for ${prof.target_level}. Their weakness is ${prof.weakness}. Language: ${lang === 'en' ? 'English' : 'Uzbek (lotin)'}. Be encouraging.`;
-        try {
-            const tip = await getAIResponse(prompt);
-            setAiTip(tip);
-        } catch (e) {
-            setAiTip(lang === 'en' ? "Keep practicing your vocabulary!" : "Lug'at ustida ishlashda davom eting!");
-        }
-    };
-
-    const generateSmartPlan = (prof: UserProfile) => {
-        const tasks: PlanTask[] = [];
-        const isAdvanced = prof.current_level?.includes('B2') || prof.current_level?.includes('C1');
-        const intensity = prof.frequency?.includes('Intensive') ? 4 : 2;
-
-        if (prof.weakness?.includes('Writing')) {
-            tasks.push({ id: 1, task: lang === 'en' ? 'Advanced Writing Analysis' : 'Writing tahlili (Task 2)', done: false, time: '25m', priority: true });
-        } else if (prof.weakness?.includes('Reading')) {
-            tasks.push({ id: 1, task: lang === 'en' ? 'Scanning Techiques Drill' : 'Scanning usullarida mashq', done: false, time: '20m', priority: true });
-        } else {
-            tasks.push({ id: 1, task: lang === 'en' ? 'General Diagnostic Session' : 'Umumiy diagnostika', done: true, time: '15m', priority: false });
-        }
-
-        if (isAdvanced) {
-            tasks.push({ id: 2, task: lang === 'en' ? 'C1 Vocabulary Expansion' : 'C1 darajadagi lug\'at', done: false, time: '15m', priority: false });
-        } else {
-            tasks.push({ id: 2, task: lang === 'en' ? 'B1/B2 Grammar Focus' : 'B1/B2 Grammatika', done: false, time: '20m', priority: false });
-        }
-
-        tasks.push({ id: 3, task: lang === 'en' ? 'Partial Mock (Reading Part 1)' : 'Mock test (Reading bo\'limi)', done: false, time: '30m', priority: prof.weakness?.includes('Reading') || false });
-
-        if (intensity > 2) {
-            tasks.push({ id: 4, task: lang === 'en' ? 'Atlas AI Feedback Review' : 'Atlas AI tahlillarini ko\'rish', done: false, time: '10m', priority: false });
-        }
-
-        setDailyPlan(tasks);
-    };
-
-    const getScoreBoundary = (level: string) => {
-        const range = CEFR_MARKING_SYSTEM.find(r => level.includes(r.level));
-        return range ? range.minPoints : 0;
-    };
-
-    const targetBoundary = getScoreBoundary(profile?.target_level || 'B2');
-    const progressPercent = profile?.avg_score ? Math.min((profile.avg_score / 75) * 100, 100) : 0;
-    const targetPercent = (targetBoundary / 75) * 100;
-
-    const getLevelDescription = () => {
-        if (profile?.target_level?.includes('C1')) {
-            return lang === 'en'
-                ? 'Advanced fluency: Understand complex texts and implicit meanings with professional precision.'
-                : 'C1 darajasi: Murakkab matnlarni yashirin ma\'nolarigacha tushunish va professional muloqot.';
-        }
-        if (profile?.target_level?.includes('B2')) {
-            return lang === 'en'
-                ? 'Upper-Intermediate: Communicate fluently and spontaneously with native speakers without strain.'
-                : 'B2 darajasi: Tayyorgarliksiz ravon gapirish va murakkab mavzularda aniq xabarlar tuzish.';
-        }
-        return lang === 'en'
-            ? 'Intermediate: Understand main points of familiar matters and produce simple connected text.'
-            : 'B1 darajasi: Kundalik mavzularni tushunish va shaxsiy qiziqishlarda erkin muloqot qilish.';
-    };
+        fetchData();
+    }, [navigate]);
 
     if (loading) {
         return (
-            <div className="page-container container" style={{ display: 'flex', justifyContent: 'center', alignItems: 'center', height: '60vh' }}>
+            <div className="flex-center" style={{ height: '70vh' }}>
                 <Loader2 className="animate-spin text-primary" size={40} />
             </div>
         );
     }
 
+    const categories = [
+        { to: '/dashboard/reading', label: lang === 'en' ? 'Reading' : 'O\'qib tushunish', sub: 'Mocks 1-50', icon: <BookOpen />, color: '#4F46E5' },
+        { to: '/dashboard/listening', label: lang === 'en' ? 'Listening' : 'Tinglab tushunish', sub: 'Mocks 1-50', icon: <Headphones />, color: '#0EA5E9' },
+        { to: '/dashboard/vocabulary', label: lang === 'en' ? 'Vocabulary' : 'Lug\'at boyligi', sub: '600+ Words', icon: <Library />, color: '#10B981' },
+        { to: '/dashboard/writing', label: lang === 'en' ? 'Writing' : 'Yozma nutq', sub: 'AI Feedback', icon: <GraduationCap />, color: '#7C3AED' },
+        { to: '/dashboard/speaking', label: lang === 'en' ? 'Speaking' : 'Og\'zaki nutq', sub: 'Atlas AI', icon: <Mic />, color: '#F59E0B' },
+        { to: '/dashboard/ai-chat', label: 'Atlas AI Chat', sub: 'Smart Tutor', icon: <MessageSquare />, color: '#6366f1' },
+    ];
+
     return (
-        <motion.div
-            className="page-container"
-            initial={{ opacity: 0, y: 10 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.4 }}
-        >
-            <header className="page-header" style={{ position: 'relative' }}>
-                <div style={{ display: 'flex', alignItems: 'center', gap: '1.5rem' }}>
-                    <div className="avatar-placeholder-large" style={{ background: 'var(--color-surface-alt)', borderRadius: '1rem', padding: '0.5rem', border: '1px solid var(--color-border)' }}>
-                        <img src={atlasWolfSmall} alt="Atlas" style={{ width: '80px' }} />
+        <motion.div initial={{ opacity: 0 }} animate={{ opacity: 1 }} className="page-container">
+            {/* Hero Section */}
+            <div className="glass-panel" style={{ padding: '3rem', marginBottom: '3rem', background: 'var(--gradient-primary)', color: 'white', border: 'none', borderRadius: 'var(--radius-2xl)' }}>
+                <div style={{ maxWidth: '600px' }}>
+                    <div className="badge" style={{ background: 'rgba(255,255,255,0.2)', color: 'white', marginBottom: '1rem' }}>
+                        {lang === 'en' ? 'In Progress' : 'Jarayonda'}
                     </div>
-                    <div>
-                        <h1 style={{ fontSize: '2rem', fontWeight: 800, color: 'var(--color-text-main)' }}>{lang === 'en' ? `Welcome, ${profile?.username || 'Learner'}` : `Xush kelibsiz, ${profile?.username || 'O\'quvchi'}`}</h1>
-                        <p style={{ opacity: 0.7, color: 'var(--color-text-main)' }}>{getLevelDescription()}</p>
-                    </div>
-                </div>
-            </header>
-
-            <div className="dashboard-grid-modern" style={{ display: 'grid', gridTemplateColumns: '1.6fr 0.9fr', gap: '2rem', marginTop: '2rem' }}>
-
-                {/* Left: Study Plan & Daily Progress */}
-                <div style={{ display: 'flex', flexDirection: 'column', gap: '2rem' }}>
-                    <div className="glass-panel" style={{ padding: '2.5rem' }}>
-                        <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '2rem' }}>
-                            <h3 style={{ display: 'flex', alignItems: 'center', gap: '0.75rem', color: 'var(--color-text-main)' }}><Calendar size={32} /> {lang === 'en' ? 'Active Study Plan' : 'Faol o\'quv rejasi'}</h3>
-                            <div className="progress-badge">Day 1 of 30</div>
-                        </div>
-
-                        <div className="daily-tasks-list">
-                            {dailyPlan.map(item => (
-                                <div key={item.id} className={`task-item ${item.done ? 'task-done' : ''}`} style={{ background: 'var(--color-surface-alt)', borderColor: 'var(--color-border)' }}>
-                                    <div className="task-checkbox">
-                                        {item.done ? <CheckCircle2 className="text-secondary" /> : <div className="empty-check" style={{ borderColor: 'var(--color-border)' }} />}
-                                    </div>
-                                    <div className="task-info">
-                                        <span className="task-name" style={{ color: 'var(--color-text-main)' }}>{item.task}</span>
-                                        <span className="task-meta" style={{ color: 'var(--color-text-muted)' }}>{item.time} • {item.priority ? '🔥 Priority' : 'Regular'}</span>
-                                    </div>
-                                    {!item.done && <button className="btn-start-task">{lang === 'en' ? 'Start' : 'Boshlash'}</button>}
-                                </div>
-                            ))}
-                        </div>
-
-                        <div style={{ marginTop: '2rem', padding: '1.5rem', background: 'var(--color-primary-soft)', borderRadius: '1rem', display: 'flex', gap: '1rem', alignItems: 'center', border: '1px solid var(--color-primary-soft)' }}>
-                            <Compass className="text-primary" size={32} />
-                            <p style={{ fontSize: '1rem', color: 'var(--color-primary)', margin: 0 }}>
-                                <strong>Atlas AI Robot:</strong> {aiTip || (profile?.weakness?.includes('Writing')
-                                    ? (lang === 'en' ? 'Focus on cohesive devices today to boost your Task 2 score.' : 'Task 2 ballini oshirish uchun bugun bog\'lovchi vositalarga e\'tibor bering.')
-                                    : (lang === 'en' ? 'Read 2 articles from BBC today to improve reading speed.' : 'O\'qish tezligini oshirish uchun BBC dan 2 ta maqola o\'qing.'))}
-                            </p>
-                        </div>
-                    </div>
-
-                    <div className="glass-panel" style={{ padding: '2.5rem' }}>
-                        <h3 style={{ marginBottom: '2rem', color: 'var(--color-text-main)' }}><BarChart size={32} /> {lang === 'en' ? 'Performance' : 'Natijalar'}</h3>
-                        <div className="score-viz-container" style={{ display: 'flex', alignItems: 'flex-end', height: '100px', gap: '1rem' }}>
-                            {[0.2, 0.4, 0.35, 0.5, 0.6, 0.55, 0.72].map((v, i) => (
-                                <div key={i} style={{ flex: 1, background: i === 6 ? 'var(--color-primary)' : 'var(--color-border)', height: `${v * 100}%`, borderRadius: '4px' }} />
-                            ))}
-                        </div>
-                    </div>
-                </div>
-
-                {/* Right: Metrics & Levels */}
-                <div style={{ display: 'flex', flexDirection: 'column', gap: '1.5rem' }}>
-                    <div className="stat-card-modern color-primary-dark">
-                        <div style={{ display: 'flex', justifyContent: 'space-between' }}>
-                            <div>
-                                <p style={{ fontSize: '0.85rem', opacity: 0.7 }}>Score Progress</p>
-                                <h4 style={{ fontSize: '2.5rem', margin: '0.5rem 0' }}>{profile?.avg_score || 0}<span style={{ fontSize: '1rem' }}>/75</span></h4>
-                            </div>
-                            <TrendingUp className="stat-icon-fade" />
-                        </div>
-                        <div className="mini-progress-track">
-                            <div className="mini-progress-bar" style={{ width: `${progressPercent}%` }}></div>
-                            <div className="target-marker-line" style={{ left: `${targetPercent}%` }}></div>
-                        </div>
-                        <div style={{ marginTop: '1rem', display: 'flex', justifyContent: 'space-between', fontSize: '0.75rem', opacity: 0.8 }}>
-                            <span>Target: {profile?.target_level}</span>
-                            <span>{Math.round(progressPercent)}% achieved</span>
-                        </div>
-                    </div>
-
-                    {/* Level Card */}
-                    {(() => {
-                        const levelData = calculateLevel(profile?.points || 0);
-                        return (
-                            <div className="glass-panel" style={{ padding: '1.5rem', background: 'var(--gradient-primary)', color: 'white', border: 'none' }}>
-                                <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '1rem' }}>
-                                    <div>
-                                        <p style={{ fontSize: '0.75rem', opacity: 0.8 }}>Current Level</p>
-                                        <h4 style={{ fontSize: '1.5rem', margin: 0 }}>Level {levelData.level}</h4>
-                                    </div>
-                                    <div style={{ background: 'rgba(255,255,255,0.2)', padding: '0.4rem 0.8rem', borderRadius: 'var(--radius-lg)', fontSize: '0.8rem', fontWeight: 700 }}>
-                                        {levelData.title}
-                                    </div>
-                                </div>
-                                <div className="mini-progress-track" style={{ background: 'rgba(255,255,255,0.2)' }}>
-                                    <div className="mini-progress-bar" style={{ width: `${levelData.progress}%`, background: 'white' }}></div>
-                                </div>
-                                <div style={{ marginTop: '0.5rem', display: 'flex', justifyContent: 'space-between', fontSize: '0.7rem', opacity: 0.8 }}>
-                                    <span>{levelData.currentXP} XP</span>
-                                    <span>{levelData.xpToNextLevel} XP needed</span>
-                                </div>
-                            </div>
-                        );
-                    })()}
-
-                    <div className="glass-panel" style={{ padding: '1.5rem' }}>
-                        <h4 style={{ fontSize: '0.9rem', marginBottom: '1rem', display: 'flex', alignItems: 'center', gap: '0.5rem', color: 'var(--color-text-main)' }}>
-                            <TrendingUp size={16} /> {lang === 'en' ? 'Current Path' : 'Joriy yo\'nalish'}
-                        </h4>
-                        <div style={{ display: 'flex', flexDirection: 'column', gap: '0.5rem' }}>
-                            <div className="badge-small" style={{ background: 'var(--color-background-alt)', color: 'var(--color-text-main)', border: '1px solid var(--color-border)' }}>⚠️ {profile?.weakness}</div>
-                            <div className="badge-small" style={{ background: 'var(--color-primary-soft)', color: 'var(--color-primary)', border: '1px solid var(--color-primary-soft)' }}>📅 {profile?.frequency}</div>
-                        </div>
-                    </div>
-
-                    <div className="glass-panel" style={{ padding: '1.5rem', background: 'var(--color-surface-glass)', border: '1px solid var(--color-border)' }}>
-                        <h4 style={{ fontSize: '0.9rem', marginBottom: '1rem', display: 'flex', alignItems: 'center', gap: '0.5rem', color: 'var(--color-primary)' }}>
-                            <Shield size={16} /> {lang === 'en' ? 'Official Registration' : 'Rasmiy ro\'yxatdan o\'tish'}
-                        </h4>
-                        <ol style={{ paddingLeft: '1.25rem', fontSize: '0.8rem', color: 'var(--color-text-muted)', display: 'flex', flexDirection: 'column', gap: '0.5rem' }}>
-                            <li>{lang === 'en' ? 'Register online at nsfla.uz' : 'nsfla.uz saytida onlayn ro\'yxatdan o\'ting'}</li>
-                            <li>{lang === 'en' ? 'Print the PDF application' : 'PDF arizani chop eting'}</li>
-                            <li>{lang === 'en' ? 'Pay the fee (1.5x MRZP) at any bank' : 'Istalgan bankda to\'lovni amalga oshiring'}</li>
-                            <li>{lang === 'en' ? 'Submit docs to DTM (Bog\'ishamol 12)' : 'Hujjatlarni DTMga (Bog\'ishamol 12) topshiring'}</li>
-                        </ol>
-                    </div>
-
-                    <Link to="/dashboard/ai-chat" className="btn btn-primary" style={{ padding: '1.25rem', borderRadius: '1rem', display: 'flex', justifyContent: 'center', alignItems: 'center', gap: '0.75rem' }}>
-                        <MessageSquare size={20} /> {lang === 'en' ? 'Ask Atlas AI' : 'Atlas AI dan so\'rash'}
-                    </Link>
-
-                    <MotivationalQuote />
-
-                    {/* Marking System Guide */}
-                    <div className="glass-panel" style={{ padding: '1.5rem' }}>
-                        <h4 style={{ fontSize: '0.9rem', marginBottom: '1rem', color: 'var(--color-text-main)' }}>{lang === 'en' ? 'Official Marking Guide' : 'Rasmiy baholash tizimi'}</h4>
-                        <div style={{ display: 'flex', flexDirection: 'column', gap: '0.8rem' }}>
-                            {CEFR_MARKING_SYSTEM.map(range => (
-                                <div key={range.level} style={{ display: 'flex', justifyContent: 'space-between', fontSize: '0.85rem' }}>
-                                    <span style={{ fontWeight: 700, color: 'var(--color-text-main)' }}>{range.level}</span>
-                                    <span className="text-muted">{range.minPoints}-{range.maxPoints} pts</span>
-                                </div>
-                            ))}
-                        </div>
+                    <h1 style={{ fontSize: '2.5rem', fontWeight: 800, marginBottom: '1rem', color: 'white' }}>
+                        {lang === 'en' ? `Welcome back, ${profile?.username || 'Learner'}!` : `Xush kelibsiz, ${profile?.username || 'O\'quvchi'}!`}
+                    </h1>
+                    <p style={{ opacity: 0.9, fontSize: '1.1rem', marginBottom: '2rem' }}>
+                        {lang === 'en' ? 'You are doing great! Keep your streak alive and master your CEFR goals.' : 'Juda yaxshi natija! O\'z maqsadingiz sari intilishda davom eting.'}
+                    </p>
+                    <div style={{ display: 'flex', gap: '1rem' }}>
+                        <Link to="/dashboard/reading" className="btn" style={{ background: 'white', color: 'var(--color-primary)' }}>
+                            {lang === 'en' ? 'Continue Practice' : 'Amaliyotni davom ettirish'} <ArrowRight size={18} />
+                        </Link>
                     </div>
                 </div>
             </div>
 
-            <section style={{ marginTop: '4rem' }}>
-                <h2 style={{ marginBottom: '2rem', fontSize: '1.5rem', color: 'var(--color-text-main)' }}>{lang === 'en' ? 'Full Mock Exams' : 'To\'liq Mock imtihonlari'}</h2>
-                <div className="grid grid-cols-2">
-                    <Link to="/dashboard/reading" className="training-card-modern" style={{ padding: '1.5rem' }}>
-                        <div className="training-icon-circle" style={{ background: 'var(--color-primary-soft)', color: 'var(--color-primary)', width: '3.5rem', height: '3.5rem' }}><BookOpen size={28} /></div>
-                        <div className="training-info"><h5>Reading</h5><p>National Exam Academy</p></div>
-                        <ArrowRight size={20} className="arrow-fade" />
-                    </Link>
-                    <Link to="/dashboard/writing" className="training-card-modern" style={{ padding: '1.5rem' }}>
-                        <div className="training-icon-circle" style={{ background: 'var(--color-primary-soft)', color: 'var(--color-secondary)', width: '3.5rem', height: '3.5rem' }}><GraduationCap size={28} /></div>
-                        <div className="training-info"><h5>Writing</h5><p>AI Evaluated Tasks</p></div>
-                        <ArrowRight size={20} className="arrow-fade" />
-                    </Link>
+            {/* Quick Stats Grid */}
+            <div className="dashboard-grid" style={{ gridTemplateColumns: 'repeat(4, 1fr)', gap: '1.5rem', marginBottom: '3rem' }}>
+                <div className="glass-panel" style={{ padding: '1.5rem' }}>
+                    <div className="flex" style={{ marginBottom: '1rem' }}>
+                        <div style={{ background: 'var(--color-primary-soft)', padding: '0.5rem', borderRadius: '12px' }}><Trophy size={20} className="text-primary" /></div>
+                        <span className="text-muted">{lang === 'en' ? 'Current Level' : 'Joriy daraja'}</span>
+                    </div>
+                    <h3 style={{ margin: 0, fontSize: '1.75rem' }}>Level {stats.level}</h3>
+                    <div className="mini-progress-track" style={{ marginTop: '1rem' }}>
+                        <div className="mini-progress-bar" style={{ width: `${GamificationService.calculateProgress(stats.xp)}%` }}></div>
+                    </div>
                 </div>
-            </section>
-        </motion.div >
+
+                <div className="glass-panel" style={{ padding: '1.5rem' }}>
+                    <div className="flex" style={{ marginBottom: '1rem' }}>
+                        <div style={{ background: 'rgba(245,158,11,0.1)', padding: '0.5rem', borderRadius: '12px' }}><Flame size={20} style={{ color: '#F59E0B' }} /></div>
+                        <span className="text-muted">{lang === 'en' ? 'Day Streak' : 'Kunlik streak'}</span>
+                    </div>
+                    <h3 style={{ margin: 0, fontSize: '1.75rem' }}>{stats.streak} {lang === 'en' ? 'Days' : 'Kun'}</h3>
+                </div>
+
+                <div className="glass-panel" style={{ padding: '1.5rem' }}>
+                    <div className="flex" style={{ marginBottom: '1rem' }}>
+                        <div style={{ background: 'rgba(16,185,129,0.1)', padding: '0.5rem', borderRadius: '12px' }}><Target size={20} className="text-success" /></div>
+                        <span className="text-muted">{lang === 'en' ? 'Goals Met' : 'Maqsadlar'}</span>
+                    </div>
+                    <h3 style={{ margin: 0, fontSize: '1.75rem' }}>{Math.floor(stats.xp / 100)} / {stats.level * 10}</h3>
+                </div>
+
+                <div className="glass-panel" style={{ padding: '1.5rem' }}>
+                    <div className="flex" style={{ marginBottom: '1rem' }}>
+                        <div style={{ background: 'var(--color-primary-soft)', padding: '0.5rem', borderRadius: '12px' }}><CheckCircle size={20} className="text-primary" /></div>
+                        <span className="text-muted">{lang === 'en' ? 'Tests Done' : 'Testlar'}</span>
+                    </div>
+                    <h3 style={{ margin: 0, fontSize: '1.75rem' }}>{profile?.tests_completed || 0}</h3>
+                </div>
+            </div>
+
+            {/* Main Categories Grid */}
+            <h2 style={{ marginBottom: '2rem', fontSize: '1.5rem', fontWeight: 800 }}>
+                {lang === 'en' ? 'Learning Categories' : 'O\'quv bo\'limlari'}
+            </h2>
+            <div className="dashboard-grid" style={{ gridTemplateColumns: 'repeat(3, 1fr)', gap: '1.5rem' }}>
+                {categories.map((cat, i) => (
+                    <Link key={i} to={cat.to} style={{ textDecoration: 'none' }}>
+                        <motion.div
+                            whileHover={{ y: -5, boxShadow: 'var(--shadow-lg)' }}
+                            className="glass-panel"
+                            style={{ padding: '2rem', border: '1px solid var(--color-border)', cursor: 'pointer' }}
+                        >
+                            <div style={{ background: `${cat.color}15`, color: cat.color, width: '4rem', height: '4rem', borderRadius: '1.5rem', display: 'flex', alignItems: 'center', justifyContent: 'center', marginBottom: '1.5rem' }}>
+                                {cat.icon}
+                            </div>
+                            <h4 style={{ margin: '0 0 0.5rem 0', fontSize: '1.25rem', fontWeight: 700 }}>{cat.label}</h4>
+                            <p className="text-muted" style={{ margin: 0, fontSize: '0.9rem' }}>{cat.sub}</p>
+                        </motion.div>
+                    </Link>
+                ))}
+            </div>
+        </motion.div>
     );
 };
 
