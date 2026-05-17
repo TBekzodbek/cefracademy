@@ -4,7 +4,7 @@ import { useNavigate, Link } from 'react-router-dom';
 import {
     ArrowRight, Zap, Sparkles, Flame, Clock, Activity,
     Brain, BarChart2, Layers, Quote, CheckCircle2,
-    BookOpen, Headphones, GraduationCap, Mic, Library, TrendingUp
+    BookOpen, GraduationCap, Mic, Library, TrendingUp
 } from 'lucide-react';
 import { supabase } from '../lib/supabase';
 import './OnboardingSurvey.css';
