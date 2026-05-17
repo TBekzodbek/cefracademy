@@ -1,202 +1,1098 @@
 [
   {
+    "en": "Enhance",
+    "uz": "kuchaytirmoq, yaxshilamoq"
+  },
+  {
     "en": "Justify",
     "uz": "oqlab bermoq, asoslab bermoq"
+  },
+  {
+    "en": "Hypothesis",
+    "uz": "faraz, ilmiy taxmin"
   },
   {
     "en": "Evaluate",
     "uz": "baholamoq"
   },
   {
+    "en": "Interpret",
+    "uz": "talqin qilmoq"
+  },
+  {
     "en": "Indicate",
     "uz": "ko‘rsatmoq, ishora qilmoq"
+  },
+  {
+    "en": "Address (a problem)",
+    "uz": "muammoni ko‘rib chiqmoq, hal qilmoq"
   },
   {
     "en": "Emphasize",
     "uz": "urg‘u bermoq"
   },
   {
+    "en": "Illustrate",
+    "uz": "misol bilan tushuntirmoq"
+  },
+  {
     "en": "Assume",
     "uz": "faraz qilmoq"
+  },
+  {
+    "en": "Highlight",
+    "uz": "alohida ta’kidlash"
   },
   {
     "en": "Investigate",
     "uz": "tekshirmoq"
   },
   {
+    "en": "Inevitable",
+    "uz": "muqarrar"
+  },
+  {
     "en": "Sustain",
     "uz": "davom ettirmoq, qo‘llab turmoq"
   },
   {
+    "en": "Range (from…to)",
+    "uz": "oralig‘ida bo‘lmoq"
+  },
+  {
     "en": "Fluctuate",
-    "uz": "o‘zgarib turmoq"
+    "uz": "o‘zgarib turmoq (ko‘p va tez)"
   },
   {
     "en": "Maintain",
     "uz": "saqlab qolmoq, davom ettirmoq"
   },
   {
+    "en": "Derive (from)",
+    "uz": "kelib chiqmoq"
+  },
+  {
     "en": "Embrace",
-    "uz": "qabul qilmoq, quchoqlamoq"
+    "uz": "qabul qilmoq, quchoqlamoq (fig"
   },
   {
     "en": "Perceive",
     "uz": "idrok qilmoq, qandaydir tarzda qabul qilmoq"
   },
   {
-    "en": "Consequently",
-    "uz": "natijada"
-  },
-  {
-    "en": "Reliable",
-    "uz": "ishonchli"
-  },
-  {
     "en": "Encourage",
-    "uz": "rag‘batlantirmoq"
-  },
-  {
-    "en": "Prevent",
-    "uz": "oldini olmoq"
-  },
-  {
-    "en": "Awareness",
-    "uz": "xabardorlik"
-  },
-  {
-    "en": "Available",
-    "uz": "mavjud"
+    "uz": "rag‘batlantirmoq Parents should encourage children to read books"
   },
   {
     "en": "Require",
-    "uz": "talab qilmoq"
-  },
-  {
-    "en": "Maintain",
-    "uz": "saqlamoq"
-  },
-  {
-    "en": "Depend on",
-    "uz": "bog‘liq bo‘lmoq"
-  },
-  {
-    "en": "Likewise",
-    "uz": "xuddi shuningdek"
-  },
-  {
-    "en": "Nowadays",
-    "uz": "hozirgi kunda"
+    "uz": "talab qilmoq This job requires strong communication skills"
   },
   {
     "en": "Valuable",
-    "uz": "qimmatli"
-  },
-  {
-    "en": "Suitable",
-    "uz": "mos"
+    "uz": "qimmatli / foydali Experience is more valuable than theory"
   },
   {
     "en": "Issue",
-    "uz": "muammo"
-  },
-  {
-    "en": "Contribute",
-    "uz": "hissa qo‘shmoq"
-  },
-  {
-    "en": "Improve",
-    "uz": "yaxshilamoq"
+    "uz": "muammo Traffic congestion is a common issue"
   },
   {
     "en": "Impact",
-    "uz": "ta’sir"
+    "uz": "ta’sir Social media has a strong impact on teenagers"
   },
   {
-    "en": "Alternative",
-    "uz": "muqobil variant"
+    "en": "achieve",
+    "uz": "erishmoq He achieved his goal"
   },
   {
-    "en": "Recommend",
-    "uz": "tavsiya qilmoq"
+    "en": "advantage",
+    "uz": "afzallik This plan has many advantages"
   },
   {
-    "en": "Scarcity\nachieve",
-    "uz": "erishmoq"
+    "en": "affect",
+    "uz": "ta’sir qilmoq Smoking affects health"
   },
   {
-    "en": "Ota",
-    "uz": "onalar\nbolalarni qo‘llab"
+    "en": "allow",
+    "uz": "ruxsat bermoq They allow students to use phones"
   },
   {
-    "en": "Biz atrof",
-    "uz": "muhitni himoya qilishimiz\nkerak"
+    "en": "improve",
+    "uz": "yaxshilamoq Practice improves skills"
   },
   {
-    "en": "Kompaniya oziq",
-    "uz": "ovqat ta’minlaydi"
+    "en": "increase",
+    "uz": "oshmoq Prices increased"
   },
   {
-    "en": "Men hisob",
-    "uz": "kitob\nto‘layman"
+    "en": "reduce",
+    "uz": "kamaytirmoq We must reduce waste"
   },
   {
-    "en": "Ular bir",
-    "uz": "birini qo‘llaydi"
+    "en": "require",
+    "uz": "talab qilmoq This job requires experience"
   },
   {
-    "en": "Men tez",
-    "uz": "tez\nsayohat qilaman"
+    "en": "provide",
+    "uz": "ta’minlamoq The school provides books"
   },
   {
-    "en": "Ular tez",
-    "uz": "tez bahslashadi"
+    "en": "create",
+    "uz": "yaratmoq They created a new system"
   },
   {
-    "en": "Bu tez",
-    "uz": "tez sodir bo‘ladi"
+    "en": "solution",
+    "uz": "yechim This is a good solution"
   },
   {
-    "en": "Atrof",
-    "uz": "muhitni himoya qil"
+    "en": "problem",
+    "uz": "muammo We have a problem"
   },
   {
-    "en": "Men tez",
-    "uz": "tez o‘qiyman"
+    "en": "result",
+    "uz": "natija The result was good"
   },
   {
-    "en": "Men kamdan",
-    "uz": "kam"
+    "en": "reason",
+    "uz": "sabab There is a reason"
   },
   {
-    "en": "Approach",
-    "uz": "yondashuv"
+    "en": "effect",
+    "uz": "ta’sir / natija The effect is strong"
   },
   {
-    "en": "Appearance",
-    "uz": "tashqi ko’rinish"
+    "en": "benefit",
+    "uz": "foyda Exercise has benefits"
   },
   {
-    "en": "Diligent",
-    "uz": "hard"
+    "en": "challenge",
+    "uz": "qiyinchilik Learning is a challenge"
   },
   {
-    "en": "For a long time",
-    "uz": "for donkey’s years"
+    "en": "develop",
+    "uz": "rivojlanmoq The country develops fast"
   },
   {
-    "en": "Go back",
-    "uz": "have known each other"
+    "en": "explain",
+    "uz": "tushuntirmoq He explained the lesson"
   },
   {
-    "en": "Gregarious",
-    "uz": "sociabale"
+    "en": "support",
+    "uz": "qo‘llab-quvvatlamoq Parents support children"
   },
   {
-    "en": "Set up",
-    "uz": "begin"
+    "en": "environment",
+    "uz": "atrof-muhit We must protect the environment"
   },
   {
-    "en": "Acknowledge",
-    "uz": "admit"
+    "en": "pollution",
+    "uz": "ifloslanish Pollution is dangerous"
+  },
+  {
+    "en": "waste",
+    "uz": "chiqindi / isrof Do not waste water"
+  },
+  {
+    "en": "recycle",
+    "uz": "qayta ishlamoq We recycle plastic"
+  },
+  {
+    "en": "nature",
+    "uz": "tabiat Nature is beautiful"
+  },
+  {
+    "en": "technology",
+    "uz": "texnologiya Technology is growing"
+  },
+  {
+    "en": "device",
+    "uz": "qurilma This device is useful"
+  },
+  {
+    "en": "internet",
+    "uz": "internet The internet is important"
+  },
+  {
+    "en": "online",
+    "uz": "onlayn We study online"
+  },
+  {
+    "en": "digital",
+    "uz": "raqamli Digital tools help students"
+  },
+  {
+    "en": "health",
+    "uz": "sog‘liq Health is important"
+  },
+  {
+    "en": "disease",
+    "uz": "kasallik This disease spreads fast"
+  },
+  {
+    "en": "treatment",
+    "uz": "davolash The treatment works well"
+  },
+  {
+    "en": "diet",
+    "uz": "parhez A healthy diet is important"
+  },
+  {
+    "en": "exercise",
+    "uz": "mashq Exercise keeps you fit"
+  },
+  {
+    "en": "education",
+    "uz": "ta’lim Education is important"
+  },
+  {
+    "en": "knowledge",
+    "uz": "bilim Knowledge is power"
+  },
+  {
+    "en": "skill",
+    "uz": "ko‘nikma He has good skills"
+  },
+  {
+    "en": "learn",
+    "uz": "o‘rganmoq We learn every day"
+  },
+  {
+    "en": "teach",
+    "uz": "o‘rgatmoq Teachers teach students"
+  },
+  {
+    "en": "job",
+    "uz": "ish He found a job"
+  },
+  {
+    "en": "salary",
+    "uz": "maosh The salary is high"
+  },
+  {
+    "en": "work",
+    "uz": "ishlamoq She works hard"
+  },
+  {
+    "en": "career",
+    "uz": "kasb yo‘li He wants a career"
+  },
+  {
+    "en": "employee",
+    "uz": "xodim The employee is kind"
+  },
+  {
+    "en": "travel",
+    "uz": "sayohat qilmoq I like to travel"
+  },
+  {
+    "en": "journey",
+    "uz": "safar The journey was long"
+  },
+  {
+    "en": "trip",
+    "uz": "sayohat We had a good trip"
+  },
+  {
+    "en": "visit",
+    "uz": "tashrif buyurmoq They visit places"
+  },
+  {
+    "en": "explore",
+    "uz": "o‘rganmoq / kashf etmoq He explores new places"
+  },
+  {
+    "en": "city",
+    "uz": "shahar The city is big"
+  },
+  {
+    "en": "village",
+    "uz": "qishloq The village is quiet"
+  },
+  {
+    "en": "population",
+    "uz": "aholi Population is growing"
+  },
+  {
+    "en": "traffic",
+    "uz": "tirbandlik Traffic is heavy"
+  },
+  {
+    "en": "transport",
+    "uz": "transport Transport is useful"
+  },
+  {
+    "en": "money",
+    "uz": "pul Money is important"
+  },
+  {
+    "en": "cost",
+    "uz": "xarajat The cost is high"
+  },
+  {
+    "en": "price",
+    "uz": "narx The price increased"
+  },
+  {
+    "en": "spend",
+    "uz": "sarflamoq I spend money"
+  },
+  {
+    "en": "save",
+    "uz": "tejamoq We save money"
+  },
+  {
+    "en": "friend",
+    "uz": "do‘st A friend helps you"
+  },
+  {
+    "en": "family",
+    "uz": "oila Family is important"
+  },
+  {
+    "en": "relationship",
+    "uz": "munosabat They have a good relationship"
+  },
+  {
+    "en": "trust",
+    "uz": "ishonch Trust is important"
+  },
+  {
+    "en": "support",
+    "uz": "qo‘llab-quvvatlash Friends support each other"
+  },
+  {
+    "en": "success",
+    "uz": "muvaffaqiyat Success needs effort"
+  },
+  {
+    "en": "failure",
+    "uz": "muvaffaqiyatsizlik Failure teaches lessons"
+  },
+  {
+    "en": "goal",
+    "uz": "maqsad He reached his goal"
+  },
+  {
+    "en": "plan",
+    "uz": "reja We need a plan"
+  },
+  {
+    "en": "effort",
+    "uz": "harakat Success needs effort"
+  },
+  {
+    "en": "change",
+    "uz": "o‘zgarish Change is necessary"
+  },
+  {
+    "en": "grow",
+    "uz": "o‘smoq Plants grow fast"
+  },
+  {
+    "en": "progress",
+    "uz": "rivojlanish There is progress"
+  },
+  {
+    "en": "improve",
+    "uz": "yaxshilanmoq Things improve"
+  },
+  {
+    "en": "develop",
+    "uz": "rivojlanmoq The company develops"
+  },
+  {
+    "en": "cause",
+    "uz": "sabab bo‘lmoq What caused this?"
+  },
+  {
+    "en": "solve",
+    "uz": "hal qilmoq We solve problems"
+  },
+  {
+    "en": "situation",
+    "uz": "vaziyat The situation is difficult"
+  },
+  {
+    "en": "issue",
+    "uz": "muammo This is an issue"
+  },
+  {
+    "en": "important",
+    "uz": "muhim This is important"
+  },
+  {
+    "en": "necessary",
+    "uz": "zarur It is necessary"
+  },
+  {
+    "en": "useful",
+    "uz": "foydali This is useful"
+  },
+  {
+    "en": "difficult",
+    "uz": "qiyin It is difficult"
+  },
+  {
+    "en": "easy",
+    "uz": "oson It is easy"
+  },
+  {
+    "en": "think",
+    "uz": "o‘ylamoq I think about it"
+  },
+  {
+    "en": "believe",
+    "uz": "ishonmoq I believe you"
+  },
+  {
+    "en": "understand",
+    "uz": "tushunmoq I understand you"
+  },
+  {
+    "en": "know",
+    "uz": "bilmoq I know this"
+  },
+  {
+    "en": "remember",
+    "uz": "eslamoq I remember it"
+  },
+  {
+    "en": "use",
+    "uz": "ishlatmoq I use this app"
+  },
+  {
+    "en": "make",
+    "uz": "qilmoq / yasamoq I make plans"
+  },
+  {
+    "en": "take",
+    "uz": "olmoq I take a book"
+  },
+  {
+    "en": "give",
+    "uz": "bermoq I give help"
+  },
+  {
+    "en": "find",
+    "uz": "topmoq I find information"
+  },
+  {
+    "en": "decide",
+    "uz": "qaror qilmoq I decided to study more"
+  },
+  {
+    "en": "choose",
+    "uz": "tanlamoq She chose the best option"
+  },
+  {
+    "en": "prefer",
+    "uz": "afzal ko‘rmoq I prefer tea to coffee"
+  },
+  {
+    "en": "suggest",
+    "uz": "taklif qilmoq He suggested a new idea"
+  },
+  {
+    "en": "recommend",
+    "uz": "tavsiya qilmoq I recommend this book"
+  },
+  {
+    "en": "agree",
+    "uz": "rozi bo‘lmoq I agree with you"
+  },
+  {
+    "en": "disagree",
+    "uz": "rozi bo‘lmaslik I disagree with this idea"
+  },
+  {
+    "en": "accept",
+    "uz": "qabul qilmoq They accepted the plan"
+  },
+  {
+    "en": "refuse",
+    "uz": "rad etmoq He refused the offer"
+  },
+  {
+    "en": "argue",
+    "uz": "bahslashmoq They argued about money"
+  },
+  {
+    "en": "happen",
+    "uz": "sodir bo‘lmoq What happened?"
+  },
+  {
+    "en": "occur",
+    "uz": "yuz bermoq The problem occurred yesterday"
+  },
+  {
+    "en": "continue",
+    "uz": "davom etmoq The lesson continued"
+  },
+  {
+    "en": "stop",
+    "uz": "to‘xtamoq The rain stopped"
+  },
+  {
+    "en": "start",
+    "uz": "boshlamoq We started the project"
+  },
+  {
+    "en": "build",
+    "uz": "qurmoq They built a house"
+  },
+  {
+    "en": "produce",
+    "uz": "ishlab chiqarmoq The factory produces cars"
+  },
+  {
+    "en": "grow",
+    "uz": "yetishtirmoq Farmers grow vegetables"
+  },
+  {
+    "en": "supply",
+    "uz": "ta’minlamoq The company supplies food"
+  },
+  {
+    "en": "deliver",
+    "uz": "yetkazib bermoq They deliver packages"
+  },
+  {
+    "en": "buy",
+    "uz": "sotib olmoq I buy new clothes"
+  },
+  {
+    "en": "sell",
+    "uz": "sotmoq They sell products"
+  },
+  {
+    "en": "pay",
+    "uz": "to‘lamoq I pay bills"
+  },
+  {
+    "en": "earn",
+    "uz": "pul topmoq He earns money"
+  },
+  {
+    "en": "meet",
+    "uz": "uchrashmoq I meet friends"
+  },
+  {
+    "en": "join",
+    "uz": "qo‘shilmoq He joined the team"
+  },
+  {
+    "en": "leave",
+    "uz": "tark etmoq She left the room"
+  },
+  {
+    "en": "arrive",
+    "uz": "yetib kelmoq They arrived early"
+  },
+  {
+    "en": "return",
+    "uz": "qaytmoq I returned home"
+  },
+  {
+    "en": "study",
+    "uz": "o‘qimoq She studies daily"
+  },
+  {
+    "en": "practice",
+    "uz": "mashq qilmoq We practice speaking"
+  },
+  {
+    "en": "forget",
+    "uz": "unutmoq I forget things"
+  },
+  {
+    "en": "open",
+    "uz": "ochmoq He opened the door"
+  },
+  {
+    "en": "close",
+    "uz": "yopmoq She closed the window"
+  },
+  {
+    "en": "enter",
+    "uz": "kirmoq They entered the room"
+  },
+  {
+    "en": "exit",
+    "uz": "chiqmoq We exited the building"
+  },
+  {
+    "en": "move",
+    "uz": "harakatlanmoq The car moved fast"
+  },
+  {
+    "en": "help",
+    "uz": "yordam bermoq I help my friend"
+  },
+  {
+    "en": "protect",
+    "uz": "himoya qilmoq We protect nature"
+  },
+  {
+    "en": "design",
+    "uz": "loyihalamoq She designs clothes"
+  },
+  {
+    "en": "organize",
+    "uz": "tashkil qilmoq They organize events"
+  },
+  {
+    "en": "manage",
+    "uz": "boshqarmoq He manages a company"
+  },
+  {
+    "en": "reduce",
+    "uz": "kamaytirmoq We reduce stress"
+  },
+  {
+    "en": "win",
+    "uz": "yutmoq He won the game"
+  },
+  {
+    "en": "lose",
+    "uz": "yutqazmoq They lost the match"
+  },
+  {
+    "en": "try",
+    "uz": "harakat qilmoq I try again"
+  },
+  {
+    "en": "fail",
+    "uz": "muvaffaqiyatsiz bo‘lmoq He failed the test"
+  },
+  {
+    "en": "succeed",
+    "uz": "muvaffaqiyatga erishmoq She succeeded"
+  },
+  {
+    "en": "watch",
+    "uz": "tomosha qilmoq I watch TV"
+  },
+  {
+    "en": "see",
+    "uz": "ko‘rmoq I see a car"
+  },
+  {
+    "en": "look",
+    "uz": "qaramoq Look at this"
+  },
+  {
+    "en": "observe",
+    "uz": "kuzatmoq Scientists observe nature"
+  },
+  {
+    "en": "notice",
+    "uz": "payqamoq I noticed a mistake"
+  },
+  {
+    "en": "hear",
+    "uz": "eshitmoq I hear music"
+  },
+  {
+    "en": "listen",
+    "uz": "tinglamoq I listen carefully"
+  },
+  {
+    "en": "speak",
+    "uz": "gapirmoq He speaks English"
+  },
+  {
+    "en": "talk",
+    "uz": "suhbatlashmoq We talk daily"
+  },
+  {
+    "en": "say",
+    "uz": "demoq She said hello"
+  },
+  {
+    "en": "consider",
+    "uz": "hisobga olmoq We consider options"
+  },
+  {
+    "en": "imagine",
+    "uz": "tasavvur qilmoq I imagine success"
+  },
+  {
+    "en": "feel",
+    "uz": "his qilmoq I feel happy"
+  },
+  {
+    "en": "enjoy",
+    "uz": "zavqlanmoq I enjoy music"
+  },
+  {
+    "en": "like",
+    "uz": "yoqtirmoq I like coffee"
+  },
+  {
+    "en": "love",
+    "uz": "sevmoq I love my family"
+  },
+  {
+    "en": "hate",
+    "uz": "yomon ko‘rmoq I hate noise"
+  },
+  {
+    "en": "live",
+    "uz": "yashamoq I live here"
+  },
+  {
+    "en": "stay",
+    "uz": "qolmoq I stay at home"
+  },
+  {
+    "en": "eat",
+    "uz": "yemoq I eat food"
+  },
+  {
+    "en": "drink",
+    "uz": "ichmoq I drink water"
+  },
+  {
+    "en": "cook",
+    "uz": "pishirmoq She cooks well"
+  },
+  {
+    "en": "order",
+    "uz": "buyurtma bermoq I order pizza"
+  },
+  {
+    "en": "need",
+    "uz": "kerak bo‘lmoq I need help"
+  },
+  {
+    "en": "want",
+    "uz": "xohlamoq I want success"
+  },
+  {
+    "en": "plan",
+    "uz": "reja qilmoq I plan my day"
+  },
+  {
+    "en": "create",
+    "uz": "yaratmoq We create content"
+  },
+  {
+    "en": "do",
+    "uz": "bajarmoq I do my work"
+  },
+  {
+    "en": "complete",
+    "uz": "tugatmoq I complete tasks"
+  },
+  {
+    "en": "apply",
+    "uz": "murojaat qilmoq I applied for the job"
+  },
+  {
+    "en": "approve",
+    "uz": "tasdiqlamoq They approved the plan"
+  },
+  {
+    "en": "reject",
+    "uz": "rad etmoq The company rejected him"
+  },
+  {
+    "en": "compare",
+    "uz": "solishtirmoq We compare two options"
+  },
+  {
+    "en": "contrast",
+    "uz": "farqlamoq The essay contrasts ideas"
+  },
+  {
+    "en": "contain",
+    "uz": "o‘z ichiga olmoq The box contains books"
+  },
+  {
+    "en": "consist",
+    "uz": "iborat bo‘lmoq The team consists of"
+  },
+  {
+    "en": "involve",
+    "uz": "o‘z ichiga olmoq The job involves travel"
+  },
+  {
+    "en": "advance",
+    "uz": "oldinga siljimoq Technology advances fast"
+  },
+  {
+    "en": "upgrade",
+    "uz": "yangilamoq They upgraded the system"
+  },
+  {
+    "en": "avoid",
+    "uz": "qochmoq Avoid bad habits"
+  },
+  {
+    "en": "eliminate",
+    "uz": "yo‘q qilmoq They eliminated errors"
+  },
+  {
+    "en": "motivate",
+    "uz": "motivatsiya bermoq He motivates others"
+  },
+  {
+    "en": "inspire",
+    "uz": "ilhomlantirmoq She inspires people"
+  },
+  {
+    "en": "influence",
+    "uz": "ta’sir qilmoq Media influences people"
+  },
+  {
+    "en": "select",
+    "uz": "tanlab olmoq They selected him"
+  },
+  {
+    "en": "pick",
+    "uz": "tanlamoq Pick one"
+  },
+  {
+    "en": "determine",
+    "uz": "aniqlamoq This determines success"
+  },
+  {
+    "en": "define",
+    "uz": "aniqlamoq Define the term"
+  },
+  {
+    "en": "mention",
+    "uz": "eslatmoq He mentioned it"
+  },
+  {
+    "en": "state",
+    "uz": "bayon qilmoq She stated facts"
+  },
+  {
+    "en": "discuss",
+    "uz": "muhokama qilmoq We discuss topics"
+  },
+  {
+    "en": "debate",
+    "uz": "munozara qilmoq Students debate ideas"
+  },
+  {
+    "en": "claim",
+    "uz": "da’vo qilmoq He claims success"
+  },
+  {
+    "en": "prove",
+    "uz": "isbotlamoq They proved it"
+  },
+  {
+    "en": "construct",
+    "uz": "qurmoq They construct bridges"
+  },
+  {
+    "en": "boost",
+    "uz": "oshirmoq This boosts energy"
+  },
+  {
+    "en": "expand",
+    "uz": "kengaytirmoq The company expands"
+  },
+  {
+    "en": "extend",
+    "uz": "uzaytirmoq They extend time"
+  },
+  {
+    "en": "drop",
+    "uz": "tushmoq Prices dropped"
+  },
+  {
+    "en": "decline",
+    "uz": "pasaymoq Sales declined"
+  },
+  {
+    "en": "limit",
+    "uz": "cheklamoq They limit access"
+  },
+  {
+    "en": "operate",
+    "uz": "ishlatmoq He operates machines"
+  },
+  {
+    "en": "handle",
+    "uz": "boshqarmoq She handles tasks"
+  },
+  {
+    "en": "pause",
+    "uz": "to‘xtatib turmoq Pause the video"
+  },
+  {
+    "en": "conclude",
+    "uz": "xulosa qilmoq We conclude the lesson"
+  },
+  {
+    "en": "analyze",
+    "uz": "tahlil qilmoq We analyze data"
+  },
+  {
+    "en": "judge",
+    "uz": "baho bermoq Do not judge quickly"
+  },
+  {
+    "en": "realize",
+    "uz": "anglamoq I realized the truth"
+  },
+  {
+    "en": "recognize",
+    "uz": "tanimoq I recognize him"
+  },
+  {
+    "en": "invent",
+    "uz": "ixtiro qilmoq He invented a tool"
+  },
+  {
+    "en": "discover",
+    "uz": "kashf qilmoq They discovered oil"
+  },
+  {
+    "en": "connect",
+    "uz": "bog‘lamoq Connect devices"
+  },
+  {
+    "en": "link",
+    "uz": "bog‘lamoq These link together"
+  },
+  {
+    "en": "combine",
+    "uz": "birlashtirmoq Combine ideas"
+  },
+  {
+    "en": "mix",
+    "uz": "aralashtirmoq Mix ingredients"
+  },
+  {
+    "en": "divide",
+    "uz": "bo‘lmoq Divide into parts"
+  },
+  {
+    "en": "split",
+    "uz": "bo‘lmoq Split the bill"
+  },
+  {
+    "en": "remove",
+    "uz": "olib tashlamoq Remove errors"
+  },
+  {
+    "en": "delete",
+    "uz": "o‘chirmoq Delete files"
+  },
+  {
+    "en": "add",
+    "uz": "qo‘shmoq Add sugar"
+  },
+  {
+    "en": "insert",
+    "uz": "joylashtirmoq Insert text"
+  },
+  {
+    "en": "attach",
+    "uz": "biriktirmoq Attach file"
+  },
+  {
+    "en": "upload",
+    "uz": "yuklamoq Upload document"
+  },
+  {
+    "en": "download",
+    "uz": "yuklab olmoq Download the file"
+  },
+  {
+    "en": "share",
+    "uz": "ulashmoq Share information"
+  },
+  {
+    "en": "calculate",
+    "uz": "hisoblamoq Calculate costs"
+  },
+  {
+    "en": "count",
+    "uz": "sanamoq Count numbers"
+  },
+  {
+    "en": "schedule",
+    "uz": "jadval tuzmoq Schedule meetings"
+  },
+  {
+    "en": "lead",
+    "uz": "boshqarmoq He leads the team"
+  },
+  {
+    "en": "direct",
+    "uz": "yo‘naltirmoq Direct the process"
+  },
+  {
+    "en": "accurate",
+    "uz": "aniq The data is accurate"
+  },
+  {
+    "en": "crucial",
+    "uz": "juda muhim This step is crucial"
+  },
+  {
+    "en": "effective",
+    "uz": "samarali The method is effective"
+  },
+  {
+    "en": "efficient",
+    "uz": "samarador She works efficiently"
+  },
+  {
+    "en": "essential",
+    "uz": "zarur Water is essential"
+  },
+  {
+    "en": "flexible",
+    "uz": "moslashuvchan He is flexible"
+  },
+  {
+    "en": "frequent",
+    "uz": "tez-tez This happens frequently"
+  },
+  {
+    "en": "proper",
+    "uz": "to‘g‘ri / mos Use proper language"
+  },
+  {
+    "en": "relevant",
+    "uz": "dolzarb This topic is relevant"
+  },
+  {
+    "en": "significant",
+    "uz": "muhim This is significant"
+  },
+  {
+    "en": "unique",
+    "uz": "noyob This idea is unique"
+  },
+  {
+    "en": "Inedible",
+    "uz": "yeb bomidigan"
+  },
+  {
+    "en": "Abundant",
+    "uz": "ko’p"
+  },
+  {
+    "en": "Diversity",
+    "uz": "xilma-xillik"
+  },
+  {
+    "en": "Illiterate",
+    "uz": "savodsiz"
+  },
+  {
+    "en": "Lavish",
+    "uz": "dabdabali"
+  },
+  {
+    "en": "Initiate",
+    "uz": "boshlamoq"
   }
 ]

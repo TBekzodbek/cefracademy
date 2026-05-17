@@ -24,7 +24,7 @@ const Vocabulary = () => {
 
         const generated = selected.map(word => {
             const others = (vocabData as Word[])
-                .filter(w => w.uz !== word.uz)
+                .filter(w => w.uz !== word.uz && !/^[a-zA-Z\s]+$/.test(w.uz)) // Ensure option is not pure English
                 .sort(() => 0.5 - Math.random())
                 .slice(0, 3)
                 .map(w => w.uz);
