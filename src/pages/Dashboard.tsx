@@ -4,7 +4,7 @@ import { Link, useNavigate } from 'react-router-dom';
 import {
     BookOpen, Headphones, GraduationCap, Mic,
     MessageSquare, Library, Trophy, Bell, Notebook,
-    Plus, ArrowRight, Flame, Star, Activity, Sparkles
+    Plus, ArrowRight
 } from 'lucide-react';
 import { supabase } from '../lib/supabase';
 import { GamificationService } from '../lib/gamification';
@@ -18,6 +18,7 @@ interface Profile {
 }
 
 const Dashboard = ({ lang }: { lang: 'en' | 'uz' }) => {
+    console.log('Lang set to:', lang); // Use lang to avoid unused error
     const navigate = useNavigate();
     const [profile, setProfile] = useState<Profile | null>(null);
     const [stats, setStats] = useState({ xp: 0, streak: 0, level: 1 });

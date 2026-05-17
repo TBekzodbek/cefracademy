@@ -47,7 +47,7 @@ function App() {
       <Analytics />
       <Routes>
         {/* Unified Home & Onboarding */}
-        <Route path="/" element={<OnboardingSurvey {...commonProps} />} />
+        <Route path="/" element={<OnboardingSurvey lang={lang} />} />
 
         {/* Auth with Navigation */}
         <Route path="/login" element={
@@ -59,7 +59,7 @@ function App() {
 
         {/* Dashboard Routes with Sidebar Layout */}
         <Route path="/dashboard" element={<DashboardLayout {...commonProps} />}>
-          <Route index element={<Dashboard lang={lang} theme={theme} />} />
+          <Route index element={<Dashboard lang={lang} />} />
           <Route path="reading" element={<Reading lang={lang} />} />
           <Route path="listening" element={<Listening lang={lang} />} />
           <Route path="writing" element={<Writing lang={lang} />} />
@@ -72,7 +72,7 @@ function App() {
         </Route>
 
         {/* Legacy redirect for old bookmarkers */}
-        <Route path="/onboarding" element={<OnboardingSurvey {...commonProps} />} />
+        <Route path="/onboarding" element={<OnboardingSurvey lang={lang} />} />
       </Routes>
     </Router>
   );

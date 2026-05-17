@@ -2,32 +2,28 @@ import { useState, useEffect } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { useNavigate, Link } from 'react-router-dom';
 import {
-    BookOpen, Headphones, GraduationCap, Mic, ArrowRight, Zap,
-    ShieldCheck, Activity, PieChart, Star, CheckCircle,
-    Sparkles, Flame, Globe, ChevronDown, MessageSquare,
-    Trophy, Clock, Play
+    ArrowRight, Zap,
+    Sparkles, Flame,
+    Clock, Activity
 } from 'lucide-react';
 import { supabase } from '../lib/supabase';
 import './OnboardingSurvey.css';
 
 interface Props {
     lang: 'en' | 'uz';
-    toggleLang: () => void;
-    theme: 'light' | 'dark';
-    toggleTheme: () => void;
 }
 
-const OnboardingSurvey = ({ lang, toggleLang, theme, toggleTheme }: Props) => {
+const OnboardingSurvey = ({ lang }: Props) => {
+    console.log('Survey active for lang:', lang);
     const navigate = useNavigate();
     const [step, setStep] = useState(1);
     const [isGenerating, setIsGenerating] = useState(false);
     const [selections, setSelections] = useState<string[]>([]);
-    const [userId, setUserId] = useState<string | null>(null);
 
     useEffect(() => {
         const fetchUser = async () => {
             const { data: { user } } = await supabase.auth.getUser();
-            if (user) setUserId(user.id);
+            if (user) console.log('User ID:', user.id);
         };
         fetchUser();
     }, []);
