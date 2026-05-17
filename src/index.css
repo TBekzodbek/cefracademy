@@ -1,49 +1,47 @@
 @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Outfit:wght@500;600;700;800&display=swap');
 
 :root {
-  --font-family: 'Inter', system-ui, -apple-system, sans-serif;
-  --font-heading: 'Outfit', system-ui, -apple-system, sans-serif;
+  /* Backgrounds */
+  --color-page: #F7F7FF;
+  --color-section-alt: #EEEEF8;
+  --color-surface: #FFFFFF;
+  --color-dark: #0D1137;
+  --color-dark-alt: #111827;
 
-  /* Premium Design Tokens */
-  --color-primary: #4f46e5;
-  --color-primary-soft: rgba(79, 70, 229, 0.08);
-  --color-secondary: #0ea5e9;
-  --color-success: #10b981;
-  --color-warning: #f59e0b;
-  --color-error: #ef4444;
-  --color-dark: #111827;
+  /* Brand Accents */
+  --color-primary: #5B50E8;
+  --color-primary-soft: #EEF2FF;
+  --color-secondary: #06B6D4;
+  --color-success: #10B981;
+  --color-warning: #F59E0B;
+  --color-error: #F43F5E;
+  --color-purple: #8B5CF6;
 
-  --color-background: #f9fafb;
-  --color-background-alt: #f3f4f6;
-  --color-background-glass: rgba(249, 250, 251, 0.8);
+  /* Text Colors */
+  --color-text-main: #0F172A;
+  --color-text-muted: #64748B;
+  --color-text-light: #94A3B8;
 
-  --color-text-main: #111827;
-  --color-text-muted: #6b7280;
-  --color-text-light: #9ca3af;
-  --color-border: #e5e7eb;
+  /* Tag/Badge Backgrounds */
+  --bg-error: #FFF1F2;
+  --bg-warning: #FFFBEB;
+  --bg-info: #EEF2FF;
+  --bg-success: #F0FDF4;
 
-  --color-surface: #ffffff;
-  --color-surface-alt: #f8fafc;
-  --color-surface-glass: rgba(255, 255, 255, 0.95);
+  /* Geometry */
+  --radius-xl: 16px;
+  --radius-lg: 10px;
+  --radius-pill: 999px;
+  --radius-inner: 8px;
 
-  --gradient-primary: linear-gradient(135deg, #4f46e5 0%, #7c3aed 100%);
-  --gradient-subtle: linear-gradient(180deg, #ffffff 0%, #f9fafb 100%);
+  /* Shadows */
+  --shadow-sm: 0 1px 4px rgba(0, 0, 0, 0.06);
+  --shadow-md: 0 4px 6px -1px rgba(0, 0, 0, 0.1);
+  --shadow-lg: 0 20px 25px -5px rgba(0, 0, 0, 0.1);
+  --shadow-indigo: 0 8px 32px rgba(91, 80, 232, 0.12);
 
-  /* Shadows - More pronounced & softer */
-  --shadow-sm: 0 1px 3px 0 rgba(0, 0, 0, 0.1), 0 1px 2px 0 rgba(0, 0, 0, 0.06);
-  --shadow-md: 0 10px 15px -3px rgba(0, 0, 0, 0.1), 0 4px 6px -2px rgba(0, 0, 0, 0.05);
-  --shadow-lg: 0 20px 25px -5px rgba(0, 0, 0, 0.1), 0 10px 10px -5px rgba(0, 0, 0, 0.04);
-  --shadow-xl: 0 25px 50px -12px rgba(79, 70, 229, 0.15);
-
-  /* Radius - Standardizing to 24px (1.5rem) */
-  --radius-md: 0.75rem;
-  --radius-lg: 1rem;
-  --radius-xl: 1.5rem;
-  --radius-2xl: 2rem;
-  --radius-full: 9999px;
-
-  --transition-fast: 150ms cubic-bezier(0.4, 0, 0.2, 1);
-  --transition-normal: 300ms cubic-bezier(0.4, 0, 0.2, 1);
+  /* Transitions */
+  --transition-normal: 200ms ease-out;
 }
 
 [data-theme="dark"] {
@@ -91,7 +89,30 @@ h4 {
   font-family: var(--font-heading);
   line-height: 1.1;
   letter-spacing: -0.02em;
-  color: var(--color-text-main);
+}
+
+.h1-hero {
+  font-size: clamp(3rem, 5vw, 60px);
+  font-weight: 800;
+  line-height: 1.15;
+}
+
+.gradient-text {
+  background: linear-gradient(90deg, #5B50E8, #06B6D4, #8B5CF6);
+  -webkit-background-clip: text;
+  background-clip: text;
+  -webkit-text-fill-color: transparent;
+  display: inline-block;
+}
+
+.eyebrow {
+  font-size: 11px;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+  color: var(--color-primary);
+  margin-bottom: 0.75rem;
+  display: block;
 }
 
 .container {
@@ -105,38 +126,38 @@ h4 {
   display: inline-flex;
   align-items: center;
   justify-content: center;
+  gap: 0.5rem;
   padding: 0.75rem 1.5rem;
   border-radius: var(--radius-lg);
   font-weight: 600;
-  transition: all var(--transition-normal);
-  gap: 0.5rem;
-  text-decoration: none;
   cursor: pointer;
+  transition: all var(--transition-normal);
   border: none;
+  font-size: 0.95rem;
+  text-decoration: none;
 }
 
 .btn-primary {
   background: var(--color-primary);
   color: #fff !important;
-  box-shadow: 0 4px 14px 0 rgba(79, 70, 229, 0.3);
+  box-shadow: 0 4px 14px 0 rgba(91, 80, 232, 0.3);
 }
 
 .btn-primary:hover {
-  background: #4338ca;
   transform: translateY(-2px);
-  box-shadow: 0 6px 20px rgba(79, 70, 229, 0.23);
+  box-shadow: 0 6px 20px rgba(91, 80, 232, 0.23);
+  filter: brightness(1.1);
 }
 
-.btn-outline {
-  border: 1px solid var(--color-border);
+.btn-secondary {
   background: var(--color-surface);
+  border: 1px solid #E2E8F0;
   color: var(--color-text-main);
 }
 
-.btn-outline:hover {
-  background: var(--color-background-alt);
+.btn-secondary:hover {
+  background: var(--color-page);
   border-color: var(--color-primary);
-  color: var(--color-primary);
 }
 
 .btn-ghost {
@@ -164,15 +185,36 @@ h4 {
 }
 
 .badge {
-  display: inline-block;
-  padding: 0.25rem 0.75rem;
-  border-radius: var(--radius-full);
-  font-size: 0.75rem;
-  font-weight: 700;
-  text-transform: uppercase;
-  letter-spacing: 0.05em;
-  background: var(--color-primary-soft);
+  padding: 0.35rem 0.75rem;
+  border-radius: var(--radius-pill);
+  font-size: 0.7rem;
+  font-weight: 600;
+  display: inline-flex;
+}
+
+.badge-error {
+  background: var(--bg-error);
+  color: var(--color-error);
+}
+
+.badge-warning {
+  background: var(--bg-warning);
+  color: var(--color-warning);
+}
+
+.badge-info {
+  background: var(--bg-info);
   color: var(--color-primary);
+}
+
+.badge-success {
+  background: var(--bg-success);
+  color: var(--color-success);
+}
+
+.badge-teal {
+  background: #E0F2FE;
+  color: #0369A1;
 }
 
 /* Utils */
