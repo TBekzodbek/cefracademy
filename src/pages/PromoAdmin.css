@@ -1,0 +1,246 @@
+/* ═══════════════════════════════════════════════
+   PromoAdmin — Promo Code Management Page
+   ═══════════════════════════════════════════════ */
+
+.pa-page {
+    min-height: 100vh;
+    background: var(--color-background-alt);
+    padding: 2.5rem 1.25rem 4rem;
+}
+
+.pa-container {
+    max-width: 860px;
+    margin: 0 auto;
+    display: flex;
+    flex-direction: column;
+    gap: 1.75rem;
+}
+
+/* ── Header ── */
+.pa-header { text-align: center; margin-bottom: 0.5rem; }
+
+.pa-brand {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.4rem;
+    font-family: var(--font-heading);
+    font-weight: 900;
+    font-size: 1rem;
+    color: var(--color-text-main);
+    letter-spacing: -0.02em;
+    margin-bottom: 1.25rem;
+}
+
+.pa-title {
+    font-size: 2rem;
+    font-weight: 900;
+    letter-spacing: -0.03em;
+    color: var(--color-text-main);
+    margin-bottom: 0.4rem;
+}
+
+.pa-sub {
+    font-size: 0.9rem;
+    color: var(--color-text-muted);
+}
+
+/* ── Grid layout for cards ── */
+.pa-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 1.5rem;
+    align-items: start;
+}
+
+/* ── Card ── */
+.pa-card {
+    background: var(--color-surface);
+    border: 1px solid var(--color-border);
+    border-radius: var(--radius-xl);
+    padding: 1.75rem;
+}
+
+.pa-table-card { grid-column: 1 / -1; }
+
+.pa-card-title {
+    display: flex; align-items: center; gap: 0.45rem;
+    font-size: 1rem; font-weight: 800;
+    color: var(--color-text-main);
+    margin-bottom: 1.5rem;
+}
+
+.pa-card-title-row {
+    display: flex; align-items: center; justify-content: space-between;
+    margin-bottom: 1.25rem; flex-wrap: wrap; gap: 0.5rem;
+}
+.pa-card-title-row .pa-card-title { margin-bottom: 0; }
+
+/* ── Form ── */
+.pa-form { display: flex; flex-direction: column; gap: 1rem; }
+
+.pa-field-row { display: grid; grid-template-columns: 1fr 1fr; gap: 0.875rem; }
+
+.pa-field { display: flex; flex-direction: column; gap: 0.35rem; }
+.pa-field label {
+    font-size: 0.78rem; font-weight: 700;
+    color: var(--color-text-muted); letter-spacing: 0.02em;
+    display: flex; align-items: center; gap: 0.3rem;
+}
+.pa-field input {
+    padding: 0.7rem 1rem;
+    background: var(--color-background);
+    border: 1.5px solid var(--color-border);
+    border-radius: var(--radius-lg);
+    font-size: 0.9rem;
+    font-weight: 600;
+    color: var(--color-text-main);
+    transition: border-color 0.15s, box-shadow 0.15s;
+    font-family: var(--font-family);
+}
+.pa-field input:focus {
+    outline: none;
+    border-color: var(--color-primary);
+    box-shadow: 0 0 0 3px var(--color-primary-soft);
+}
+
+.pa-error {
+    font-size: 0.83rem; font-weight: 600;
+    color: var(--color-error); line-height: 1.5;
+    background: rgba(244,63,94,0.07);
+    padding: 0.65rem 1rem;
+    border-radius: var(--radius-lg);
+    border: 1px solid rgba(244,63,94,0.15);
+}
+
+.pa-btn-generate {
+    display: flex; align-items: center; justify-content: center; gap: 0.5rem;
+    padding: 0.85rem; background: var(--color-primary); color: white;
+    border: none; border-radius: var(--radius-lg);
+    font-size: 0.95rem; font-weight: 800; cursor: pointer;
+    font-family: var(--font-family); transition: filter 0.15s, box-shadow 0.15s;
+    margin-top: 0.25rem;
+}
+.pa-btn-generate:hover:not(:disabled) {
+    filter: brightness(1.1);
+    box-shadow: 0 6px 20px rgba(91,80,232,0.3);
+}
+.pa-btn-generate:disabled { opacity: 0.55; cursor: not-allowed; }
+
+/* ── Code list (output) ── */
+.pa-code-list { display: flex; flex-direction: column; gap: 0.5rem; margin-bottom: 1rem; }
+
+.pa-code-row {
+    display: flex; align-items: center; gap: 0.65rem;
+    background: var(--color-background-alt);
+    border: 1px solid var(--color-border);
+    border-radius: var(--radius-lg);
+    padding: 0.65rem 1rem;
+    flex-wrap: wrap;
+}
+.pa-code-text {
+    font-family: var(--font-heading), monospace;
+    font-weight: 900; font-size: 0.92rem;
+    letter-spacing: 0.1em; color: var(--color-primary);
+    flex: 1; min-width: 140px;
+}
+.pa-code-meta { display: flex; gap: 0.5rem; flex-wrap: wrap; flex: 1; }
+.pa-code-note   { font-size: 0.75rem; color: var(--color-text-muted); font-style: italic; }
+.pa-code-expiry { font-size: 0.75rem; color: var(--color-warning); font-weight: 600; }
+
+.pa-btn-copy {
+    display: flex; align-items: center; gap: 0.3rem;
+    padding: 0.35rem 0.75rem;
+    background: var(--color-surface);
+    border: 1px solid var(--color-border);
+    border-radius: var(--radius-full);
+    font-size: 0.75rem; font-weight: 700;
+    cursor: pointer; color: var(--color-text-muted);
+    transition: all 0.15s; white-space: nowrap;
+    font-family: var(--font-family);
+}
+.pa-btn-copy:hover { color: var(--color-primary); border-color: var(--color-primary); }
+
+.pa-btn-copy-all {
+    display: flex; align-items: center; gap: 0.3rem;
+    padding: 0.4rem 0.9rem;
+    background: var(--color-primary-soft);
+    border: 1px solid rgba(91,80,232,0.2);
+    border-radius: var(--radius-full);
+    font-size: 0.78rem; font-weight: 700;
+    cursor: pointer; color: var(--color-primary);
+    transition: background 0.15s;
+    font-family: var(--font-family);
+}
+.pa-btn-copy-all:hover { background: rgba(91,80,232,0.15); }
+
+.pa-copy-hint {
+    font-size: 0.77rem; color: var(--color-text-light);
+    line-height: 1.5; margin: 0;
+}
+
+/* ── Table ── */
+.pa-table-wrap { overflow-x: auto; border-radius: var(--radius-lg); border: 1px solid var(--color-border); }
+.pa-table { width: 100%; border-collapse: collapse; }
+.pa-table thead tr { background: var(--color-background-alt); }
+.pa-table th {
+    padding: 0.75rem 1rem; text-align: left;
+    font-size: 0.72rem; font-weight: 800; letter-spacing: 0.06em;
+    text-transform: uppercase; color: var(--color-text-light);
+    border-bottom: 1px solid var(--color-border);
+}
+.pa-table td {
+    padding: 0.75rem 1rem; font-size: 0.85rem;
+    border-bottom: 1px solid var(--color-border);
+    color: var(--color-text-main);
+}
+.pa-table tr:last-child td { border-bottom: none; }
+.pa-table tr:hover td { background: var(--color-background-alt); }
+.pa-td-code { font-family: var(--font-heading), monospace; font-weight: 800; letter-spacing: 0.08em; color: var(--color-primary); }
+.pa-td-dim  { color: var(--color-text-muted); font-size: 0.8rem; }
+
+/* Status pill */
+.pa-status {
+    display: inline-block; padding: 0.2rem 0.6rem;
+    border-radius: var(--radius-full); font-size: 0.72rem; font-weight: 800;
+    letter-spacing: 0.04em; text-transform: uppercase;
+}
+.pa-status.unused { background: rgba(16,185,129,0.1); color: var(--color-success); }
+.pa-status.used   { background: var(--color-background-alt); color: var(--color-text-light); }
+
+.pa-btn-copy-sm {
+    display: flex; align-items: center; justify-content: center;
+    width: 28px; height: 28px; border-radius: 50%;
+    background: var(--color-background-alt);
+    border: 1px solid var(--color-border);
+    cursor: pointer; color: var(--color-text-muted);
+    transition: all 0.15s;
+}
+.pa-btn-copy-sm:hover { color: var(--color-primary); border-color: var(--color-primary); }
+
+.pa-btn-refresh {
+    display: flex; align-items: center; gap: 0.35rem;
+    padding: 0.35rem 0.8rem;
+    background: none; border: 1px solid var(--color-border);
+    border-radius: var(--radius-full); cursor: pointer;
+    font-size: 0.78rem; font-weight: 700;
+    color: var(--color-text-muted); font-family: var(--font-family);
+    transition: all 0.15s;
+}
+.pa-btn-refresh:hover { color: var(--color-text-main); border-color: var(--color-text-light); }
+
+/* ── Center / loading states ── */
+.pa-center {
+    min-height: 100vh; display: flex; flex-direction: column;
+    align-items: center; justify-content: center;
+    gap: 0.75rem; text-align: center; padding: 2rem;
+    color: var(--color-text-main);
+}
+
+.pa-spin { animation: paSpin 0.75s linear infinite; }
+@keyframes paSpin { to { transform: rotate(360deg); } }
+
+/* ── Responsive ── */
+@media (max-width: 680px) {
+    .pa-grid { grid-template-columns: 1fr; }
+    .pa-field-row { grid-template-columns: 1fr; }
+}

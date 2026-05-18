@@ -4,6 +4,7 @@ import { LayoutDashboard, User, Crown, CreditCard, BookOpen, Headphones, Graduat
 import { supabase } from '../lib/supabase';
 import { GamificationService } from '../lib/gamification';
 import PricingModal from '../components/PricingModal';
+import PromoGate from '../components/PromoGate';
 import './DashboardLayout.css';
 
 interface Props {
@@ -18,10 +19,20 @@ const DashboardLayout = ({ lang, toggleLang, theme, toggleTheme }: Props) => {
     const navigate = useNavigate();
     const [stats, setStats] = useState({ xp: 0, streak: 0, level: 1 });
     const [showPricing, setShowPricing] = useState(false);
+    const [promoRequired, setPromoRequired] = useState(false);  // true = gate is active
 
     const closePricing = () => {
         localStorage.setItem('pricing_seen', '1');
         setShowPricing(false);
+    };
+
+    // Called by PromoGate after a code is successfully verified
+    const onPromoVerified = () => {
+        setPromoRequired(false);
+        // Show pricing modal right after the gate clears (first visit)
+        if (!localStorage.getItem('pricing_seen')) {
+            setTimeout(() => setShowPricing(true), 800);
+        }
     };
 
     useEffect(() => {
@@ -32,17 +43,22 @@ const DashboardLayout = ({ lang, toggleLang, theme, toggleTheme }: Props) => {
                 return;
             }
 
-            // Show pricing modal once per browser (first login)
-            if (!localStorage.getItem('pricing_seen')) {
-                // Small delay so the dashboard renders first
-                setTimeout(() => setShowPricing(true), 600);
-            }
-
+            // Check promo_verified on the profile
             const { data: profile } = await supabase
                 .from('profiles')
-                .select('xp, streak')
+                .select('xp, streak, promo_verified')
                 .eq('id', user.id)
                 .single();
+
+            if (profile && !profile.promo_verified) {
+                // User hasn't entered a promo code yet — show the gate
+                setPromoRequired(true);
+            } else if (!promoRequired) {
+                // Verified — show pricing modal once
+                if (!localStorage.getItem('pricing_seen')) {
+                    setTimeout(() => setShowPricing(true), 600);
+                }
+            }
 
             if (profile) {
                 setStats({
@@ -169,7 +185,11 @@ const DashboardLayout = ({ lang, toggleLang, theme, toggleTheme }: Props) => {
                 <Outlet />
             </main>
 
-            <PricingModal open={showPricing} onClose={closePricing} lang={lang} />
+            {/* Promo gate — blocks everything until a valid code is entered */}
+            {promoRequired && <PromoGate onVerified={onPromoVerified} lang={lang} />}
+
+            {/* Post-login pricing upsell — shown once after promo is verified */}
+            {!promoRequired && <PricingModal open={showPricing} onClose={closePricing} lang={lang} />}
         </div>
     );
 };

@@ -1,4 +1,4 @@
-// CEFR Academy - v1.0.3 - Premium Build
+// CEFR Academy - v1.0.4 - Promo Gate Build
 import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
 import Navigation from './components/Navigation';
 import Login from './pages/Login';
@@ -14,6 +14,7 @@ import Plan from './pages/Plan';
 import Pricing from './pages/Pricing';
 import AIChat from './pages/AIChat';
 import Vocabulary from './pages/Vocabulary';
+import PromoAdmin from './pages/PromoAdmin';
 import { useState, useEffect } from 'react';
 import { SpeedInsights } from "@vercel/speed-insights/react";
 import { Analytics } from "@vercel/analytics/react";
@@ -73,6 +74,9 @@ function App() {
 
         {/* Legacy redirect for old bookmarkers */}
         <Route path="/onboarding" element={<OnboardingSurvey lang={lang} />} />
+
+        {/* Admin — promo code generator (only the admin email can use it) */}
+        <Route path="/promo-admin" element={<PromoAdmin />} />
       </Routes>
     </Router>
   );
