@@ -321,14 +321,46 @@
     border-color: var(--color-text-light);
 }
 
-/* Telegram widget container — sizes to match the Google button */
+/* Telegram widget container — custom overlay over hidden official iframe */
 .tg-widget-container {
+    position: relative;
+    min-height: 42px;
+    border-radius: var(--radius-lg);
+    background: #0088CC;
+    overflow: hidden;
+    cursor: pointer;
+    transition: filter 0.18s ease;
+}
+.tg-widget-container:hover { filter: brightness(1.12); }
+
+/* Visible custom label — pointer-events: none so clicks pass through to iframe */
+.tg-btn-overlay {
+    position: absolute;
+    inset: 0;
     display: flex;
     align-items: center;
     justify-content: center;
-    min-height: 42px;
-    border-radius: var(--radius-lg);
+    gap: 0.55rem;
+    color: white;
+    font-size: 0.84rem;
+    font-weight: 700;
+    pointer-events: none;
+    z-index: 1;
+    white-space: nowrap;
+}
+
+/* Invisible Telegram iframe wrapper — sits above overlay to capture clicks */
+.tg-widget-inner {
+    position: absolute;
+    inset: 0;
+    opacity: 0;
+    z-index: 2;
     overflow: hidden;
+}
+.tg-widget-inner iframe {
+    height: 42px !important;
+    min-width: 100% !important;
+    cursor: pointer !important;
 }
 
 /* Loading placeholder while edge-function verifies */
