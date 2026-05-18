@@ -1,4 +1,4 @@
-import { useEffect, useState } from 'react';
+import { useEffect, useState, useRef } from 'react';
 import { Link, useLocation, Outlet, useNavigate } from 'react-router-dom';
 import { LayoutDashboard, User, Crown, CreditCard, BookOpen, Headphones, GraduationCap, Mic, LogOut, CheckCircle, Globe, Sun, Moon, Sparkles, Flame, Trophy, Library } from 'lucide-react';
 import { supabase } from '../lib/supabase';
@@ -19,16 +19,22 @@ const DashboardLayout = ({ lang, toggleLang, theme, toggleTheme }: Props) => {
     const navigate = useNavigate();
     const [stats, setStats] = useState({ xp: 0, streak: 0, level: 1 });
     const [showPricing, setShowPricing] = useState(false);
-    // null = still checking, false = no gate needed, true = gate required
-    const [promoStatus, setPromoStatus] = useState<'checking' | 'required' | 'ok'>('checking');
+    // Start as 'ok' immediately if user was already verified in a previous session
+    const [promoStatus, setPromoStatus] = useState<'checking' | 'required' | 'ok'>(() =>
+        localStorage.getItem('promo_ok') === '1' ? 'ok' : 'checking'
+    );
+    // Ref so navigations within a session never re-show the gate
+    const promoCheckedRef = useRef(localStorage.getItem('promo_ok') === '1');
 
     const closePricing = () => {
         localStorage.setItem('pricing_seen', '1');
         setShowPricing(false);
     };
 
-    // Called by PromoGate after a code is verified — re-run the check so we get fresh DB data
+    // Called by PromoGate after a code is verified
     const onPromoVerified = () => {
+        localStorage.setItem('promo_ok', '1');
+        promoCheckedRef.current = true;
         setPromoStatus('ok');
         if (!localStorage.getItem('pricing_seen')) {
             setTimeout(() => setShowPricing(true), 800);
@@ -37,7 +43,10 @@ const DashboardLayout = ({ lang, toggleLang, theme, toggleTheme }: Props) => {
 
     useEffect(() => {
         const fetchUserData = async () => {
-            setPromoStatus('checking');
+            // Only show the gate spinner on first load — not on every navigation
+            if (!promoCheckedRef.current) {
+                setPromoStatus('checking');
+            }
 
             const { data: { user } } = await supabase.auth.getUser();
             if (!user) {
@@ -48,6 +57,8 @@ const DashboardLayout = ({ lang, toggleLang, theme, toggleTheme }: Props) => {
             // ── Admin bypass: skip the promo gate entirely ──────────────
             const adminEmail = (import.meta.env.VITE_ADMIN_EMAIL as string | undefined)?.toLowerCase().trim();
             if (adminEmail && user.email?.toLowerCase().trim() === adminEmail) {
+                promoCheckedRef.current = true;
+                localStorage.setItem('promo_ok', '1');
                 setPromoStatus('ok');
                 if (!localStorage.getItem('pricing_seen')) {
                     setTimeout(() => setShowPricing(true), 600);
@@ -76,15 +87,20 @@ const DashboardLayout = ({ lang, toggleLang, theme, toggleTheme }: Props) => {
                 .eq('id', user.id)
                 .maybeSingle();
 
-            // promo_verified must be explicitly true — undefined / null / false all trigger gate
-            const isVerified = profile?.promo_verified === true;
+            // Only update the gate if not already cleared this session
+            if (!promoCheckedRef.current) {
+                // promo_verified must be explicitly true — undefined / null / false all trigger gate
+                const isVerified = profile?.promo_verified === true;
 
-            if (!isVerified) {
-                setPromoStatus('required');
-            } else {
-                setPromoStatus('ok');
-                if (!localStorage.getItem('pricing_seen')) {
-                    setTimeout(() => setShowPricing(true), 600);
+                if (!isVerified) {
+                    setPromoStatus('required');
+                } else {
+                    promoCheckedRef.current = true;
+                    localStorage.setItem('promo_ok', '1');
+                    setPromoStatus('ok');
+                    if (!localStorage.getItem('pricing_seen')) {
+                        setTimeout(() => setShowPricing(true), 600);
+                    }
                 }
             }
 
@@ -101,6 +117,8 @@ const DashboardLayout = ({ lang, toggleLang, theme, toggleTheme }: Props) => {
     }, [navigate, location.pathname]);
 
     const handleLogout = async () => {
+        localStorage.removeItem('promo_ok');
+        localStorage.removeItem('pricing_seen');
         await supabase.auth.signOut();
         navigate('/');
     };
