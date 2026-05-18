@@ -1,7 +1,7 @@
 import { useState, useEffect, useRef } from 'react';
-import { motion } from 'framer-motion';
+import { motion, AnimatePresence } from 'framer-motion';
 import { useNavigate, Link } from 'react-router-dom';
-import { LogIn, UserPlus, Loader2, ShieldCheck, ArrowLeft, Eye, EyeOff } from 'lucide-react';
+import { LogIn, UserPlus, Loader2, ArrowLeft, Eye, EyeOff, BookOpen, Headphones, Mic, GraduationCap } from 'lucide-react';
 import { supabase } from '../lib/supabase';
 import './Login.css';
 
@@ -22,9 +22,23 @@ interface TelegramUser {
 
 declare global {
     interface Window {
-        onTelegramAuth: (user: TelegramUser) => void;
+        Telegram?: {
+            Login: {
+                auth: (
+                    params: { bot_id: string; request_access?: string; lang?: string },
+                    callback: (user: TelegramUser | false) => void
+                ) => void;
+            };
+        };
     }
 }
+
+const features = [
+    { icon: <BookOpen size={16} />, text: '50 full CEFR mock exams' },
+    { icon: <Headphones size={16} />, text: 'Real listening audio tracks' },
+    { icon: <Mic size={16} />, text: 'AI-powered speaking feedback' },
+    { icon: <GraduationCap size={16} />, text: 'Personalised study plans' },
+];
 
 const Login = ({ lang }: Props) => {
     const navigate = useNavigate();
@@ -32,230 +46,337 @@ const Login = ({ lang }: Props) => {
     const [showPassword, setShowPassword] = useState(false);
     const [email, setEmail] = useState('');
     const [password, setPassword] = useState('');
-    const [loading, setLoading] = useState(false);
+    const [loadingSource, setLoadingSource] = useState<'email' | 'google' | 'telegram' | null>(null);
     const [error, setError] = useState<string | null>(null);
+    const [successMsg, setSuccessMsg] = useState<string | null>(null);
+    const tgScriptLoaded = useRef(false);
+
+    const loading = loadingSource !== null;
+
+    // Load Telegram widget script silently – no visible button, programmatic use only
+    useEffect(() => {
+        if (tgScriptLoaded.current) return;
+        tgScriptLoaded.current = true;
+        const s = document.createElement('script');
+        s.src = 'https://telegram.org/js/telegram-widget.js?22';
+        s.async = true;
+        document.head.appendChild(s);
+    }, []);
+
+    // Redirect if already logged in
+    useEffect(() => {
+        const check = async () => {
+            const { data: { user } } = await supabase.auth.getUser();
+            if (user) navigate('/dashboard');
+        };
+        check();
+    }, [navigate]);
 
     const t = {
         title: isSignUp
             ? (lang === 'en' ? 'Create Account' : 'Akkaunt yaratish')
             : (lang === 'en' ? 'Welcome Back' : 'Xush kelibsiz'),
         subtitle: isSignUp
-            ? (lang === 'en' ? 'Start your journey to National Multi-level CEFR success.' : 'Milliy Multi-level CEFR muvaffaqiyati sari yo\'lingizni boshlang.')
-            : (lang === 'en' ? 'Continue your national exam preparation.' : 'Milliy imtihon tayyorgarligini davom ettirish uchun kiring.'),
-        emailLabel: lang === 'en' ? 'Email Address' : 'Elektron pochta',
+            ? (lang === 'en' ? 'Join 12,000+ students preparing for CEFR success.' : 'CEFR muvaffaqiyatiga tayyorlanayotgan 12 000+ talabaga qo\'shiling.')
+            : (lang === 'en' ? 'Continue your national exam preparation.' : 'Milliy imtihon tayyorgarligini davom ettiring.'),
+        emailLabel: lang === 'en' ? 'Email address' : 'Elektron pochta',
         passwordLabel: lang === 'en' ? 'Password' : 'Parol',
-        forgot: lang === 'en' ? 'Forgot password?' : 'Parolni unutdingizmi?',
+        forgot: lang === 'en' ? 'Forgot?' : 'Unutdingizmi?',
         loginBtn: lang === 'en' ? 'Sign In' : 'Kirish',
         signUpBtn: lang === 'en' ? 'Create Account' : 'Ro\'yxatdan o\'tish',
         noAccount: lang === 'en' ? "Don't have an account?" : "Akkauntingiz yo'qmi?",
         haveAccount: lang === 'en' ? "Already have an account?" : "Akkauntingiz bormi?",
-        switchLogin: lang === 'en' ? 'Sign In' : 'Kirish',
-        switchSignUp: lang === 'en' ? 'Sign Up' : 'Ro\'yxatdan o\'tish',
-        backHome: lang === 'en' ? 'Back to home' : 'Bosh sahifaga qaytish',
-        or: lang === 'en' ? 'or continue with' : 'yoki quyidagilar orqali',
-        socialGoogle: lang === 'en' ? 'Continue with Google' : 'Google orqali davom etish',
+        switchLogin: lang === 'en' ? 'Sign in' : 'Kirish',
+        switchSignUp: lang === 'en' ? 'Sign up' : 'Ro\'yxatdan o\'tish',
+        backHome: lang === 'en' ? 'Back to home' : 'Bosh sahifaga',
+        or: lang === 'en' ? 'or' : 'yoki',
+        googleBtn: lang === 'en' ? 'Continue with Google' : 'Google orqali',
+        telegramBtn: lang === 'en' ? 'Continue with Telegram' : 'Telegram orqali',
+        telegramHint: lang === 'en' ? 'Tap Confirm in your Telegram app — no password needed.' : 'Telegram ilovangizda Tasdiqlash tugmasini bosing.',
     };
 
-    useEffect(() => {
-        const checkUser = async () => {
-            const { data: { user } } = await supabase.auth.getUser();
-            if (user) navigate('/dashboard');
-        };
-        checkUser();
-    }, [navigate]);
+    /* ─── Auth handlers ─────────────────────────────── */
 
     const handleTelegramAuth = async (user: TelegramUser) => {
-        setLoading(true);
+        setLoadingSource('telegram');
         setError(null);
         try {
-            const response = await fetch(
+            const res = await fetch(
                 'https://mctcstvjdpcnzypfjhka.supabase.co/functions/v1/telegram-auth',
-                {
-                    method: 'POST',
-                    headers: { 'Content-Type': 'application/json' },
-                    body: JSON.stringify(user),
-                }
+                { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify(user) }
             );
-            const result = await response.json();
-            if (!response.ok) throw new Error(result.error || 'Telegram verification failed');
-
-            const { error: sessionError } = await supabase.auth.setSession({
-                access_token: result.session.access_token,
-                refresh_token: result.session.refresh_token,
+            const data = await res.json();
+            if (!res.ok) throw new Error(data.error || 'Telegram verification failed');
+            const { error: sessionErr } = await supabase.auth.setSession({
+                access_token: data.session.access_token,
+                refresh_token: data.session.refresh_token,
             });
-            if (sessionError) throw sessionError;
-
+            if (sessionErr) throw sessionErr;
             navigate('/dashboard');
-        } catch (err: any) {
-            setError(err.message || 'Telegram login failed');
-            setLoading(false);
+        } catch (err: unknown) {
+            setError(err instanceof Error ? err.message : 'Telegram login failed');
+            setLoadingSource(null);
         }
     };
 
-    const telegramContainerRef = useRef<HTMLDivElement>(null);
-
-    useEffect(() => {
-        if (!telegramContainerRef.current) return;
-
-        // Remove existing scripts if any
-        telegramContainerRef.current.innerHTML = '';
-
-        window.onTelegramAuth = handleTelegramAuth;
-        const script = document.createElement('script');
-        script.src = 'https://telegram.org/js/telegram-widget.js?22';
-        script.setAttribute('data-telegram-login', 'SadoMedia_bot');
-        script.setAttribute('data-size', 'large');
-        script.setAttribute('data-radius', '12');
-        script.setAttribute('data-onauth', 'onTelegramAuth(user)');
-        script.setAttribute('data-request-access', 'write');
-        script.async = true;
-        telegramContainerRef.current.appendChild(script);
-    }, [isSignUp]); // Re-render when switching modes to keep it visible
+    const handleTelegramLogin = () => {
+        const tryAuth = () => {
+            if (!window.Telegram?.Login) { setTimeout(tryAuth, 300); return; }
+            setLoadingSource('telegram');
+            setError(null);
+            window.Telegram.Login.auth(
+                { bot_id: 'SadoMedia_bot', request_access: 'write' },
+                (user) => {
+                    if (!user) { setLoadingSource(null); return; }
+                    handleTelegramAuth(user);
+                }
+            );
+        };
+        tryAuth();
+    };
 
     const handleGoogleLogin = async () => {
-        try {
-            setLoading(true);
-            setError(null);
-            const { data, error } = await supabase.auth.signInWithOAuth({
-                provider: 'google',
-                options: {
-                    redirectTo: `${window.location.origin.replace(/\/$/, '')}/dashboard`,
-                    queryParams: {
-                        access_type: 'offline',
-                        prompt: 'consent',
-                    },
-                },
-            });
-            console.log('Google OAuth response:', { data, error });
-            if (error) {
-                throw error;
-            }
-            // If no error, Supabase will redirect the browser to Google automatically
-        } catch (err: any) {
-            console.error('Google login error:', err);
-            setError(err.message || 'Google login failed. Please check your Supabase Google provider settings.');
-            setLoading(false);
-        }
+        setLoadingSource('google');
+        setError(null);
+        const { error } = await supabase.auth.signInWithOAuth({
+            provider: 'google',
+            options: {
+                redirectTo: `${window.location.origin.replace(/\/$/, '')}/dashboard`,
+                queryParams: { access_type: 'offline', prompt: 'consent' },
+            },
+        });
+        if (error) { setError(error.message); setLoadingSource(null); }
+        // On success Supabase redirects automatically, no cleanup needed
     };
 
     const handleAuth = async (e: React.FormEvent) => {
         e.preventDefault();
-        setLoading(true);
+        setLoadingSource('email');
         setError(null);
-
+        setSuccessMsg(null);
         try {
             if (isSignUp) {
-                const { error: signUpError, data } = await supabase.auth.signUp({
-                    email,
-                    password,
-                    options: {
-                        // FIX: Ensure confirmation email redirects to production app, not localhost
-                        emailRedirectTo: 'https://cefracademy.uz/onboarding',
-                    }
+                const { error: err, data } = await supabase.auth.signUp({
+                    email, password,
+                    options: { emailRedirectTo: 'https://cefracademy.uz/onboarding' },
                 });
-                if (signUpError) throw signUpError;
+                if (err) throw err;
                 if (data.user) {
-                    // Inform user to check email
-                    alert(lang === 'en' ? 'Verification email sent! Please check your inbox.' : 'Tasdiqlash xati yuborildi! Iltimos, pochtangizni tekshiring.');
+                    setSuccessMsg(lang === 'en'
+                        ? 'Check your inbox — we sent a confirmation link.'
+                        : 'Pochtangizni tekshiring — tasdiqlash havolasi yuborildi.');
                 }
             } else {
-                const { error: signInError } = await supabase.auth.signInWithPassword({
-                    email,
-                    password,
-                });
-                if (signInError) throw signInError;
+                const { error: err } = await supabase.auth.signInWithPassword({ email, password });
+                if (err) throw err;
                 navigate('/dashboard');
             }
-        } catch (err: any) {
-            setError(err.message || (lang === 'en' ? 'Authentication error.' : 'Kirishda xatolik yuz berdi.'));
+        } catch (err: unknown) {
+            setError(err instanceof Error ? err.message : (lang === 'en' ? 'Authentication error.' : 'Kirishda xatolik.'));
         } finally {
-            setLoading(false);
+            setLoadingSource(null);
         }
     };
 
+    /* ─── JSX ───────────────────────────────────────── */
+
     return (
         <div className="auth-page">
-            <motion.div
-                className="auth-card"
-                initial={{ opacity: 0, scale: 0.98 }}
-                animate={{ opacity: 1, scale: 1 }}
-            >
-                <Link to="/" className="back-link">
-                    <ArrowLeft size={16} /> {t.backHome}
-                </Link>
+            {/* Decorative blobs */}
+            <div className="auth-blob auth-blob-1" />
+            <div className="auth-blob auth-blob-2" />
 
-                <div className="auth-header">
-                    <div style={{ display: 'flex', justifyContent: 'center', marginBottom: '1.5rem', color: 'var(--color-primary)' }}>
-                        <ShieldCheck size={48} />
+            <div className="auth-layout">
+                {/* ── Left panel ── */}
+                <div className="auth-panel-left">
+                    <Link to="/" className="auth-brand">
+                        <span className="auth-brand-logo">CEFR</span>
+                        <span className="auth-brand-text">ACADEMY</span>
+                    </Link>
+                    <div className="auth-panel-body">
+                        <h3 className="auth-panel-title">
+                            Everything you need to<br />
+                            <span className="auth-panel-grad">ace the national exam</span>
+                        </h3>
+                        <p className="auth-panel-sub">
+                            Practise all four skills, track your progress with AI, and unlock your target CEFR level.
+                        </p>
+                        <ul className="auth-feature-list">
+                            {features.map((f, i) => (
+                                <li key={i} className="auth-feature-item">
+                                    <span className="auth-feature-icon">{f.icon}</span>
+                                    {f.text}
+                                </li>
+                            ))}
+                        </ul>
                     </div>
-                    <h2>{t.title}</h2>
-                    <p>{t.subtitle}</p>
+                    <div className="auth-panel-users">
+                        <div className="auth-avatars">
+                            {['AT','SM','FN','ZR'].map((init, i) => (
+                                <div key={i} className="auth-avatar" style={{ background: ['#5B50E8','#0EA5E9','#10B981','#F59E0B'][i] }}>{init}</div>
+                            ))}
+                        </div>
+                        <span>Joined by <strong>12,000+</strong> students</span>
+                    </div>
                 </div>
 
-                <div className="social-auth">
-                    <button className="btn-social" onClick={handleGoogleLogin} disabled={loading}>
-                        <svg width="20" height="20" viewBox="0 0 24 24"><path fill="currentColor" d="M22.56 12.25c0-.78-.07-1.53-.2-2.25H12v4.26h5.92c-.26 1.37-1.04 2.53-2.21 3.31v2.77h3.57c2.08-1.92 3.28-4.74 3.28-8.09z" /><path fill="currentColor" d="M12 23c2.97 0 5.46-.98 7.28-2.66l-3.57-2.77c-.98.66-2.23 1.06-3.71 1.06-2.86 0-5.29-1.93-6.16-4.53H2.18v2.84C3.99 20.53 7.7 23 12 23z" /><path fill="currentColor" d="M5.84 14.1c-.22-.66-.35-1.36-.35-2.1s.13-1.44.35-2.1V7.06H2.18C1.43 8.55 1 10.22 1 12s.43 3.45 1.18 4.94l3.66-2.84z" /><path fill="currentColor" d="M12 5.38c1.62 0 3.06.56 4.21 1.64l3.15-3.15C17.45 2.09 14.97 1 12 1 7.7 1 3.99 3.47 2.18 7.06l3.66 2.84c.87-2.6 3.3-4.52 6.16-4.52z" /></svg>
-                        {t.socialGoogle}
-                    </button>
-                    <div ref={telegramContainerRef} style={{ display: 'flex', justifyContent: 'center', marginTop: '0.5rem' }}></div>
-                </div>
+                {/* ── Right panel (auth card) ── */}
+                <motion.div
+                    className="auth-card"
+                    initial={{ opacity: 0, y: 16 }}
+                    animate={{ opacity: 1, y: 0 }}
+                    transition={{ duration: 0.5, ease: [0.22, 1, 0.36, 1] }}
+                >
+                    <Link to="/" className="back-link">
+                        <ArrowLeft size={15} /> {t.backHome}
+                    </Link>
 
-                <div className="divider">{t.or}</div>
-
-                {error && (
-                    <div style={{ backgroundColor: '#fef2f2', color: '#dc2626', padding: '1rem', borderRadius: 'var(--radius-lg)', marginBottom: '1.5rem', fontSize: '0.875rem', fontWeight: 600, border: '1px solid #fee2e2' }}>
-                        {error}
+                    {/* Header */}
+                    <div className="auth-header">
+                        <AnimatePresence mode="wait">
+                            <motion.div
+                                key={isSignUp ? 'signup' : 'signin'}
+                                initial={{ opacity: 0, y: 6 }}
+                                animate={{ opacity: 1, y: 0 }}
+                                exit={{ opacity: 0, y: -6 }}
+                                transition={{ duration: 0.22 }}
+                            >
+                                <h2>{t.title}</h2>
+                                <p>{t.subtitle}</p>
+                            </motion.div>
+                        </AnimatePresence>
                     </div>
-                )}
 
-                <form className="auth-form" onSubmit={handleAuth}>
-                    <div className="form-group">
-                        <label>{t.emailLabel}</label>
-                        <div className="input-container">
+                    {/* Social buttons */}
+                    <div className="social-grid">
+                        {/* Google */}
+                        <button
+                            className="btn-social btn-google"
+                            onClick={handleGoogleLogin}
+                            disabled={loading}
+                        >
+                            {loadingSource === 'google'
+                                ? <Loader2 size={18} className="spin" />
+                                : <svg width="18" height="18" viewBox="0 0 24 24">
+                                    <path fill="#4285F4" d="M22.56 12.25c0-.78-.07-1.53-.2-2.25H12v4.26h5.92c-.26 1.37-1.04 2.53-2.21 3.31v2.77h3.57c2.08-1.92 3.28-4.74 3.28-8.09z"/>
+                                    <path fill="#34A853" d="M12 23c2.97 0 5.46-.98 7.28-2.66l-3.57-2.77c-.98.66-2.23 1.06-3.71 1.06-2.86 0-5.29-1.93-6.16-4.53H2.18v2.84C3.99 20.53 7.7 23 12 23z"/>
+                                    <path fill="#FBBC05" d="M5.84 14.1c-.22-.66-.35-1.36-.35-2.1s.13-1.44.35-2.1V7.06H2.18C1.43 8.55 1 10.22 1 12s.43 3.45 1.18 4.94l3.66-2.84z"/>
+                                    <path fill="#EA4335" d="M12 5.38c1.62 0 3.06.56 4.21 1.64l3.15-3.15C17.45 2.09 14.97 1 12 1 7.7 1 3.99 3.47 2.18 7.06l3.66 2.84c.87-2.6 3.3-4.52 6.16-4.52z"/>
+                                  </svg>
+                            }
+                            <span>{t.googleBtn}</span>
+                        </button>
+
+                        {/* Telegram */}
+                        <button
+                            className="btn-social btn-telegram"
+                            onClick={handleTelegramLogin}
+                            disabled={loading}
+                        >
+                            {loadingSource === 'telegram'
+                                ? <Loader2 size={18} className="spin" />
+                                : <svg width="18" height="18" viewBox="0 0 24 24" fill="currentColor">
+                                    <path d="M12 0C5.373 0 0 5.373 0 12s5.373 12 12 12 12-5.373 12-12S18.627 0 12 0zm5.894 8.221-1.97 9.28c-.145.658-.537.818-1.084.508l-3-2.21-1.447 1.394c-.16.16-.295.295-.605.295l.213-3.053 5.56-5.023c.242-.213-.054-.333-.373-.12L7.17 13.547l-2.95-.924c-.64-.204-.654-.64.135-.954l11.566-4.461c.537-.194 1.006.131.973.013z"/>
+                                  </svg>
+                            }
+                            <span>{t.telegramBtn}</span>
+                        </button>
+                    </div>
+
+                    {/* Telegram hint */}
+                    <p className="tg-hint">{t.telegramHint}</p>
+
+                    {/* Divider */}
+                    <div className="auth-divider"><span>{t.or}</span></div>
+
+                    {/* Error / Success banners */}
+                    <AnimatePresence>
+                        {error && (
+                            <motion.div
+                                className="auth-banner auth-banner-error"
+                                initial={{ opacity: 0, y: -6 }}
+                                animate={{ opacity: 1, y: 0 }}
+                                exit={{ opacity: 0 }}
+                            >
+                                {error}
+                            </motion.div>
+                        )}
+                        {successMsg && (
+                            <motion.div
+                                className="auth-banner auth-banner-success"
+                                initial={{ opacity: 0, y: -6 }}
+                                animate={{ opacity: 1, y: 0 }}
+                                exit={{ opacity: 0 }}
+                            >
+                                {successMsg}
+                            </motion.div>
+                        )}
+                    </AnimatePresence>
+
+                    {/* Email form */}
+                    <form className="auth-form" onSubmit={handleAuth}>
+                        <div className="form-group">
+                            <label>{t.emailLabel}</label>
                             <input
                                 type="email"
                                 required
                                 value={email}
                                 onChange={(e) => setEmail(e.target.value)}
                                 placeholder="name@example.com"
+                                disabled={loading}
                             />
                         </div>
-                    </div>
-                    <div className="form-group">
-                        <div className="label-row">
-                            <label>{t.passwordLabel}</label>
-                            {!isSignUp && <Link to="/login" className="forgot-link">{t.forgot}</Link>}
-                        </div>
-                        <div className="input-container">
-                            <input
-                                type={showPassword ? "text" : "password"}
-                                required
-                                value={password}
-                                onChange={(e) => setPassword(e.target.value)}
-                                placeholder="••••••••"
-                            />
-                            <div className="input-icon" onClick={() => setShowPassword(!showPassword)}>
-                                {showPassword ? <EyeOff size={18} /> : <Eye size={18} />}
+
+                        <div className="form-group">
+                            <div className="label-row">
+                                <label>{t.passwordLabel}</label>
+                                {!isSignUp && <Link to="/login" className="forgot-link">{t.forgot}</Link>}
+                            </div>
+                            <div className="input-pw-wrap">
+                                <input
+                                    type={showPassword ? 'text' : 'password'}
+                                    required
+                                    value={password}
+                                    onChange={(e) => setPassword(e.target.value)}
+                                    placeholder="••••••••"
+                                    disabled={loading}
+                                />
+                                <button
+                                    type="button"
+                                    className="pw-toggle"
+                                    onClick={() => setShowPassword(!showPassword)}
+                                    tabIndex={-1}
+                                >
+                                    {showPassword ? <EyeOff size={16} /> : <Eye size={16} />}
+                                </button>
                             </div>
                         </div>
+
+                        <motion.button
+                            type="submit"
+                            disabled={loading}
+                            className="btn-submit"
+                            whileTap={{ scale: 0.98 }}
+                        >
+                            {loadingSource === 'email'
+                                ? <Loader2 size={18} className="spin" />
+                                : (isSignUp ? <UserPlus size={18} /> : <LogIn size={18} />)
+                            }
+                            {isSignUp ? t.signUpBtn : t.loginBtn}
+                        </motion.button>
+                    </form>
+
+                    <div className="auth-footer">
+                        <span>{isSignUp ? t.haveAccount : t.noAccount}</span>
+                        <button
+                            type="button"
+                            onClick={() => { setIsSignUp(!isSignUp); setError(null); setSuccessMsg(null); }}
+                        >
+                            {isSignUp ? t.switchLogin : t.switchSignUp}
+                        </button>
                     </div>
-
-                    <button
-                        type="submit"
-                        disabled={loading}
-                        className="btn btn-primary"
-                        style={{ width: '100%', padding: '1rem', marginTop: '0.5rem' }}
-                    >
-                        {loading ? <Loader2 className="animate-spin" size={20} /> : (isSignUp ? <UserPlus size={20} /> : <LogIn size={20} />)}
-                        {isSignUp ? t.signUpBtn : t.loginBtn}
-                    </button>
-                </form>
-
-                <div className="auth-footer">
-                    <span>{isSignUp ? t.haveAccount : t.noAccount}</span>
-                    <button onClick={() => setIsSignUp(!isSignUp)}>{isSignUp ? t.switchLogin : t.switchSignUp}</button>
-                </div>
-            </motion.div>
+                </motion.div>
+            </div>
         </div>
     );
 };
