@@ -19,17 +19,17 @@ const DashboardLayout = ({ lang, toggleLang, theme, toggleTheme }: Props) => {
     const navigate = useNavigate();
     const [stats, setStats] = useState({ xp: 0, streak: 0, level: 1 });
     const [showPricing, setShowPricing] = useState(false);
-    const [promoRequired, setPromoRequired] = useState(false);  // true = gate is active
+    // null = still checking, false = no gate needed, true = gate required
+    const [promoStatus, setPromoStatus] = useState<'checking' | 'required' | 'ok'>('checking');
 
     const closePricing = () => {
         localStorage.setItem('pricing_seen', '1');
         setShowPricing(false);
     };
 
-    // Called by PromoGate after a code is successfully verified
+    // Called by PromoGate after a code is verified — re-run the check so we get fresh DB data
     const onPromoVerified = () => {
-        setPromoRequired(false);
-        // Show pricing modal right after the gate clears (first visit)
+        setPromoStatus('ok');
         if (!localStorage.getItem('pricing_seen')) {
             setTimeout(() => setShowPricing(true), 800);
         }
@@ -37,24 +37,28 @@ const DashboardLayout = ({ lang, toggleLang, theme, toggleTheme }: Props) => {
 
     useEffect(() => {
         const fetchUserData = async () => {
+            setPromoStatus('checking');
+
             const { data: { user } } = await supabase.auth.getUser();
             if (!user) {
                 navigate('/login');
                 return;
             }
 
-            // Check promo_verified on the profile
+            // Fetch profile — use maybeSingle so missing row doesn't throw
             const { data: profile } = await supabase
                 .from('profiles')
                 .select('xp, streak, promo_verified')
                 .eq('id', user.id)
-                .single();
+                .maybeSingle();
 
-            if (profile && !profile.promo_verified) {
-                // User hasn't entered a promo code yet — show the gate
-                setPromoRequired(true);
-            } else if (!promoRequired) {
-                // Verified — show pricing modal once
+            // promo_verified must be explicitly true — undefined/null/false all trigger gate
+            const isVerified = profile?.promo_verified === true;
+
+            if (!isVerified) {
+                setPromoStatus('required');
+            } else {
+                setPromoStatus('ok');
                 if (!localStorage.getItem('pricing_seen')) {
                     setTimeout(() => setShowPricing(true), 600);
                 }
@@ -64,11 +68,12 @@ const DashboardLayout = ({ lang, toggleLang, theme, toggleTheme }: Props) => {
                 setStats({
                     xp: profile.xp || 0,
                     streak: profile.streak || 0,
-                    level: GamificationService.calculateLevel(profile.xp || 0)
+                    level: GamificationService.calculateLevel(profile.xp || 0),
                 });
             }
         };
         fetchUserData();
+    // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [navigate, location.pathname]);
 
     const handleLogout = async () => {
@@ -185,11 +190,19 @@ const DashboardLayout = ({ lang, toggleLang, theme, toggleTheme }: Props) => {
                 <Outlet />
             </main>
 
-            {/* Promo gate — blocks everything until a valid code is entered */}
-            {promoRequired && <PromoGate onVerified={onPromoVerified} lang={lang} />}
+            {/* Promo gate — full-screen blocker, shown while checking OR when required */}
+            {(promoStatus === 'checking' || promoStatus === 'required') && (
+                <PromoGate
+                    onVerified={onPromoVerified}
+                    lang={lang}
+                    loading={promoStatus === 'checking'}
+                />
+            )}
 
-            {/* Post-login pricing upsell — shown once after promo is verified */}
-            {!promoRequired && <PricingModal open={showPricing} onClose={closePricing} lang={lang} />}
+            {/* Post-login pricing upsell — only after gate clears */}
+            {promoStatus === 'ok' && (
+                <PricingModal open={showPricing} onClose={closePricing} lang={lang} />
+            )}
         </div>
     );
 };
