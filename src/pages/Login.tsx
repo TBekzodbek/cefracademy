@@ -57,9 +57,13 @@ const Login = ({ lang }: Props) => {
     useEffect(() => {
         if (tgScriptLoaded.current) return;
         tgScriptLoaded.current = true;
+        // Must include data-telegram-login so the SDK initialises window.Telegram.Login
         const s = document.createElement('script');
         s.src = 'https://telegram.org/js/telegram-widget.js?22';
+        s.setAttribute('data-telegram-login', 'SadoMedia_bot');
+        s.setAttribute('data-request-access', 'write');
         s.async = true;
+        // Append to head — no visible button is rendered when placed here
         document.head.appendChild(s);
     }, []);
 
@@ -120,13 +124,31 @@ const Login = ({ lang }: Props) => {
     };
 
     const handleTelegramLogin = () => {
+        setLoadingSource('telegram');
+        setError(null);
+
+        let attempts = 0;
+        const MAX_ATTEMPTS = 20; // 6 s total wait
+
+        // Safety net: if the popup closes or callback never fires, unfreeze after 90s
+        const safetyTimer = setTimeout(() => setLoadingSource(null), 90_000);
+
         const tryAuth = () => {
-            if (!window.Telegram?.Login) { setTimeout(tryAuth, 300); return; }
-            setLoadingSource('telegram');
-            setError(null);
+            if (!window.Telegram?.Login) {
+                attempts++;
+                if (attempts >= MAX_ATTEMPTS) {
+                    clearTimeout(safetyTimer);
+                    setError('Could not load Telegram. Please refresh and try again.');
+                    setLoadingSource(null);
+                    return;
+                }
+                setTimeout(tryAuth, 300);
+                return;
+            }
             window.Telegram.Login.auth(
                 { bot_id: 'SadoMedia_bot', request_access: 'write' },
                 (user) => {
+                    clearTimeout(safetyTimer);
                     if (!user) { setLoadingSource(null); return; }
                     handleTelegramAuth(user);
                 }
