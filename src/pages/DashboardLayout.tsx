@@ -3,6 +3,7 @@ import { Link, useLocation, Outlet, useNavigate } from 'react-router-dom';
 import { LayoutDashboard, User, Crown, CreditCard, BookOpen, Headphones, GraduationCap, Mic, LogOut, CheckCircle, Globe, Sun, Moon, Sparkles, Flame, Trophy, Library } from 'lucide-react';
 import { supabase } from '../lib/supabase';
 import { GamificationService } from '../lib/gamification';
+import PricingModal from '../components/PricingModal';
 import './DashboardLayout.css';
 
 interface Props {
@@ -16,6 +17,12 @@ const DashboardLayout = ({ lang, toggleLang, theme, toggleTheme }: Props) => {
     const location = useLocation();
     const navigate = useNavigate();
     const [stats, setStats] = useState({ xp: 0, streak: 0, level: 1 });
+    const [showPricing, setShowPricing] = useState(false);
+
+    const closePricing = () => {
+        localStorage.setItem('pricing_seen', '1');
+        setShowPricing(false);
+    };
 
     useEffect(() => {
         const fetchUserData = async () => {
@@ -23,6 +30,12 @@ const DashboardLayout = ({ lang, toggleLang, theme, toggleTheme }: Props) => {
             if (!user) {
                 navigate('/login');
                 return;
+            }
+
+            // Show pricing modal once per browser (first login)
+            if (!localStorage.getItem('pricing_seen')) {
+                // Small delay so the dashboard renders first
+                setTimeout(() => setShowPricing(true), 600);
             }
 
             const { data: profile } = await supabase
@@ -155,6 +168,8 @@ const DashboardLayout = ({ lang, toggleLang, theme, toggleTheme }: Props) => {
             <main className="dashboard-main-content">
                 <Outlet />
             </main>
+
+            <PricingModal open={showPricing} onClose={closePricing} lang={lang} />
         </div>
     );
 };
