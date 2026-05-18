@@ -13,150 +13,130 @@ function respond(body: object, status: number) {
     });
 }
 
-async function sha256(message: string): Promise<ArrayBuffer> {
-    return crypto.subtle.digest('SHA-256', new TextEncoder().encode(message));
+async function sha256(msg: string): Promise<ArrayBuffer> {
+    return crypto.subtle.digest('SHA-256', new TextEncoder().encode(msg));
 }
-
-async function hmacSha256(key: ArrayBuffer, message: string): Promise<ArrayBuffer> {
-    const cryptoKey = await crypto.subtle.importKey(
-        'raw', key, { name: 'HMAC', hash: 'SHA-256' }, false, ['sign']
-    );
-    return crypto.subtle.sign('HMAC', cryptoKey, new TextEncoder().encode(message));
+async function hmac256(key: ArrayBuffer, msg: string): Promise<ArrayBuffer> {
+    const k = await crypto.subtle.importKey('raw', key, { name: 'HMAC', hash: 'SHA-256' }, false, ['sign']);
+    return crypto.subtle.sign('HMAC', k, new TextEncoder().encode(msg));
 }
-
-function toHex(buf: ArrayBuffer): string {
-    return Array.from(new Uint8Array(buf))
-        .map(b => b.toString(16).padStart(2, '0'))
-        .join('');
-}
-
-async function verifyTelegramHash(
-    fields: Record<string, string | number>,
-    receivedHash: string,
-    botToken: string
-): Promise<{ ok: boolean; checkString: string; computedHash: string }> {
-    // Build the data-check-string: all fields except hash, sorted alphabetically, joined by \n
-    const checkString = Object.entries(fields)
-        .sort(([a], [b]) => (a < b ? -1 : a > b ? 1 : 0))
-        .map(([k, v]) => `${k}=${v}`)
-        .join('\n');
-
-    const secretKey = await sha256(botToken);            // secret_key = SHA256(bot_token)
-    const computedHash = toHex(await hmacSha256(secretKey, checkString));
-
-    return { ok: computedHash === receivedHash, checkString, computedHash };
-}
-
-async function derivePassword(botToken: string, telegramId: number): Promise<string> {
-    const key = await crypto.subtle.importKey(
-        'raw', new TextEncoder().encode(botToken),
-        { name: 'HMAC', hash: 'SHA-256' }, false, ['sign']
-    );
-    return toHex(await crypto.subtle.sign(
-        'HMAC', key, new TextEncoder().encode(telegramId.toString())
-    ));
+function hex(buf: ArrayBuffer) {
+    return Array.from(new Uint8Array(buf)).map(b => b.toString(16).padStart(2, '0')).join('');
 }
 
 Deno.serve(async (req) => {
     if (req.method === 'OPTIONS') {
-        return new Response(null, { status: 204, headers: corsHeaders });
+        return new Response(null, { status: 200, headers: corsHeaders });
     }
 
     try {
-        const botToken = Deno.env.get('TELEGRAM_BOT_TOKEN');
-        const supabaseUrl = Deno.env.get('SUPABASE_URL')!;
-        const serviceRoleKey = Deno.env.get('SUPABASE_SERVICE_ROLE_KEY')!;
-        const anonKey = Deno.env.get('SUPABASE_ANON_KEY')!;
+        /* ── 1. env vars ─────────────────────────────── */
+        const botToken        = Deno.env.get('TELEGRAM_BOT_TOKEN');
+        const supabaseUrl     = Deno.env.get('SUPABASE_URL')!;
+        const serviceRoleKey  = Deno.env.get('SUPABASE_SERVICE_ROLE_KEY')!;
 
-        // ── Guard: token must be configured ──────────────────
         if (!botToken) {
-            console.error('[telegram-auth] TELEGRAM_BOT_TOKEN secret is not set');
+            console.error('[tg-auth] TELEGRAM_BOT_TOKEN not set');
             return respond({ error: 'Server misconfiguration: TELEGRAM_BOT_TOKEN not set' }, 500);
         }
+        console.log('[tg-auth] bot token prefix:', botToken.split(':')[0]);
 
-        // ── Parse body ────────────────────────────────────────
+        /* ── 2. parse body ────────────────────────────── */
         let body: Record<string, string | number>;
-        try {
-            body = await req.json();
-        } catch {
-            return respond({ error: 'Invalid JSON body' }, 400);
-        }
+        try { body = await req.json(); }
+        catch { return respond({ error: 'Invalid JSON body' }, 400); }
 
         const { hash, ...userData } = body;
-
         if (!hash || !userData.id || !userData.auth_date) {
-            console.error('[telegram-auth] Missing fields. Received:', Object.keys(body));
-            return respond({ error: `Missing required fields. Got: ${Object.keys(body).join(', ')}` }, 400);
+            return respond({ error: `Missing fields. Received: ${Object.keys(body).join(', ')}` }, 400);
         }
 
-        // ── Guard: reject stale data (> 1 hour) ──────────────
-        const authAge = Math.floor(Date.now() / 1000) - Number(userData.auth_date);
-        console.log(`[telegram-auth] auth_date age: ${authAge}s`);
-        if (authAge > 3600) {
-            return respond({ error: `Auth data expired (${authAge}s old). Please try again.` }, 401);
-        }
+        /* ── 3. check freshness (<1 h) ────────────────── */
+        const age = Math.floor(Date.now() / 1000) - Number(userData.auth_date);
+        console.log('[tg-auth] auth_date age:', age, 's');
+        if (age > 3600) return respond({ error: `Auth data expired (${age}s). Please try again.` }, 401);
 
-        // ── Verify HMAC-SHA256 hash ───────────────────────────
-        const { ok, checkString, computedHash } = await verifyTelegramHash(userData, String(hash), botToken);
-        console.log(`[telegram-auth] check_string fields: ${checkString.split('\n').map(l => l.split('=')[0]).join(', ')}`);
-        console.log(`[telegram-auth] hash match: ${ok}`);
-        console.log(`[telegram-auth] bot token prefix: ${botToken.split(':')[0]}`);  // log bot ID only, not secret
+        /* ── 4. verify HMAC-SHA256 ────────────────────── */
+        const checkStr = Object.entries(userData)
+            .sort(([a], [b]) => (a < b ? -1 : a > b ? 1 : 0))
+            .map(([k, v]) => `${k}=${v}`)
+            .join('\n');
+        const secret      = await sha256(botToken);
+        const computed    = hex(await hmac256(secret, checkStr));
+        const hashMatches = computed === String(hash);
+        console.log('[tg-auth] fields:', Object.keys(userData).join(','), '| match:', hashMatches);
 
-        if (!ok) {
+        if (!hashMatches) {
             return respond({
-                error: `Hash mismatch — check that TELEGRAM_BOT_TOKEN matches the bot used in data-telegram-login. Bot ID in token: ${botToken.split(':')[0]}`,
+                error: `Hash mismatch. Bot ID in token: ${botToken.split(':')[0]}. ` +
+                       `Make sure data-telegram-login uses this same bot.`,
             }, 401);
         }
 
-        // ── Create / sign in user ─────────────────────────────
+        /* ── 5. derive stable credentials ────────────── */
         const telegramId = Number(userData.id);
-        const email = `tg_${telegramId}@cefracademy.uz`;
-        const password = await derivePassword(botToken, telegramId);
+        const email      = `tg_${telegramId}@cefracademy.uz`;
+
+        // password = HMAC(botToken, telegramId) — deterministic, server-only
+        const pwKey = await crypto.subtle.importKey(
+            'raw', new TextEncoder().encode(botToken),
+            { name: 'HMAC', hash: 'SHA-256' }, false, ['sign']
+        );
+        const password = hex(await crypto.subtle.sign(
+            'HMAC', pwKey, new TextEncoder().encode(telegramId.toString())
+        ));
+
         const fullName = [userData.first_name, userData.last_name].filter(Boolean).join(' ');
+        console.log('[tg-auth] email:', email);
 
-        const adminClient = createClient(supabaseUrl, serviceRoleKey, {
+        /* ── 6. admin client (single client for everything) ── */
+        const admin = createClient(supabaseUrl, serviceRoleKey, {
             auth: { autoRefreshToken: false, persistSession: false },
         });
-        const anonClient = createClient(supabaseUrl, anonKey, {
-            auth: { autoRefreshToken: false, persistSession: false },
-        });
 
-        const { data: newUser, error: createError } = await adminClient.auth.admin.createUser({
+        /* ── 7. upsert user via admin ─────────────────── */
+        const { data: created, error: createErr } = await admin.auth.admin.createUser({
             email,
             password,
             email_confirm: true,
             user_metadata: {
-                full_name: fullName,
-                telegram_id: telegramId,
-                telegram_username: userData.username ?? null,
-                avatar_url: userData.photo_url ?? null,
+                full_name:         fullName,
+                telegram_id:       telegramId,
+                telegram_username: userData.username  ?? null,
+                avatar_url:        userData.photo_url ?? null,
             },
         });
+        console.log('[tg-auth] createUser:', created?.user?.id ?? 'exists', createErr?.message ?? 'ok');
 
-        if (createError && !createError.message.includes('already been registered')) {
-            console.error('[telegram-auth] createUser error:', createError.message);
-            throw createError;
+        if (createErr && !createErr.message.includes('already been registered')) {
+            return respond({ error: `createUser failed: ${createErr.message}` }, 500);
         }
 
-        if (newUser?.user) {
-            await adminClient.from('profiles').upsert(
-                { id: newUser.user.id, full_name: fullName, xp: 0, streak: 0, cefr_level: 'A2' },
+        // seed profile row for brand-new users
+        if (created?.user) {
+            await admin.from('profiles').upsert(
+                { id: created.user.id, full_name: fullName, xp: 0, streak: 0, cefr_level: 'A2' },
                 { onConflict: 'id', ignoreDuplicates: true }
             );
         }
 
-        const { data: signInData, error: signInError } = await anonClient.auth.signInWithPassword({ email, password });
-        if (signInError) {
-            console.error('[telegram-auth] signIn error:', signInError.message);
-            throw signInError;
+        /* ── 8. sign in → get session ─────────────────── */
+        // Use the admin (service-role) client's signInWithPassword —
+        // avoids the extra round-trip overhead of a separate anon client.
+        const { data: signIn, error: signInErr } = await admin.auth.signInWithPassword({ email, password });
+        console.log('[tg-auth] signIn:', signIn?.session ? 'session ok' : 'no session', signInErr?.message ?? '');
+
+        if (signInErr || !signIn?.session) {
+            const msg = signInErr?.message || 'No session returned';
+            return respond({ error: `signIn failed: ${msg}` }, 500);
         }
 
-        console.log(`[telegram-auth] success for Telegram ID ${telegramId}`);
-        return respond({ session: signInData.session, user: signInData.user }, 200);
+        console.log('[tg-auth] success for tg id', telegramId);
+        return respond({ session: signIn.session, user: signIn.user }, 200);
 
     } catch (err: unknown) {
-        const msg = err instanceof Error ? err.message : 'Internal server error';
-        console.error('[telegram-auth] unhandled error:', msg);
+        const msg = (err instanceof Error && err.message) ? err.message : 'Internal server error';
+        console.error('[tg-auth] unhandled:', msg);
         return respond({ error: msg }, 500);
     }
 });

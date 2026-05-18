@@ -101,11 +101,24 @@ const Login = ({ lang, toggleLang }: Props) => {
                 'https://mctcstvjdpcnzypfjhka.supabase.co/functions/v1/telegram-auth',
                 { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify(user) }
             );
-            const data = await res.json();
-            if (!res.ok) throw new Error(data.error || 'Telegram verification failed');
+
+            // Parse response body safely
+            let data: Record<string, unknown> = {};
+            try { data = await res.json(); } catch { /* empty body */ }
+
+            if (!res.ok) {
+                const msg = (typeof data.error === 'string' && data.error)
+                    ? data.error
+                    : `Server error ${res.status}`;
+                throw new Error(msg);
+            }
+
+            if (!data.session) throw new Error('No session returned from server');
+
+            const session = data.session as { access_token: string; refresh_token: string };
             const { error: sessionErr } = await supabase.auth.setSession({
-                access_token: data.session.access_token,
-                refresh_token: data.session.refresh_token,
+                access_token:  session.access_token,
+                refresh_token: session.refresh_token,
             });
             if (sessionErr) throw sessionErr;
             navigate('/dashboard');
