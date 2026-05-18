@@ -45,6 +45,30 @@ const DashboardLayout = ({ lang, toggleLang, theme, toggleTheme }: Props) => {
                 return;
             }
 
+            // ── Admin bypass: skip the promo gate entirely ──────────────
+            const adminEmail = (import.meta.env.VITE_ADMIN_EMAIL as string | undefined)?.toLowerCase().trim();
+            if (adminEmail && user.email?.toLowerCase().trim() === adminEmail) {
+                setPromoStatus('ok');
+                if (!localStorage.getItem('pricing_seen')) {
+                    setTimeout(() => setShowPricing(true), 600);
+                }
+                // Still load sidebar stats if a profile exists
+                const { data: adminProfile } = await supabase
+                    .from('profiles')
+                    .select('xp, streak')
+                    .eq('id', user.id)
+                    .maybeSingle();
+                if (adminProfile) {
+                    setStats({
+                        xp: adminProfile.xp || 0,
+                        streak: adminProfile.streak || 0,
+                        level: GamificationService.calculateLevel(adminProfile.xp || 0),
+                    });
+                }
+                return;
+            }
+            // ────────────────────────────────────────────────────────────
+
             // Fetch profile — use maybeSingle so missing row doesn't throw
             const { data: profile } = await supabase
                 .from('profiles')
@@ -52,7 +76,7 @@ const DashboardLayout = ({ lang, toggleLang, theme, toggleTheme }: Props) => {
                 .eq('id', user.id)
                 .maybeSingle();
 
-            // promo_verified must be explicitly true — undefined/null/false all trigger gate
+            // promo_verified must be explicitly true — undefined / null / false all trigger gate
             const isVerified = profile?.promo_verified === true;
 
             if (!isVerified) {
