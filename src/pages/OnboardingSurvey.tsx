@@ -112,7 +112,7 @@ function AtlasScanScreen({ selections, onContinue }: AtlasScanProps) {
                         transition={{ duration: 2.2, repeat: Infinity }}
                     >🧠</motion.div>
                     <h3>Atlas AI is scanning your profile…</h3>
-                    <p className="as-sub">Comparing with 2,400+ similar student journeys</p>
+                    <p className="as-sub">Comparing with students who took the official 405,000 UZS Bilim va malakalarni CEFR exam</p>
                     <div className="as-skill-bars">
                         {skillBars.map((s, i) => (
                             <div key={s.name} className="as-skill-row">
@@ -143,8 +143,8 @@ function AtlasScanScreen({ selections, onContinue }: AtlasScanProps) {
                     <h3>Your <span className="as-weak-name">{critical.name}</span> is limiting your score</h3>
                     <p className="as-reveal-sub">
                         {weakKey === 'all'
-                            ? '76% of students with gaps across all skills fail their first DTM attempt without a structured plan.'
-                            : `71% of students who struggle with ${critical.name} fail their first DTM attempt without targeted practice.`}
+                            ? '76% of students with gaps across all skills fail their first official CEFR exam attempt without a structured plan — wasting 405,000 UZS.'
+                            : `71% of students who struggle with ${critical.name} fail their first official CEFR exam attempt without targeted practice — wasting their 405,000 UZS registration fee.`}
                     </p>
                     <div className="as-contrast-row">
                         <div className="as-contrast-cell fail">
@@ -160,7 +160,7 @@ function AtlasScanScreen({ selections, onContinue }: AtlasScanProps) {
                     <div className="as-student-win">
                         <div className="as-sw-ava" style={{ background: '#5B50E8' }}>A</div>
                         <div className="as-sw-body">
-                            <strong>Aziz T.</strong> had the same {critical.name} gap — passed B2 in 7 weeks.
+                            <strong>Aziz T.</strong> had the same {critical.name} gap — passed B2 in 7 weeks. Now exempt from university entrance foreign language block.
                         </div>
                         <span className="as-sw-badge">+26 pts 🎉</span>
                     </div>
@@ -177,10 +177,10 @@ function AtlasScanScreen({ selections, onContinue }: AtlasScanProps) {
 
 function PlanBuildingScreen() {
     const items = [
-        { icon: '🔍', text: 'Skill gap analysis complete' },
-        { icon: '📅', text: '12-week schedule calculated' },
-        { icon: '📝', text: 'Mock exam sequence prepared' },
-        { icon: '🎯', text: 'Vocabulary list personalised' },
+        { icon: '🔍', text: 'Skill gap analysis against official CEFR rubric complete' },
+        { icon: '📅', text: 'Daily schedule calculated for monthly exam date' },
+        { icon: '📝', text: 'Official Bilim va malakalarni mock sequence prepared' },
+        { icon: '🎯', text: 'B2 / C1 benefits target mapped to your profile' },
     ];
     return (
         <div className="plan-building-screen">
@@ -191,7 +191,7 @@ function PlanBuildingScreen() {
                 <Sparkles size={38} color="var(--color-primary)" />
             </motion.div>
             <h3>Atlas AI is building your roadmap…</h3>
-            <p>Analysing 15,000+ study paths to personalise yours</p>
+                        <p>Calibrating your path to the official 405,000 UZS CEFR exam</p>
             <div className="pb-list">
                 {items.map((item, i) => (
                     <motion.div key={i} className="pb-list-item"
@@ -252,17 +252,17 @@ const OnboardingSurvey = ({ lang, toggleLang, theme, toggleTheme }: Props) => {
         {
             id: 'target_level', group: 'Foundation',
             q: 'What certificate level are you aiming for?',
-            sub: 'This is the score you need for university admission, your visa, or your job.',
+            sub: 'B2 unlocks university entrance exemption. C1 unlocks a 50% teacher salary bonus. Choose your target.',
             opts: [
                 { label: 'B1 — 38–50 pts', icon: '🎯', desc: 'Foundation certificate' },
-                { label: 'B2 — 51–64 pts', icon: '🎯', desc: 'Upper certificate' },
-                { label: 'C1 — 65–75 pts', icon: '🎯', desc: 'Advanced certificate' },
+                { label: 'B2 — 51–64 pts', icon: '🏫', desc: 'University exemption + max entrance points' },
+                { label: 'C1 — 65–75 pts', icon: '💰', desc: '50% teacher salary bonus + toifa max' },
             ],
         },
         {
             id: 'exam_date', group: 'Foundation',
-            q: 'When is your DTM exam date?',
-            sub: 'Your deadline sets everything — Atlas paces your daily plan around it.',
+            q: 'When is your next CEFR exam date?',
+            sub: 'The official exam runs monthly across Uzbekistan (register at my.gov.uz). Atlas paces your daily plan around your target sitting.',
             opts: [
                 { label: 'In less than 1 month', icon: '🔥', desc: 'Intensive mode' },
                 { label: 'In 1–3 months', icon: '⚡', desc: 'Accelerated track' },
@@ -325,10 +325,10 @@ const OnboardingSurvey = ({ lang, toggleLang, theme, toggleTheme }: Props) => {
             q: 'What is the main reason you need this certificate?',
             sub: "Your 'why' becomes the engine that powers your plan when motivation dips.",
             opts: [
-                { label: 'University admission', icon: '🎓', desc: 'Getting into my dream uni' },
-                { label: 'Job or promotion', icon: '💼', desc: 'Career advancement' },
-                { label: 'Visa or immigration', icon: '✈️', desc: 'Moving abroad' },
-                { label: 'Personal achievement', icon: '🏅', desc: 'Proving it to myself' },
+                { label: 'University entrance exemption', icon: '🎓', desc: 'B2 = skip foreign language block + max points' },
+                { label: 'Teacher salary bonus (50%)', icon: '👨‍🏫', desc: 'C1 = 50% salary supplement for educators' },
+                { label: 'Career or promotion', icon: '💼', desc: 'Job advancement requiring English proof' },
+                { label: 'Personal achievement', icon: '🏅', desc: 'Proving my proficiency to myself' },
             ],
         },
         {
@@ -345,7 +345,7 @@ const OnboardingSurvey = ({ lang, toggleLang, theme, toggleTheme }: Props) => {
         // ── Group 4: Intent (Q10–12) ──
         {
             id: 'feature_interest', group: 'Intent',
-            hint: '⭐ Premium users score an average of +28 points higher than free-plan users',
+            hint: '⭐ Premium prep costs 49K/mo — 8× less than one failed 405K exam retake',
             q: 'Which Atlas AI tool sounds most powerful for your goal?',
             sub: 'This becomes the #1 tool highlighted in your personalised roadmap.',
             opts: [
@@ -362,13 +362,13 @@ const OnboardingSurvey = ({ lang, toggleLang, theme, toggleTheme }: Props) => {
             opts: [
                 { label: 'No — only free tools so far', icon: '🆓', desc: 'Never invested in prep' },
                 { label: 'Yes — under 100K UZS', icon: '💳', desc: 'Tried cheaper options' },
-                { label: 'Yes — 100K–300K UZS', icon: '💰', desc: 'Significant investment' },
-                { label: 'Yes — 300K+ on private tutors', icon: '💸', desc: 'Heavy spending with limited results' },
+                { label: 'Yes — 100K–400K UZS', icon: '💰', desc: 'Courses or tutor sessions' },
+                { label: 'Yes — paid 2M+ for IELTS', icon: '💸', desc: '5× the cost of the CEFR exam' },
             ],
         },
         {
             id: 'start_date', group: 'Intent',
-            hint: '⚡ Students who start today save an average of 2 months of wasted preparation',
+            hint: '⚡ Monthly exams at my.gov.uz — every week you delay is one exam cycle lost',
             q: 'When do you want to start improving your score?',
             sub: 'Your roadmap is ready the moment you answer — the clock is already ticking.',
             opts: [
@@ -435,49 +435,51 @@ const OnboardingSurvey = ({ lang, toggleLang, theme, toggleTheme }: Props) => {
 
     /* ── Features ── */
     const features = [
-        { title: 'Authentic Mock Tests', desc: '50+ full Reading & Listening papers aligned to official DTM format.', color: 'var(--color-primary)', bg: 'rgba(91,80,232,0.08)', icon: <BookOpen size={20} color="var(--color-primary)" />, chips: ['B1', 'B2', 'C1'] },
-        { title: 'AI Essay Grading', desc: 'Instant C1-level feedback on every Writing task within 30 seconds.', color: 'var(--color-success)', bg: 'rgba(16,185,129,0.08)', icon: <GraduationCap size={20} color="var(--color-success)" />, chips: ['Essay', 'Letter', 'Report'] },
-        { title: 'Vocabulary Lab', desc: 'Master the 1,500 most frequent academic words with spaced repetition.', color: 'var(--color-purple)', bg: 'rgba(139,92,246,0.08)', icon: <Library size={20} color="var(--color-purple)" />, chips: ['A2', 'B1', 'B2', 'C1'] },
-        { title: 'Speaking Atlas', desc: 'AI fluency + pronunciation scoring on real speaking prompts.', color: 'var(--color-error)', bg: 'rgba(244,63,94,0.08)', icon: <Mic size={20} color="var(--color-error)" />, chips: ['Fluency', 'Pronunciation'] },
-        { title: 'Level Progress Map', desc: 'Visualize your path from A1 to C1 with live XP and streak tracking.', color: 'var(--color-warning)', bg: 'rgba(245,158,11,0.08)', icon: <TrendingUp size={20} color="var(--color-warning)" />, chips: ['A1→C1', 'XP System'] },
-        { title: 'Grammar Guard', desc: 'Identify and fix your recurring structural errors automatically.', color: 'var(--color-secondary)', bg: 'rgba(6,182,212,0.08)', icon: <CheckCircle2 size={20} color="var(--color-secondary)" />, chips: ['Grammar', 'Auto-fix'] },
+        { title: 'Official Mock Tests', desc: '50+ full Reading & Listening papers built from the official Bilim va malakalarni baholash agentligi exam format — the agency that issues your real certificate.', color: 'var(--color-primary)', bg: 'rgba(91,80,232,0.08)', icon: <BookOpen size={20} color="var(--color-primary)" />, chips: ['B1', 'B2', 'C1'] },
+        { title: 'AI Essay Grading', desc: 'Instant Writing feedback scored against the exact rubric used in the official CEFR exam — in under 30 seconds, any time of day.', color: 'var(--color-success)', bg: 'rgba(16,185,129,0.08)', icon: <GraduationCap size={20} color="var(--color-success)" />, chips: ['Essay', 'Letter', 'Report'] },
+        { title: 'Vocabulary Lab', desc: 'Master the 1,500 most frequent academic words tested in CEFR Reading & Listening sections with smart spaced repetition.', color: 'var(--color-purple)', bg: 'rgba(139,92,246,0.08)', icon: <Library size={20} color="var(--color-purple)" />, chips: ['A2', 'B1', 'B2', 'C1'] },
+        { title: 'Speaking Atlas', desc: 'AI fluency and pronunciation scoring on real speaking prompts — the skill that separates B1 from B2, and B2 from C1.', color: 'var(--color-error)', bg: 'rgba(244,63,94,0.08)', icon: <Mic size={20} color="var(--color-error)" />, chips: ['Fluency', 'Pronunciation'] },
+        { title: 'Level Progress Map', desc: 'Visualize your journey from A1 to C1 with live XP and streak tracking — know exactly how close you are to your B2 or C1 certificate.', color: 'var(--color-warning)', bg: 'rgba(245,158,11,0.08)', icon: <TrendingUp size={20} color="var(--color-warning)" />, chips: ['A1→C1', 'XP System'] },
+        { title: 'Grammar Guard', desc: 'Automatically identifies recurring structural errors — the patterns that cost you points on the official CEFR Writing and Speaking assessments.', color: 'var(--color-secondary)', bg: 'rgba(6,182,212,0.08)', icon: <CheckCircle2 size={20} color="var(--color-secondary)" />, chips: ['Grammar', 'Auto-fix'] },
     ];
 
     /* ── How it works ── */
     const howSteps = [
-        { num: '01', icon: <Brain size={20} color="var(--color-primary)" />, bg: 'rgba(91,80,232,0.1)', title: 'Tell Atlas your goal', desc: 'Answer 5 quick questions. Atlas builds a personalized study roadmap targeting your exact score gap.' },
-        { num: '02', icon: <Layers size={20} color="var(--color-success)" />, bg: 'rgba(16,185,129,0.1)', title: 'Practice with real mocks', desc: 'Work through authentic past papers under timed conditions — all four skills covered, every CEFR level.' },
-        { num: '03', icon: <BarChart2 size={20} color="var(--color-warning)" />, bg: 'rgba(245,158,11,0.1)', title: 'Get instant AI feedback', desc: 'Every answer scored in real-time. Fix errors, track improvement, predict your official score with 98% accuracy.' },
+        { num: '01', icon: <Brain size={20} color="var(--color-primary)" />, bg: 'rgba(91,80,232,0.1)', title: 'Tell Atlas your goal', desc: 'Answer 12 quick questions. Atlas maps your exact skill gaps and builds a daily roadmap targeting your B2 or C1 certificate.' },
+        { num: '02', icon: <Layers size={20} color="var(--color-success)" />, bg: 'rgba(16,185,129,0.1)', title: 'Practice with official mocks', desc: 'Work through papers built on the official Bilim va malakalarni baholash agentligi format — all 4 skills, every CEFR level, under real exam timing.' },
+        { num: '03', icon: <BarChart2 size={20} color="var(--color-warning)" />, bg: 'rgba(245,158,11,0.1)', title: 'Get instant AI feedback', desc: 'Every answer scored in real-time against official CEFR criteria. Track your progress and walk into the monthly exam day knowing exactly what to expect.' },
     ];
 
     /* ── Testimonials ── */
     const testimonials = [
-        { text: '"I improved from B1 to B2 in just 6 weeks. The AI feedback on my essays was sharper than any tutor I\'d paid 200,000 UZS a month for."', name: 'Sardor M.', meta: 'Tashkent · B1 → B2', avatar: 'S', color: '#5B50E8', score: '+24 pts', stars: 5, exam: 'DTM 2024' },
-        { text: '"The Reading mocks are identical to the real exam. I went in completely confident and came out with my C1 certificate first attempt."', name: 'Dilnoza K.', meta: 'Samarkand · B2 → C1', avatar: 'D', color: '#10B981', score: '+18 pts', stars: 5, exam: 'DTM 2024' },
-        { text: '"Atlas caught grammar patterns in my writing I\'d been repeating for years. The speaking feedback was a complete game-changer for me."', name: 'Jasur A.', meta: 'Bukhara · A2 → B1', avatar: 'J', color: '#F59E0B', score: '+32 pts', stars: 5, exam: 'DTM 2024' },
-        { text: '"I had 6 weeks until my exam and was panicking. The intensive track gave me a daily plan and I jumped a full CEFR level. Unbelievable."', name: 'Malika R.', meta: 'Fergana · B1 → B2', avatar: 'M', color: '#F43F5E', score: '+26 pts', stars: 5, exam: 'DTM 2025' },
-        { text: '"Free plan alone has better content than most paid apps. I upgraded to Premium for the Speaking module and I don\'t regret a single sum."', name: 'Otabek N.', meta: 'Namangan · A2 → B1', avatar: 'O', color: '#8B5CF6', score: '+29 pts', stars: 5, exam: 'DTM 2025' },
-        { text: '"My tutor was teaching me from a 2019 textbook. CEFR Academy uses actual past DTM papers. The difference in my score was immediate."', name: 'Zulfiya T.', meta: 'Nukus · B2 → C1', avatar: 'Z', color: '#06B6D4', score: '+15 pts', stars: 5, exam: 'DTM 2025' },
+        { text: '"I improved from B1 to B2 in just 6 weeks. The AI feedback on my essays was sharper than any tutor I\'d paid 300,000 UZS a month for — and the exam cost was only 405K."', name: 'Sardor M.', meta: 'Tashkent · B1 → B2', avatar: 'S', color: '#5B50E8', score: '+24 pts', stars: 5, exam: 'CEFR 2024' },
+        { text: '"The Reading mocks mirror the real Bilim va malakalarni exam exactly. I went in confident and came out with my C1 certificate first attempt. Now I get the 50% salary bonus."', name: 'Dilnoza K.', meta: 'Samarkand · B2 → C1', avatar: 'D', color: '#10B981', score: '+18 pts', stars: 5, exam: 'CEFR 2024' },
+        { text: '"Atlas caught grammar patterns in my writing I\'d been repeating for years. Got my B2 — now I\'m exempt from the foreign language block in my university entrance exam."', name: 'Jasur A.', meta: 'Bukhara · A2 → B1', avatar: 'J', color: '#F59E0B', score: '+32 pts', stars: 5, exam: 'CEFR 2024' },
+        { text: '"I had 6 weeks until the monthly exam and was panicking. The intensive track gave me a daily plan and I jumped a full CEFR level. Got my B2 — university exemption secured."', name: 'Malika R.', meta: 'Fergana · B1 → B2', avatar: 'M', color: '#F43F5E', score: '+26 pts', stars: 5, exam: 'CEFR 2025' },
+        { text: '"I paid 2 million UZS for IELTS prep twice and failed both times. CEFR Academy cost me 49K/month — I passed the 405K Bilim va malakalarni exam on my first try."', name: 'Otabek N.', meta: 'Namangan · B1 → B2', avatar: 'O', color: '#8B5CF6', score: '+29 pts', stars: 5, exam: 'CEFR 2025' },
+        { text: '"My tutor was teaching from a 2019 textbook. CEFR Academy uses the actual official format. C1 achieved — and I\'m now earning the teacher salary supplement."', name: 'Zulfiya T.', meta: 'Nukus · B2 → C1', avatar: 'Z', color: '#06B6D4', score: '+15 pts', stars: 5, exam: 'CEFR 2025' },
     ];
 
     /* ── Comparison table ── */
     const compRows = [
-        { label: 'Official DTM exam papers',     academy: true,  tutor: false, youtube: false },
-        { label: 'Instant AI feedback (< 30s)',   academy: true,  tutor: false, youtube: false },
-        { label: '24 / 7 availability',           academy: true,  tutor: false, youtube: true  },
-        { label: 'Personalised study roadmap',    academy: true,  tutor: true,  youtube: false },
-        { label: 'Speaking pronunciation score',  academy: true,  tutor: true,  youtube: false },
-        { label: 'Score prediction accuracy',     academy: '98%', tutor: '~60%',youtube: false },
-        { label: 'Monthly cost (UZS)',            academy: 'Free–49K', tutor: '200K+', youtube: 'Free' },
+        { label: 'Official Bilim va malakalarni exam papers', academy: true,  tutor: false, youtube: false },
+        { label: 'Instant AI feedback (< 30s)',               academy: true,  tutor: false, youtube: false },
+        { label: '24 / 7 availability',                       academy: true,  tutor: false, youtube: true  },
+        { label: 'Personalised study roadmap',                academy: true,  tutor: true,  youtube: false },
+        { label: 'Speaking pronunciation score',              academy: true,  tutor: true,  youtube: false },
+        { label: 'Certificate validity',                      academy: '2 yrs', tutor: '—',  youtube: '—'   },
+        { label: 'Monthly prep cost (UZS)',                   academy: 'Free–49K', tutor: '300K+', youtube: 'Free' },
+        { label: 'vs. IELTS exam (2,000,000 UZS)',            academy: '405K ✓', tutor: '405K ✓', youtube: '2M ✗' },
     ];
 
     /* ── FAQ ── */
     const faqs = [
-        { q: 'Is CEFR Academy aligned with the official DTM exam format?', a: 'Yes. Every Reading and Listening paper is built from real DTM past papers. Writing tasks mirror the exact rubric used by official markers. We update our content after every DTM exam season.' },
-        { q: 'How accurate is the AI score prediction?', a: 'Our model has been validated against 2,400+ real exam results. It predicts final DTM scores with 98% accuracy within ±3 points — meaning if Atlas says B2, you will almost certainly receive a B2 certificate.' },
+        { q: 'How much does the official CEFR exam cost in Uzbekistan?', a: 'The official exam — organized by Bilim va malakalarni baholash agentligi (former DTM) — costs 405,000 UZS. This is more than 5× cheaper than IELTS (≈2,000,000 UZS), making it the most affordable internationally recognized English certificate in Uzbekistan. You can register at my.gov.uz or my.dtm.uz.' },
+        { q: 'What are the benefits of achieving a B2 certificate?', a: 'A B2 result (51–64 points) exempts you from the foreign language block in university entrance exams and earns you maximum points in that section. It also provides a significant advantage for non-philology magistratura (master\'s) admission and for doctorate document submission requirements.' },
+        { q: 'What are the benefits of achieving a C1 certificate?', a: 'A C1 result (65–75 points) unlocks a 50% teacher salary supplement — a life-changing benefit for educators. It also earns maximum points in the toifa (professional rank) exam and provides the highest advantage for English philology magistratura and doctorate programs.' },
+        { q: 'How long is the CEFR certificate valid?', a: 'Your official CEFR certificate is valid for 2 years from the date of issue. The exam is held monthly in Tashkent and at all regional centers across Uzbekistan, so there are regular opportunities to sit it.' },
+        { q: 'Is CEFR Academy aligned with the official exam format?', a: 'Yes. Every Reading and Listening mock is built on the official Bilim va malakalarni baholash agentligi exam structure. Writing tasks mirror the exact rubric used by official markers, and Speaking prompts follow the same format as the real exam.' },
         { q: 'What\'s included in the free plan?', a: 'The free plan gives you 3 AI Writing checks, 1 Speaking mock, and unlimited Reading & Listening tests at all CEFR levels. There is no time limit and no credit card required.' },
-        { q: 'How quickly will I see improvement?', a: 'Most students notice measurable improvement within 2 weeks of consistent daily practice. Our data shows the average student gains one full CEFR sub-level every 4–6 weeks.' },
-        { q: 'Can I access CEFR Academy on my phone?', a: 'Yes. The platform is fully responsive on all devices. A dedicated mobile app is coming in Q3 2025.' },
         { q: 'Is there a refund policy for Premium?', a: 'Absolutely. If you practice for 14 days and don\'t see measurable progress, we will refund your subscription — no questions asked.' },
     ];
 
@@ -485,17 +487,17 @@ const OnboardingSurvey = ({ lang, toggleLang, theme, toggleTheme }: Props) => {
     const plans = [
         {
             tier: 'Forever Free', price: 'Free', period: 'No card needed',
-            features: ['3 AI Writing checks / month', '1 Speaking mock', 'Full Reading & Listening', 'All B1, B2, C1 levels', 'Platform tour'],
+            features: ['3 AI Writing checks / month', '1 Speaking mock', 'Full Reading & Listening', 'All B1, B2, C1 levels', 'Official Bilim va malakalarni format'],
             cta: 'Start Free', highlight: false,
         },
         {
             tier: 'Pro', price: '29,000', period: 'UZS / month',
-            features: ['Unlimited Writing checks', 'All essay types (letter, report)', 'Unlimited Reading tests', 'Unlimited Listening tests', 'Error tracking dashboard', 'Speaking — Premium required'],
+            features: ['Unlimited Writing checks', 'All essay types (letter, report)', 'Unlimited Reading tests', 'Unlimited Listening tests', 'Error tracking dashboard', '7× cheaper than the exam itself'],
             cta: 'Get Pro', highlight: false, badge: 'Popular',
         },
         {
             tier: 'Premium', price: '49,000', period: 'UZS / month · Everything',
-            features: ['Everything in Pro', 'Unlimited Speaking feedback', '1 Full CEFR Mock Exam/month', 'Real-time AI pronunciation score', 'Priority 24 h support', '14-day money-back guarantee'],
+            features: ['Everything in Pro', 'Unlimited Speaking feedback', '1 Full CEFR Mock Exam/month', 'Real-time AI pronunciation score', 'B2 & C1 track — official benefits unlocked', '14-day money-back guarantee'],
             cta: 'Get Premium', highlight: true, badge: 'Best Value',
         },
     ];
@@ -551,13 +553,13 @@ const OnboardingSurvey = ({ lang, toggleLang, theme, toggleTheme }: Props) => {
                 <section className="hero-section" id="hero">
                     <div className="container hero-grid">
                         <motion.div className="hero-text" initial={{ opacity: 0, y: 24 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 0.5 }}>
-                            <span className="eyebrow" style={{ color: 'var(--color-secondary)' }}>AI-POWERED · DTM CEFR PREP · UZBEKISTAN</span>
+                            <span className="eyebrow" style={{ color: 'var(--color-secondary)' }}>AI-POWERED · BILIM VA MALAKALARNI BAHOLASH AGENTLIGI · UZBEKISTAN</span>
                             <h1 className="h1-hero">
                                 Go from <span className="gradient-text">A2 to B2</span><br />
                                 before your exam date.
                             </h1>
                             <p className="hero-description">
-                                Atlas AI analyzes every sentence, identifies your exact weak points, and builds a daily study plan that gets you your target CEFR level — faster than any tutor.
+                                Atlas AI prepares you for the official CEFR exam by Bilim va malakalarni baholash agentligi (former DTM) — held every month across Uzbekistan for only 405,000 UZS. Reach <strong>B2</strong> and earn university entrance exemption. Reach <strong>C1</strong> and unlock a 50% teacher salary bonus.
                             </p>
                             <div className="hero-btn-group">
                                 <button className="btn btn-primary" style={{ padding: '0.9rem 2rem' }} onClick={() => scrollTo('builder')}>
@@ -570,7 +572,7 @@ const OnboardingSurvey = ({ lang, toggleLang, theme, toggleTheme }: Props) => {
                             <div className="trust-bar">
                                 <span>✓ Free to start</span><span className="dot">·</span>
                                 <span>✓ No card required</span><span className="dot">·</span>
-                                <span>✓ Official DTM Standards</span>
+                                <span>✓ Official Bilim va malakalarni Standards</span>
                             </div>
                         </motion.div>
 
@@ -624,9 +626,9 @@ const OnboardingSurvey = ({ lang, toggleLang, theme, toggleTheme }: Props) => {
                     <div className="container guarantee-inner">
                         {[
                             { icon: <Shield size={16} />, text: '14-day money-back guarantee' },
-                            { icon: <Award size={16} />, text: '98% score prediction accuracy' },
-                            { icon: <CheckCircle2 size={16} />, text: 'Official DTM 2025 standards' },
-                            { icon: <Users size={16} />, text: '12,000+ students enrolled' },
+                            { icon: <Award size={16} />, text: 'B2 = University entrance exemption' },
+                            { icon: <CheckCircle2 size={16} />, text: 'C1 = 50% teacher salary bonus' },
+                            { icon: <Users size={16} />, text: '5× cheaper than IELTS' },
                         ].map((item, i) => (
                             <div key={i} className="guarantee-item">
                                 <span className="guarantee-icon">{item.icon}</span>
@@ -639,7 +641,7 @@ const OnboardingSurvey = ({ lang, toggleLang, theme, toggleTheme }: Props) => {
                 {/* ── Ticker ── */}
                 <div className="ticker-strip">
                     <div className="ticker-content">
-                        🚀 12,000+ STUDENTS ENROLLED &nbsp;·&nbsp; ★★★★★ 4.9/5 RATING &nbsp;·&nbsp; REAL-TIME AI SCORING &nbsp;·&nbsp; DTM 2025 COMPLIANT &nbsp;·&nbsp; 98% SCORE ACCURACY &nbsp;·&nbsp; 14-DAY MONEY BACK &nbsp;·&nbsp; 🚀 12,000+ STUDENTS ENROLLED &nbsp;·&nbsp; ★★★★★ 4.9/5 RATING &nbsp;·&nbsp; REAL-TIME AI SCORING &nbsp;·&nbsp; DTM 2025 COMPLIANT &nbsp;·&nbsp; 98% SCORE ACCURACY &nbsp;·&nbsp; 14-DAY MONEY BACK
+                        🎓 B2 = UNIVERSITY ENTRANCE EXEMPTION + MAX POINTS &nbsp;·&nbsp; 💰 EXAM COST: 405,000 UZS &nbsp;·&nbsp; 🏆 C1 = 50% TEACHER SALARY BONUS &nbsp;·&nbsp; 📅 MONTHLY EXAMS NATIONWIDE &nbsp;·&nbsp; ✅ 2-YEAR CERTIFICATE VALIDITY &nbsp;·&nbsp; 💸 5× CHEAPER THAN IELTS (2,000,000 UZS) &nbsp;·&nbsp; 🌐 REGISTER: my.gov.uz OR my.dtm.uz &nbsp;·&nbsp; 🎓 B2 = UNIVERSITY ENTRANCE EXEMPTION + MAX POINTS &nbsp;·&nbsp; 💰 EXAM COST: 405,000 UZS &nbsp;·&nbsp; 🏆 C1 = 50% TEACHER SALARY BONUS &nbsp;·&nbsp; 📅 MONTHLY EXAMS NATIONWIDE &nbsp;·&nbsp; ✅ 2-YEAR CERTIFICATE VALIDITY &nbsp;·&nbsp; 💸 5× CHEAPER THAN IELTS (2,000,000 UZS) &nbsp;·&nbsp; 🌐 REGISTER: my.gov.uz OR my.dtm.uz
                     </div>
                 </div>
 
@@ -648,10 +650,10 @@ const OnboardingSurvey = ({ lang, toggleLang, theme, toggleTheme }: Props) => {
                     <div className="container">
                         <div className="stats-grid">
                             {[
-                                { num: '12,000+', label: 'Students Enrolled' },
-                                { num: '4.9★', label: 'Average Rating' },
-                                { num: '98%', label: 'Score Accuracy' },
-                                { num: '6 weeks', label: 'Avg. Level Gain' },
+                                { num: '405,000', label: 'UZS Official Exam Fee' },
+                                { num: '5×', label: 'Cheaper Than IELTS' },
+                                { num: '2 years', label: 'Certificate Validity' },
+                                { num: 'Monthly', label: 'Exams Nationwide' },
                             ].map((s, i) => (
                                 <motion.div key={i} className="stat-item" initial={{ opacity: 0, y: 16 }} whileInView={{ opacity: 1, y: 0 }} viewport={{ once: true }} transition={{ delay: i * 0.08 }}>
                                     <div className="stat-number">{s.num}</div>
@@ -668,13 +670,13 @@ const OnboardingSurvey = ({ lang, toggleLang, theme, toggleTheme }: Props) => {
                         <span className="eyebrow" style={{ color: 'var(--color-error)' }}>THE CHALLENGE</span>
                         <h2>Sound familiar?</h2>
                         <p className="text-muted" style={{ maxWidth: '540px', margin: '1rem auto 0' }}>
-                            These are the three reasons most students fail the DTM CEFR exam — and why traditional preparation doesn't fix them.
+                            These are the three reasons most students fail the official Bilim va malakalarni CEFR exam — and why traditional preparation doesn't fix them.
                         </p>
                         <div className="problem-grid">
                             {[
                                 { cls: 'rose', pill: 'No Feedback', icon: <Zap size={26} className="text-error" />, h: '"I don\'t know my level"', p: 'Practicing without a baseline is like driving in the dark. You need instant, accurate scoring on every attempt.' },
                                 { cls: 'amber', pill: 'Lost Time', icon: <Clock size={26} className="text-warning" />, h: '"Waiting days for feedback"', p: 'Don\'t wait 48 h for a tutor. Get AI assessments in under 30 seconds, every time, at any hour.' },
-                                { cls: 'indigo', pill: 'No Direction', icon: <Activity size={26} className="text-primary" />, h: '"Inconsistent results"', p: 'DTM criteria are complex. Atlas ensures you hit every marking point on every attempt.' },
+                                { cls: 'indigo', pill: 'No Direction', icon: <Activity size={26} className="text-primary" />, h: '"Inconsistent results"', p: 'The official CEFR marking criteria are complex. Atlas ensures you hit every point on every attempt.' },
                             ].map((c, i) => (
                                 <motion.div key={i} className={`problem-card ${c.cls}`} initial={{ opacity: 0, y: 16 }} whileInView={{ opacity: 1, y: 0 }} viewport={{ once: true }} transition={{ delay: i * 0.1 }}>
                                     <div className="problem-pill">{c.pill}</div>
@@ -693,7 +695,7 @@ const OnboardingSurvey = ({ lang, toggleLang, theme, toggleTheme }: Props) => {
                         <span className="eyebrow">SIMPLE PROCESS</span>
                         <h2>From zero to result in 3 steps</h2>
                         <p className="text-muted" style={{ maxWidth: '480px', margin: '1rem auto 0' }}>
-                            Atlas AI adapts to your weaknesses and builds a structured daily path to your target score.
+                            Atlas AI adapts to your weaknesses and builds a structured daily path to your B2 or C1 certificate — the 405,000 UZS exam that opens real doors in Uzbekistan.
                         </p>
                         <div className="section-how">
                             {howSteps.map((s, i) => (
@@ -719,7 +721,7 @@ const OnboardingSurvey = ({ lang, toggleLang, theme, toggleTheme }: Props) => {
                             <span className="eyebrow">ALL THE TOOLS YOU NEED</span>
                             <h2>Built for your CEFR result</h2>
                             <p className="text-muted" style={{ maxWidth: '500px', margin: '1rem auto 0' }}>
-                                Six integrated tools. One platform. One mission: your official CEFR certificate.
+                                Six integrated tools. One platform. One mission: your official Bilim va malakalarni CEFR certificate — valid 2 years, earned in a single 405K UZS exam.
                             </p>
                         </div>
                         <div className="features-grid">
@@ -745,7 +747,7 @@ const OnboardingSurvey = ({ lang, toggleLang, theme, toggleTheme }: Props) => {
                             <span className="eyebrow">WHY STUDENTS SWITCH TO US</span>
                             <h2>CEFR Academy vs. the alternatives</h2>
                             <p className="text-muted" style={{ maxWidth: '500px', margin: '1rem auto 0' }}>
-                                See exactly why 12,000 students chose Atlas AI over expensive tutors or free YouTube videos.
+                                See exactly why students preparing for the 405,000 UZS official exam choose Atlas AI over paying 300K+ per month for a private tutor.
                             </p>
                         </div>
                         <div className="comparison-wrap">
@@ -791,7 +793,7 @@ const OnboardingSurvey = ({ lang, toggleLang, theme, toggleTheme }: Props) => {
                         <span className="eyebrow">REAL STUDENTS · REAL RESULTS</span>
                         <h2>From Tashkent to Nukus — they all passed</h2>
                         <p className="text-muted" style={{ maxWidth: '480px', margin: '1rem auto 0' }}>
-                            Over 12,000 Uzbek students have used CEFR Academy to reach their target level. Here are just a few.
+                            Uzbek students from Tashkent to Nukus are passing the official 405,000 UZS CEFR exam and unlocking real benefits — B2 exemptions, C1 salary bonuses, and more.
                         </p>
 
                         {/* Star rating summary */}
@@ -848,7 +850,7 @@ const OnboardingSurvey = ({ lang, toggleLang, theme, toggleTheme }: Props) => {
                             ))}
                         </div>
                         <p style={{ color: 'rgba(255,255,255,0.3)', fontSize: '0.8rem', marginTop: '2rem' }}>
-                            All prices in Uzbek Som (UZS). Premium includes 14-day money-back guarantee.
+                            All prices in Uzbek Som (UZS). The official CEFR exam fee is 405,000 UZS — register at my.gov.uz or my.dtm.uz. Premium includes 14-day money-back guarantee.
                         </p>
                     </div>
                 </section>
@@ -889,8 +891,8 @@ const OnboardingSurvey = ({ lang, toggleLang, theme, toggleTheme }: Props) => {
                         <div className="urgency-left">
                             <Rocket size={22} color="white" />
                             <div>
-                                <strong>DTM exam season is approaching.</strong>
-                                <span> Students who start 6+ weeks early are 3× more likely to reach their target level.</span>
+                                <strong>The monthly CEFR exam registration is open now.</strong>
+                                <span> Students who start preparing 6+ weeks early are 3× more likely to reach their B2 or C1 target.</span>
                             </div>
                         </div>
                         <button className="btn urgency-btn" onClick={() => scrollTo('builder')}>
@@ -991,8 +993,8 @@ const OnboardingSurvey = ({ lang, toggleLang, theme, toggleTheme }: Props) => {
                                             </div>
                                             <ul className="result-plan-features">
                                                 {(recommendPremium
-                                                    ? ['Unlimited AI Speaking feedback', 'Unlimited Writing checks + all types', '1 Full CEFR mock exam / month', 'Real-time pronunciation scoring', '14-day money-back guarantee']
-                                                    : ['Unlimited Writing checks', 'All essay types (letter, report)', 'Unlimited Reading & Listening', 'Error tracking dashboard']
+                                                    ? ['Unlimited AI Speaking feedback', 'Unlimited Writing checks + all types', '1 Full CEFR mock exam / month', 'Real-time pronunciation scoring', 'B2 track → university entrance exemption', '14-day money-back guarantee']
+                                                    : ['Unlimited Writing checks', 'All essay types (letter, report)', 'Unlimited Reading & Listening', 'Error tracking dashboard', 'Official Bilim va malakalarni format']
                                                 ).map(f => <li key={f}><Check size={14} />{f}</li>)}
                                             </ul>
                                         </div>
@@ -1002,12 +1004,12 @@ const OnboardingSurvey = ({ lang, toggleLang, theme, toggleTheme }: Props) => {
                                                     <div key={i} className="rsp-avatar" style={{ background: c, marginLeft: i > 0 ? '-8px' : 0 }}>{l}</div>
                                                 ))}
                                             </div>
-                                            <span><strong>2,400+ students</strong> with a similar profile achieved their target level</span>
+                                            <span><strong>Students like you</strong> are passing the 405K official exam and unlocking real B2/C1 benefits</span>
                                         </div>
                                         {isUrgent && (
                                             <div className="result-urgency">
                                                 <Timer size={15} />
-                                                <span>Your exam is soon — the intensive track is already loaded into your plan.</span>
+                                                <span>Your exam is soon — intensive track loaded. Register at <strong>my.gov.uz</strong> or <strong>my.dtm.uz</strong> (405,000 UZS).</span>
                                             </div>
                                         )}
                                         <div className="result-actions">
